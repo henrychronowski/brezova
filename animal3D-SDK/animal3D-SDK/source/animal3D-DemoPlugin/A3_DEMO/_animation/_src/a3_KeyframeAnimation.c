@@ -38,12 +38,18 @@
 // allocate keyframe pool
 a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count)
 {
+	// Init array of Keyframes
+	keyframePool_out->keyframe = malloc(count * sizeof(a3_Keyframe));
+
 	return -1;
 }
 
 // release keyframe pool
 a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool)
 {
+	// Deallocate Keyframe array
+	free(keyframePool->keyframe);
+
 	return -1;
 }
 
@@ -64,12 +70,16 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 // allocate clip pool
 a3i32 a3clipPoolCreate(a3_ClipPool* clipPool_out, const a3ui32 count)
 {
+	// Init array of Clips
+	clipPool_out->clip = malloc(count * sizeof(a3_Clip));
 	return -1;
 }
 
 // release clip pool
 a3i32 a3clipPoolRelease(a3_ClipPool* clipPool)
 {
+	// Deallocate Keyframe array
+	free(clipPool->clip);
 	return -1;
 }
 
