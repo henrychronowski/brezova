@@ -87,7 +87,7 @@ a3i32 a3clipPoolRelease(a3_ClipPool* clipPool)
 a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_nameLenMax], const a3_KeyframePool* keyframePool, const a3ui32 firstKeyframeIndex, const a3ui32 finalKeyframeIndex)
 {
 	// Set clip name
-	for (int i = 0; i < clipName; i++)
+	for (a3ui32 i = 0; i < clipName; i++)
 	{
 		clip_out->name[i] = clipName[i];
 	}
@@ -105,6 +105,12 @@ a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_na
 // get clip index from pool
 a3i32 a3clipGetIndexInPool(const a3_ClipPool* clipPool, const a3byte clipName[a3keyframeAnimation_nameLenMax])
 {
+	for (a3ui32 i = 0; i < clipPool->clip; i++)
+	{
+		if(clipPool->clip[i].name == clipName)
+			return i;
+	}
+
 	return -1;
 }
 
