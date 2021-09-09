@@ -50,7 +50,14 @@ a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool)
 // initialize keyframe
 a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x)
 {
-	return -1;
+	// Set duration & inverse duration
+	keyframe_out->duration = duration;
+	keyframe_out->durationInverse = 1.0f / duration;
+
+	// Set keyframe data
+	keyframe_out->data = value_x;
+
+	return keyframe_out->data; // Not sure if this is what needs to be returned 
 }
 
 
@@ -69,6 +76,19 @@ a3i32 a3clipPoolRelease(a3_ClipPool* clipPool)
 // initialize clip with first and last indices
 a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_nameLenMax], const a3_KeyframePool* keyframePool, const a3ui32 firstKeyframeIndex, const a3ui32 finalKeyframeIndex)
 {
+	// Set clip name
+	for (int i = 0; i < clipName; i++)
+	{
+		clip_out->name[i] = clipName[i];
+	}
+
+	// Set keyframe pool referenced by clip
+	clip_out->keyframePool = keyframePool;
+
+	// Set first and last keyframe indices
+	clip_out->firstKeyframe = firstKeyframeIndex;
+	clip_out->lastKeyframe = finalKeyframeIndex;
+	
 	return -1;
 }
 
