@@ -71,6 +71,12 @@ struct a3_ClipController
 
 	// Pool of clips controlled by the controller
 	a3_ClipPool* clipPool;
+
+	// Pointer to current clip
+	a3_Clip* currentClip;
+
+	// Pointer to current keyframe
+	a3_Keyframe* currentKeyframe;
 };
 
 
