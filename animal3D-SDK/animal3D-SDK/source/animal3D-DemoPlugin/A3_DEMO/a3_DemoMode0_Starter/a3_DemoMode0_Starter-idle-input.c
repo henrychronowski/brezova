@@ -41,7 +41,7 @@
 
 // main demo mode callback
 void a3starter_input_keyCharPress(a3_DemoState const* demoState, a3_DemoMode0_Starter* demoMode, a3i32 const asciiKey, a3i32 const state)
-{
+{	
 	switch (asciiKey)
 	{
 		// toggle render program
@@ -61,6 +61,63 @@ void a3starter_input_keyCharPress(a3_DemoState const* demoState, a3_DemoMode0_St
 
 		// toggle pass to display
 		a3demoCtrlCasesLoop(demoMode->pass, starter_pass_max, ')', '(');
+
+		// Toggle forward
+		case '/': demoMode->activeController->playbackDirection = 1;
+			break;
+		// Toggle pause
+		case '.': demoMode->activeController->playbackDirection = 0;
+			break;
+		
+		//Toggle reverse
+		case ',': demoMode->activeController->playbackDirection = -1;
+			break;
+
+		// Toggle controller1
+		case 'i': demoMode->activeController = &demoMode->clipController1;
+			break;
+
+		// Toggle controller2
+		case 'o': demoMode->activeController = &demoMode->clipController2;
+			break;
+
+		// Toggle controller3
+		case 'p': demoMode->activeController = &demoMode->clipController3;
+			break;
+		
+		// Switch clip
+		case 'm':
+		{
+			// Get next clip index
+			a3ui32 index = demoMode->activeController->clip;
+			a3demoCtrlIncLoop(index, demoMode->activeController->clipPool->count);
+
+			// Set new clip
+			a3clipControllerSetClip(demoMode->activeController, &demoMode->clipPool, index);
+
+			break;
+		}
+
+		// Time multiplier
+		case 'n':
+		{
+			if(demoMode->activeController->timeMultiplier == 1.0f)
+				demoMode->activeController->timeMultiplier = 0.1f;
+			else
+				demoMode->activeController->timeMultiplier = 1.0f;
+
+			break;
+		}
+
+		// Jump to first keyframe
+		case 'y': 
+			a3clipControllerSetKeyframe(demoMode->activeController ,demoMode->activeController->currentClip->firstKeyframe);
+			break;
+
+		// Jump to second keyframe
+		case 'u':
+			a3clipControllerSetKeyframe(demoMode->activeController, demoMode->activeController->currentClip->lastKeyframe);
+			break;
 	}
 }
 

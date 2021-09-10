@@ -189,6 +189,7 @@ void a3starter_load(a3_DemoState const* demoState, a3_DemoMode0_Starter* demoMod
 	a3clipControllerInit(&demoMode->clipController1, "Controller 1", &demoMode->clipPool, 0);
 	a3clipControllerInit(&demoMode->clipController2, "Controller 2", &demoMode->clipPool, 2);
 	a3clipControllerInit(&demoMode->clipController3, "Controller 3", &demoMode->clipPool, 1);
+	demoMode->activeController = &demoMode->clipController1;
 }
 
 

@@ -41,8 +41,8 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 	// Forwards
 	case 1:
 		// Pre resolution
-		clipCtrl->clipTime += dt;
-		clipCtrl->keyframeTime += dt;
+		clipCtrl->clipTime += dt * clipCtrl->timeMultiplier;
+		clipCtrl->keyframeTime += dt * clipCtrl->timeMultiplier;
 
 		// Check for overflow resolution
 		{
@@ -85,8 +85,8 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 	// Reverse
 	case -1:
 		// Pre resolution
-		clipCtrl->clipTime -= dt;
-		clipCtrl->keyframeTime -= dt;
+		clipCtrl->clipTime -= dt * clipCtrl->timeMultiplier;
+		clipCtrl->keyframeTime -= dt * clipCtrl->timeMultiplier;
 
 		// Check for overflow resolution
 		{
@@ -139,10 +139,36 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 inline a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool)
 {
 	// Set reference to current clip
-	clipCtrl->currentClip = &clipPool->clip[clipIndex_pool];
+	//clipCtrl->currentClip = &clipPool->clip[clipIndex_pool];
 	
 	// Update clip index
+	//clipCtrl->clip = clipIndex_pool;
+
+	// Set name
+	for (a3ui32 i = 0; i < a3keyframeAnimation_nameLenMax; i++)
+	{
+		//clipCtrl->name[i] = clipPool[clipIndex_pool].clip->name[i];
+	}
+
+	// Set reference to clip pool
+	clipCtrl->clipPool = clipPool;
+
+	// Set index of current clip
 	clipCtrl->clip = clipIndex_pool;
+
+	// Set playback direction
+	clipCtrl->playbackDirection = 1;
+
+	// Set current clip
+	clipCtrl->currentClip = &clipPool->clip[clipIndex_pool];
+
+	// Set current keyframe
+	clipCtrl->keyframe = clipPool->clip[clipIndex_pool].firstKeyframe;
+	clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
+
+	// Reset times
+	clipCtrl->clipTime = 0;
+	clipCtrl->keyframeTime = 0;
 	
 	return 1;
 }

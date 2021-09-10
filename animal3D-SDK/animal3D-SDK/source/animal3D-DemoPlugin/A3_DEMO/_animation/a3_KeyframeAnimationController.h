@@ -77,6 +77,8 @@ struct a3_ClipController
 
 	// Pointer to current keyframe
 	a3_Keyframe* currentKeyframe;
+
+	a3real timeMultiplier;
 };
 
 
@@ -90,6 +92,8 @@ a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt);
 
 // set clip to play
 a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool);
+
+void a3clipControllerSetKeyframe(a3_ClipController* clipCtrl, const a3ui32 keyframeIndex);
 
 
 //-----------------------------------------------------------------------------

@@ -54,8 +54,22 @@ a3i32 a3clipControllerInit(a3_ClipController* clipCtrl_out, const a3byte ctrlNam
 	clipCtrl_out->keyframe = clipPool->clip[clipIndex_pool].firstKeyframe;
 	clipCtrl_out->currentKeyframe = &clipCtrl_out->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
 
+	clipCtrl_out->timeMultiplier = 1.0f;
+
 	return clipCtrl_out->playbackDirection;
 }
 
+
+void a3clipControllerSetKeyframe(a3_ClipController* clipCtrl, const a3ui32 keyframeIndex)
+{
+	// Validate index
+	if (keyframeIndex > 0 && keyframeIndex < clipCtrl->currentClip->keyframePool->count)
+	{
+		// Set index based on keyframeIndex
+		clipCtrl->keyframe = keyframeIndex;
+		clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[keyframeIndex];
+		clipCtrl->keyframeTime = 0.0f;
+	}
+}
 
 //-----------------------------------------------------------------------------
