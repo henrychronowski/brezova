@@ -55,8 +55,10 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 				clipCtrl->clipTime = clipCtrl->clipTime - curClipDuration;
 			}
 
+			// Check if we exceeded the current keyframe
 			if (clipCtrl->keyframeTime >= curKeyframeDuration)
 			{
+				// Check if we are on the last keyframe
 				if (clipCtrl->currentKeyframe->index == clipCtrl->currentClip->lastKeyframe)
 				{
 					// Loop back to first keyframe
@@ -80,12 +82,51 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 		break;
 	// Reverse
 	case -1:
+		// Pre resolution
+		clipCtrl->clipTime -= dt;
+		clipCtrl->keyframeTime -= dt;
+
+		// Check for overflow resolution
+		{
+			a3f32 curClipDuration = clipCtrl->currentClip->duration;
+			a3f32 curKeyframeDuration = clipCtrl->currentKeyframe->duration;
+
+			// Check if we pass the start of the clip
+			if (clipCtrl->clipTime < 0)
+			{
+				// Reset clip time including overflow
+				clipCtrl->clipTime = clipCtrl->clipTime + curClipDuration;
+			}
+			// Check if we pass the start of the current keyframe
+			if (clipCtrl->keyframeTime < 0)
+			{
+				// Check if we are on the first keyframe
+				if (clipCtrl->currentKeyframe->index == clipCtrl->currentClip->firstKeyframe)
+				{
+					// Loop back to last keyframe in the clip
+					clipCtrl->keyframe = clipCtrl->currentClip->lastKeyframe;
+					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+				}
+				else
+				{
+					// Decrement keyframe index
+					clipCtrl->keyframe--;
+
+					// Set new keyframe
+					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+				}
+
+				// Reset keyframe time including overflow
+				clipCtrl->keyframeTime = clipCtrl->keyframeTime + curKeyframeDuration;
+			}
+		}
+
 		break;
 	default:
 		break;
 	}
 	
-	return -1;
+	return 1;
 }
 
 // set clip to play
