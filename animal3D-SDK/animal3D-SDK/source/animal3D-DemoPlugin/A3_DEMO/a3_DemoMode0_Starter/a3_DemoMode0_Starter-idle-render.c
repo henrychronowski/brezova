@@ -120,65 +120,69 @@ void a3starter_render_controls(a3_DemoState const* demoState, a3_DemoMode0_Start
 	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 	//	"    Active camera (%u / %u) ('c' prev | next 'v'): %s", activeCamera + 1, starter_camera_max, cameraText[activeCamera]);
 
+	// Display controls
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"Playback state: /=forward, .=pause, ,=reverse | Controller select: i=1, o=2, p=3");
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"Press m to cycle through clips | Press n for slow time");
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"Press y to jump to first keyframe | Press u to jump to last keyframe");
+
+	// Currently active controller
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"==================================================================");
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"Current Active Controller: %s", demoMode->activeController->name);
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"==================================================================");
+
 	// display controller1 data
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Controller: %s", demoMode->clipController1.name);
+		"Controller: %s | Playback Direction: %i", demoMode->clipController1.name, demoMode->clipController1.playbackDirection);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Index In Pool: %i", demoMode->clipController1.clip);
+		"Clip Index In Pool: %i | Keyframe index In Pool: %i", demoMode->clipController1.clip, demoMode->clipController1.keyframe);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Time: %f", demoMode->clipController1.clipTime);
+		"Clip Time (parameter): %f (%f)", demoMode->clipController1.clipTime, demoMode->clipController1.clipParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Parameter: %f", demoMode->clipController1.clipParameter);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Index In Pool: %i", demoMode->clipController1.keyframe);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Time: %f", demoMode->clipController1.keyframeTime);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Parameter: %f", demoMode->clipController1.keyframeParameter);
+		"Keyframe Time (parameter): %f (%f)", demoMode->clipController1.keyframeTime, demoMode->clipController1.keyframeParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"Keyframe Data: %i", demoMode->clipController1.currentKeyframe->data);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Playback Direction: %i", demoMode->clipController1.playbackDirection);
+		"==================================================================");
 
 	// display controller2 data
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Controller: %s", demoMode->clipController2.name);
+		"Controller: %s | Playback Direction: %i", demoMode->clipController2.name, demoMode->clipController2.playbackDirection);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Index In Pool: %i", demoMode->clipController2.clip);
+		"Clip Index In Pool: %i | Keyframe index In Pool: %i", demoMode->clipController2.clip, demoMode->clipController2.keyframe);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Time: %07.4lf", demoMode->clipController2.clipTime);
+		"Clip Time (parameter): %f (%f)", demoMode->clipController2.clipTime, demoMode->clipController2.clipParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Parameter: %f", demoMode->clipController2.clipParameter);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Index In Pool: %i", demoMode->clipController2.keyframe);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Time: %f", demoMode->clipController2.keyframeTime);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Parameter: %f", demoMode->clipController2.keyframeParameter);
+		"Keyframe Time (parameter): %f (%f)", demoMode->clipController2.keyframeTime, demoMode->clipController2.keyframeParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"Keyframe Data: %i", demoMode->clipController2.currentKeyframe->data);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Playback Direction: %i", demoMode->clipController2.playbackDirection);
+		"==================================================================");
 
 	// display controller3 data
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Controller: %s", demoMode->clipController3.name);
+		"Controller: %s | Playback Direction: %i", demoMode->clipController3.name, demoMode->clipController3.playbackDirection);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Index In Pool: %i", demoMode->clipController3.clip);
+		"Clip Index In Pool: %i | Keyframe index In Pool: %i", demoMode->clipController3.clip, demoMode->clipController3.keyframe);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Time: %f", demoMode->clipController3.clipTime);
+		"Clip Time (parameter): %f (%f)", demoMode->clipController3.clipTime, demoMode->clipController3.clipParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Parameter: %f", demoMode->clipController3.clipParameter);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Index In Pool: %i", demoMode->clipController3.keyframe);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Time: %f", demoMode->clipController3.keyframeTime);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Parameter: %f", demoMode->clipController3.keyframeParameter);
+		"Keyframe Time (parameter): %f (%f)", demoMode->clipController3.keyframeTime, demoMode->clipController3.keyframeParameter);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"Keyframe Data: %i", demoMode->clipController3.currentKeyframe->data);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Playback Direction: %i", demoMode->clipController3.playbackDirection);
+		"==================================================================");
+	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		" ")
+		;a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		" ");
+		a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		" ");
 }
 
 
