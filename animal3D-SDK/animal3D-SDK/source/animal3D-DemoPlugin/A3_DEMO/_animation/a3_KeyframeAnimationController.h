@@ -52,25 +52,25 @@ struct a3_ClipController
 	a3ui32 clip;
 
 	// Current time relative to the start of the clip [0, clip duration)
-	a3f32 clipTime;
+	a3real clipTime;
 
 	// Normalized clip time [0, 1)
-	a3f32 clipParameter;
+	a3real clipParameter;
 
 	// index of current keyframe in referenced keyframe pool
 	a3ui32 keyframe;
 
 	// Current time relative to current keyframe [0, keyframe duration)
-	a3f32 keyframeTime;
+	a3real keyframeTime;
 
 	// Normalized keyframe time [0, 1)
-	a3f32 keyframeParameter;
+	a3real keyframeParameter;
 
 	// Active playback behavior (-1 = reverse, 0 = pause/stop, +1 = forward)
 	a3i32 playbackDirection;
 
 	// Pool of clips controlled by the controller
-	a3_ClipPool* clipPool;
+	const a3_ClipPool* clipPool;
 
 	// Pointer to current clip
 	a3_Clip* currentClip;

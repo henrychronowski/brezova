@@ -42,10 +42,17 @@ a3i32 a3clipControllerInit(a3_ClipController* clipCtrl_out, const a3byte ctrlNam
 	clipCtrl_out->clipPool = clipPool;
 
 	// Set index of current clip
-	clipCtrl_out->clip;
+	clipCtrl_out->clip = clipIndex_pool;
 
 	// Set playback direction
 	clipCtrl_out->playbackDirection = 1;
+
+	// Set current clip
+	clipCtrl_out->currentClip = &clipPool->clip[clipIndex_pool];
+
+	// Set current keyframe
+	clipCtrl_out->keyframe = clipPool->clip[clipIndex_pool].firstKeyframe;
+	clipCtrl_out->currentKeyframe = &clipCtrl_out->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
 
 	return clipCtrl_out->playbackDirection;
 }

@@ -41,7 +41,7 @@ a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count
 	// Init array of Keyframes
 	keyframePool_out->keyframe = malloc(count * sizeof(a3_Keyframe));
 
-	for (a3i32 i = 0; i < count; i++)
+	for (a3ui32 i = 0; i < count; i++)
 	{
 		keyframePool_out->keyframe->data = 0;
 		keyframePool_out->keyframe->duration = 0;
@@ -83,7 +83,7 @@ a3i32 a3clipPoolCreate(a3_ClipPool* clipPool_out, const a3ui32 count)
 	// Init array of Clips
 	clipPool_out->clip = malloc(count * sizeof(a3_Clip));
 
-	for (a3i32 i = 0; i < count; i++)
+	for (a3ui32 i = 0; i < count; i++)
 	{
 		clipPool_out->clip->duration = 0;
 		clipPool_out->clip->durationInverse = 0;
@@ -121,6 +121,12 @@ a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_na
 	// Set first and last keyframe indices
 	clip_out->firstKeyframe = firstKeyframeIndex;
 	clip_out->lastKeyframe = finalKeyframeIndex;
+
+	// Calculate Count
+	clip_out->keyframeCount = finalKeyframeIndex - firstKeyframeIndex + 1;
+
+	// Calcualte clip duration
+	a3clipCalculateDuration(clip_out);
 	
 	return 1;
 }
@@ -128,7 +134,7 @@ a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_na
 // get clip index from pool
 a3i32 a3clipGetIndexInPool(const a3_ClipPool* clipPool, const a3byte clipName[a3keyframeAnimation_nameLenMax])
 {
-	for (a3ui32 i = 0; i < clipPool->clip; i++)
+	for (a3ui32 i = 0; i < a3keyframeAnimation_nameLenMax; i++)
 	{
 		if(clipPool->clip[i].name == clipName)
 			return i;

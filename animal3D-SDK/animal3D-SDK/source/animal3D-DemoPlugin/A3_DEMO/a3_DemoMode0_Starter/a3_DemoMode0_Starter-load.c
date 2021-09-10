@@ -29,7 +29,6 @@
 //-----------------------------------------------------------------------------
 
 #include "../a3_DemoMode0_Starter.h"
-
 #include "../a3_DemoState.h"
 
 
@@ -170,24 +169,26 @@ void a3starter_load(a3_DemoState const* demoState, a3_DemoMode0_Starter* demoMod
 	// Init animation data
 	a3keyframePoolCreate(&demoMode->keyframePool, 20);
 	a3clipPoolCreate(&demoMode->clipPool, 5);
-	a3clipControllerInit(&demoMode->clipController1, "Controller 1", &demoMode->clipPool, 0);
-	a3clipControllerInit(&demoMode->clipController2, "Controller 2", &demoMode->clipPool, 2);
-	a3clipControllerInit(&demoMode->clipController3, "Controller 3", &demoMode->clipPool, 1);
 
 	// Load animation data
 
 	// Load keyframes
 	for (a3ui32 i = 0; i < demoMode->keyframePool.count; i++)
 	{
-		a3keyframeInit(&demoMode->keyframePool.keyframe[i], (float)i * 1.54, i * 0.85714285);
+		a3keyframeInit(&demoMode->keyframePool.keyframe[i], (a3real)(i * 0.54f) + 1, (a3ui32)(i * 0.85714285f));
 	}
 
 	// Load clips
-	a3clipInit(&demoMode->clipPool.clip[0], "Bor", &demoMode->keyframePool, 0, 19);
+	a3clipInit(&demoMode->clipPool.clip[0], "Bor", &demoMode->keyframePool, 0, 3);
 	a3clipInit(&demoMode->clipPool.clip[1], "Tanda", &demoMode->keyframePool, 5, 16);
-	a3clipInit(&demoMode->clipPool.clip[2], "Zlot", &demoMode->keyframePool, 0, 1);
+	a3clipInit(&demoMode->clipPool.clip[2], "Zlot", &demoMode->keyframePool, 0, 6);
 	a3clipInit(&demoMode->clipPool.clip[3], "Plavna", &demoMode->keyframePool, 7, 18);
 	a3clipInit(&demoMode->clipPool.clip[4], "Petrovac", &demoMode->keyframePool, 2, 11);
+
+	// Init Clip Controllers
+	a3clipControllerInit(&demoMode->clipController1, "Controller 1", &demoMode->clipPool, 0);
+	a3clipControllerInit(&demoMode->clipController2, "Controller 2", &demoMode->clipPool, 2);
+	a3clipControllerInit(&demoMode->clipController3, "Controller 3", &demoMode->clipPool, 1);
 }
 
 

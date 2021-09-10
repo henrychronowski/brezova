@@ -36,6 +36,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 	{
 	// Paused
 	case 0:
+		return 0;
 		break;
 	// Forwards
 	case 1:
@@ -72,6 +73,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 
 					// Set new keyframe
 					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+					clipCtrl->currentKeyframe->index = clipCtrl->keyframe;
 				}
 
 				// Reset keyframe time including overflow
