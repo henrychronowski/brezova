@@ -49,7 +49,9 @@ a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count
 		keyframePool_out->keyframe->index = 0;
 	}
 
-	return -1;
+	keyframePool_out->count = count;
+
+	return 1;
 }
 
 // release keyframe pool
@@ -58,7 +60,7 @@ a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool)
 	// Deallocate Keyframe array
 	free(keyframePool->keyframe);
 
-	return -1;
+	return 1;
 }
 
 // initialize keyframe
@@ -71,7 +73,7 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 	// Set keyframe data
 	keyframe_out->data = value_x;
 
-	return keyframe_out->data; // Not sure if this is what needs to be returned 
+	return 1;
 }
 
 
@@ -91,7 +93,9 @@ a3i32 a3clipPoolCreate(a3_ClipPool* clipPool_out, const a3ui32 count)
 		clipPool_out->clip->keyframeCount = 0;
 	}
 
-	return -1;
+	clipPool_out->count = count;
+
+	return 1;
 }
 
 // release clip pool
