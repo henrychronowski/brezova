@@ -125,6 +125,10 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 	default:
 		break;
 	}
+
+	// Post Resolution (Normalize)
+	clipCtrl->clipParameter = clipCtrl->clipTime * clipCtrl->currentClip->durationInverse;
+	clipCtrl->keyframeParameter = clipCtrl->keyframeTime * clipCtrl->currentKeyframe->durationInverse;
 	
 	return 1;
 }
