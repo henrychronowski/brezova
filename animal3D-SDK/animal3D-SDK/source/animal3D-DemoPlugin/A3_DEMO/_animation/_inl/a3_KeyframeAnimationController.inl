@@ -47,7 +47,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 		// Check for overflow resolution
 		{
 			a3f32 curClipDuration = clipCtrl->currentClip->duration;
-			a3f32 curKeyframeDuration = clipCtrl->currentKeyframe->duration;
+			a3f32 curKeyframeDuration = clipCtrl->currentKeyframe0->duration;
 
 			// Check if we exceeded length of the clip
 			if (clipCtrl->clipTime >= curClipDuration)
@@ -60,20 +60,20 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 			if (clipCtrl->keyframeTime >= curKeyframeDuration)
 			{
 				// Check if we are on the last keyframe
-				if (clipCtrl->currentKeyframe->index == clipCtrl->currentClip->lastKeyframe)
+				if (clipCtrl->currentKeyframe0->index == clipCtrl->currentClip->lastKeyframe)
 				{
 					// Loop back to first keyframe
-					clipCtrl->keyframe = clipCtrl->currentClip->firstKeyframe;
-					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+					clipCtrl->keyframe0 = clipCtrl->currentClip->firstKeyframe;
+					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
 				}
 				else
 				{
 					// Increment keyframe index
-					clipCtrl->keyframe++;
+					clipCtrl->keyframe0++;
 
 					// Set new keyframe
-					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
-					clipCtrl->currentKeyframe->index = clipCtrl->keyframe;
+					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
+					clipCtrl->currentKeyframe0->index = clipCtrl->keyframe0;
 				}
 
 				// Reset keyframe time including overflow
@@ -91,7 +91,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 		// Check for overflow resolution
 		{
 			a3f32 curClipDuration = clipCtrl->currentClip->duration;
-			a3f32 curKeyframeDuration = clipCtrl->currentKeyframe->duration;
+			a3f32 curKeyframeDuration = clipCtrl->currentKeyframe0->duration;
 
 			// Check if we pass the start of the clip
 			if (clipCtrl->clipTime < 0)
@@ -103,19 +103,19 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 			if (clipCtrl->keyframeTime < 0)
 			{
 				// Check if we are on the first keyframe
-				if (clipCtrl->currentKeyframe->index == clipCtrl->currentClip->firstKeyframe)
+				if (clipCtrl->currentKeyframe0->index == clipCtrl->currentClip->firstKeyframe)
 				{
 					// Loop back to last keyframe in the clip
-					clipCtrl->keyframe = clipCtrl->currentClip->lastKeyframe;
-					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+					clipCtrl->keyframe0 = clipCtrl->currentClip->lastKeyframe;
+					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
 				}
 				else
 				{
 					// Decrement keyframe index
-					clipCtrl->keyframe--;
+					clipCtrl->keyframe0--;
 
 					// Set new keyframe
-					clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe];
+					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
 				}
 
 				// Reset keyframe time including overflow
@@ -130,7 +130,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 
 	// Post Resolution (Normalize)
 	clipCtrl->clipParameter = clipCtrl->clipTime * clipCtrl->currentClip->durationInverse;
-	clipCtrl->keyframeParameter = clipCtrl->keyframeTime * clipCtrl->currentKeyframe->durationInverse;
+	clipCtrl->keyframeParameter = clipCtrl->keyframeTime * clipCtrl->currentKeyframe0->durationInverse;
 	
 	return 1;
 }
@@ -163,8 +163,8 @@ inline a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipP
 	clipCtrl->currentClip = &clipPool->clip[clipIndex_pool];
 
 	// Set current keyframe
-	clipCtrl->keyframe = clipPool->clip[clipIndex_pool].firstKeyframe;
-	clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
+	clipCtrl->keyframe0 = clipPool->clip[clipIndex_pool].firstKeyframe;
+	clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
 
 	// Reset times
 	clipCtrl->clipTime = 0;

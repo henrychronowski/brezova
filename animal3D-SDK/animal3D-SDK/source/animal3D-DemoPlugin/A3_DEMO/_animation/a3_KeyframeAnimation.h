@@ -101,6 +101,19 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 
 //-----------------------------------------------------------------------------
 
+// description of a clip transition
+struct a3_ClipTransition
+{
+	// Which transition to use
+	a3ui16 transition;
+
+	// Clip pool holding next clip
+	a3_ClipPool* clipPool;
+
+	// Index of next clip
+	a3ui32 destinationIndex;
+};
+
 // description of single clip
 // metaphor: timeline
 struct a3_Clip

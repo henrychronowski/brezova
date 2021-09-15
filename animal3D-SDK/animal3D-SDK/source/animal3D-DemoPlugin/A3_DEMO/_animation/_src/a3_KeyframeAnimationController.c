@@ -51,8 +51,8 @@ a3i32 a3clipControllerInit(a3_ClipController* clipCtrl_out, const a3byte ctrlNam
 	clipCtrl_out->currentClip = &clipPool->clip[clipIndex_pool];
 
 	// Set current keyframe
-	clipCtrl_out->keyframe = clipPool->clip[clipIndex_pool].firstKeyframe;
-	clipCtrl_out->currentKeyframe = &clipCtrl_out->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
+	clipCtrl_out->keyframe0 = clipPool->clip[clipIndex_pool].firstKeyframe;
+	clipCtrl_out->currentKeyframe0 = &clipCtrl_out->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
 
 	clipCtrl_out->timeMultiplier = 1.0f;
 
@@ -66,8 +66,8 @@ void a3clipControllerSetKeyframe(a3_ClipController* clipCtrl, const a3ui32 keyfr
 	if (keyframeIndex > 0 && keyframeIndex < clipCtrl->currentClip->keyframePool->count)
 	{
 		// Set index based on keyframeIndex
-		clipCtrl->keyframe = keyframeIndex;
-		clipCtrl->currentKeyframe = &clipCtrl->currentClip->keyframePool->keyframe[keyframeIndex];
+		clipCtrl->keyframe0 = keyframeIndex;
+		clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[keyframeIndex];
 		clipCtrl->keyframeTime = 0.0f;
 	}
 }
@@ -86,11 +86,11 @@ inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Samp
 		// 2: lerp
 		// k = k0 + (k1 - k0)param
 		sample_out->time = clipCtrl->keyframeTime;
-		sample_out->value = a3lerp(
-			clipCtrl->keyframe0.sample.value,
+		/*sample_out->value = a3lerp(
+			clipCtrl->keyframe0->sample.value,
 			clipCtrl->keyframe1->sample.value,
 			clipCtrl->keyframeParameter
-		);
+		);*/
 
 		// 3: spline (catmull-rom, cubic hermite, etc)
 

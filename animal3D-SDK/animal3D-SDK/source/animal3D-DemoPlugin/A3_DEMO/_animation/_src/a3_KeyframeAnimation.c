@@ -43,7 +43,7 @@ a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count
 
 	for (a3ui32 i = 0; i < count; i++)
 	{
-		keyframePool_out->keyframe->data = 0;
+		keyframePool_out->keyframe->sample.value = 0;
 		keyframePool_out->keyframe->duration = 0;
 		keyframePool_out->keyframe->durationInverse = 0;
 		keyframePool_out->keyframe->index = 0;
@@ -71,7 +71,7 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 	keyframe_out->durationInverse = 1.0f / duration;
 
 	// Set keyframe data
-	keyframe_out->data = value_x;
+	keyframe_out->sample.value = (a3real)value_x;
 
 	return 1;
 }
