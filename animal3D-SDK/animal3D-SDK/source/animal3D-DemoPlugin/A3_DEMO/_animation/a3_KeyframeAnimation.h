@@ -41,6 +41,7 @@ typedef struct a3_Keyframe					a3_Keyframe;
 typedef struct a3_KeyframePool				a3_KeyframePool;
 typedef struct a3_Clip						a3_Clip;
 typedef struct a3_ClipPool					a3_ClipPool;
+typedef struct a3_ClipTransition			a3_ClipTransition;
 #endif	// __cplusplus
 
 
@@ -126,6 +127,12 @@ struct a3_Clip
 
 	// Duration of clip
 	a3real duration;
+
+	// Forwards transition
+	a3_ClipTransition forwardTransition;
+
+	// Reverse transition;
+	a3_ClipTransition reverseTransition;
 
 	// Reciprocal of duration
 	a3real durationInverse;
