@@ -128,7 +128,7 @@ struct a3_Clip
 	// Duration of clip
 	a3real duration;
 
-	// Forwards transition
+	// Forward transition
 	a3_ClipTransition forwardTransition;
 
 	// Reverse transition;
