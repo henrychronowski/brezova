@@ -53,6 +53,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 			// Check if we exceeded length of the clip
 			if (clipCtrl->clipTime >= curClipDuration)
 			{
+				// Set clip and play direction based on transition parameters
 				clipCtrl->playbackDirection = clipCtrl->currentClip->forwardTransition.transition;
 				clipCtrl->clip = clipCtrl->currentClip->forwardTransition.destinationIndex;
 				clipCtrl->currentClip = &clipCtrl->clipPool->clip[clipCtrl->clip];
@@ -116,6 +117,7 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 			// Check if we pass the start of the clip
 			if (clipCtrl->clipTime < 0)
 			{
+				// Set clip and play direction based on transition parameters
 				clipCtrl->playbackDirection = clipCtrl->currentClip->reverseTransition.transition;
 				clipCtrl->clip = clipCtrl->currentClip->reverseTransition.destinationIndex;
 				clipCtrl->currentClip = &clipCtrl->clipPool->clip[clipCtrl->clip];
@@ -225,6 +227,7 @@ inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Samp
 
 		switch (clipCtrl->playbackDirection)
 		{
+		// Lerp forwards
 		case(-1):
 			sample_out->position.x = a3lerp(
 				k1->sample.position.x,
@@ -242,6 +245,7 @@ inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Samp
 				clipCtrl->keyframeParameter
 			);
 			break;
+		// Lerp reverse
 		case(1):
 			sample_out->position.x = a3lerp(
 				k0->sample.position.x,

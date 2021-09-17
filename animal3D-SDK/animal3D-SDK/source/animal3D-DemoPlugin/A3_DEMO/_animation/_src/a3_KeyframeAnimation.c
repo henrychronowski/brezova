@@ -78,8 +78,10 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 	return 1;
 }
 
+// Initialize clip transition
 a3i32 a3clipTransitionInit(a3_ClipTransition* transition_out, a3i32 transition, a3_ClipPool* clipPool, a3i32 nextClip)
 {
+	// Set transition data
 	transition_out->transition = transition;
 	transition_out->clipPool = clipPool;
 	transition_out->destinationIndex = nextClip;
@@ -157,7 +159,7 @@ a3i32 a3clipGetIndexInPool(const a3_ClipPool* clipPool, const a3byte clipName[a3
 	return 1;
 }
 
-
+// Init animation data from file
 void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, const char* filepath)
 {
 	FILE* file;
@@ -166,60 +168,74 @@ void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, 
 	a3real x = 0, y = 0, z = 0;
 	char buff[20];
 
+	// open file
 	file = fopen(filepath, "r");
 	if (file == NULL)
 	{
 		printf("%s", "failed to open file");
 		return;
 	}
+
+	// read in keyframe count
 	fgets(buff, 12, file);
 	count = atoi(buff);
 
+	// Create keyframe pool based on count
 	a3keyframePoolCreate(keyframePool, count);
 
+	// Init keyframes
 	for (a3ui32 i = 0; i < count; i++)
 	{
+		// read in duration
 		fscanf(file, "%f", &dur);
-
+		// read in x pos
 		fscanf(file, "%f", &x);
-
+		// read in y pos
 		fscanf(file, "%f", &y);
-
+		// read in z pos
 		fscanf(file, "%f", &z);
 
+		// construct position vector for this keyframe
 		a3vec3 pos;
 		pos.x = x;
 		pos.y = y;
 		pos.z =z;
 
+		// Init the current keyframe
 		a3keyframeInit(&keyframePool->keyframe[i], dur, i, pos);
 	}
 
+	// read in clip count
 	fscanf(file, "%u", &count);
 
+	// create clip pool based on count
 	a3clipPoolCreate(clipPool, count);
 
 	a3byte name[a3keyframeAnimation_nameLenMax];
 	a3ui32 first, last, fwdTarget, revTarget;
 	a3i32 fwdDir, revDir;
 
+	// Init clips
 	for (a3ui32 i = 0; i < count; i++)
 	{
+		// Read in name
 		fscanf(file, "%s", &name);
-
+		// Read in first keyframe index
 		fscanf(file, "%u", &first);
-
+		// Read in last keyframe index
 		fscanf(file, "%u", &last);
-
+		// Read in forward keyframe target
 		fscanf(file, "%u", &fwdTarget);
-
+		// read in forward keyframe transition direction
 		fscanf(file, "%i", &fwdDir);
-		
+		// Read in reverse keyframe target
 		fscanf(file, "%u", &revTarget);
-		
+		// read in reverse keyframe transition direction
 		fscanf(file, "%i", &revDir);
 
+		// Init clip
 		a3clipInit(&clipPool->clip[i], name, keyframePool, first, last, clipPool);
+		// Init clip transitions
 		a3clipTransitionInit(&clipPool->clip[i].forwardTransition, fwdDir, clipPool, fwdTarget);
 		a3clipTransitionInit(&clipPool->clip[i].reverseTransition, revDir, clipPool, revTarget);
 	}

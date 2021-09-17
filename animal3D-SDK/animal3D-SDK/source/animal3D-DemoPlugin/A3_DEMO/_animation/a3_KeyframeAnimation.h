@@ -183,7 +183,7 @@ a3i32 a3clipCalculateDuration(a3_Clip* clip);
 // calculate keyframes' durations by distributing clip's duration
 a3i32 a3clipDistributeDuration(a3_Clip* clip, const a3real newClipDuration);
 
-
+// Read custon animation data from a file
 void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, const char* filepath);
 
 //-----------------------------------------------------------------------------

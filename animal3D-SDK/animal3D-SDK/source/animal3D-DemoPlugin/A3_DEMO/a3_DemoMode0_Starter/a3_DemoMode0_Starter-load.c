@@ -185,6 +185,7 @@ void a3starter_load(a3_DemoState const* demoState, a3_DemoMode0_Starter* demoMod
 	a3clipInit(&demoMode->clipPool.clip[3], "Plavna", &demoMode->keyframePool, 7, 18, &demoMode->clipPool);
 	a3clipInit(&demoMode->clipPool.clip[4], "Petrovac", &demoMode->keyframePool, 2, 11, &demoMode->clipPool);*/
 
+	// Init animation data from file
 	a3CustomInitFromFile(&demoMode->clipPool, &demoMode->keyframePool, A3_RES_DIR"proj1_anim.txt");
 	
 	// Init Clip Controllers

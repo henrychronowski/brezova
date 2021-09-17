@@ -65,6 +65,7 @@ void a3starter_update(a3_DemoState* demoState, a3_DemoMode0_Starter* demoMode, a
 	a3demo_update_objects(demoState, dt,
 		demoMode->object_camera, starterMaxCount_cameraObject, 1, 0);
 
+	//Update object position based on animation data
 	a3_Sample evaluated;
 	a3clipControllerEvaluate(&demoMode->clipController1, &evaluated);
 	demoMode->obj_teapot->modelMat.v3.xyz = evaluated.position;
