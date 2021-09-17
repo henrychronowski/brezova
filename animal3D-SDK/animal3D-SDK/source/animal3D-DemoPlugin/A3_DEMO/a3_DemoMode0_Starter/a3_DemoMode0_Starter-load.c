@@ -179,11 +179,11 @@ void a3starter_load(a3_DemoState const* demoState, a3_DemoMode0_Starter* demoMod
 	}
 
 	// Load clips
-	a3clipInit(&demoMode->clipPool.clip[0], "Bor", &demoMode->keyframePool, 0, 3);
-	a3clipInit(&demoMode->clipPool.clip[1], "Tanda", &demoMode->keyframePool, 5, 16);
-	a3clipInit(&demoMode->clipPool.clip[2], "Zlot", &demoMode->keyframePool, 0, 6);
-	a3clipInit(&demoMode->clipPool.clip[3], "Plavna", &demoMode->keyframePool, 7, 18);
-	a3clipInit(&demoMode->clipPool.clip[4], "Petrovac", &demoMode->keyframePool, 2, 11);
+	a3clipInit(&demoMode->clipPool.clip[0], "Bor", &demoMode->keyframePool, 0, 3, &demoMode->clipPool);
+	a3clipInit(&demoMode->clipPool.clip[1], "Tanda", &demoMode->keyframePool, 5, 16, &demoMode->clipPool);
+	a3clipInit(&demoMode->clipPool.clip[2], "Zlot", &demoMode->keyframePool, 0, 6, &demoMode->clipPool);
+	a3clipInit(&demoMode->clipPool.clip[3], "Plavna", &demoMode->keyframePool, 7, 18, &demoMode->clipPool);
+	a3clipInit(&demoMode->clipPool.clip[4], "Petrovac", &demoMode->keyframePool, 2, 11, &demoMode->clipPool);
 
 	// Init Clip Controllers
 	a3clipControllerInit(&demoMode->clipController1, "Controller 1", &demoMode->clipPool, 0);
