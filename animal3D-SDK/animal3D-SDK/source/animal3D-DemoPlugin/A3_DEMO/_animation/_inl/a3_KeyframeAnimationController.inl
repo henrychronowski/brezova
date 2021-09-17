@@ -223,21 +223,46 @@ inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Samp
 		const a3_Keyframe* k0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
 		const a3_Keyframe* k1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 
-		sample_out->position.x = a3lerp(
-			k0->sample.position.x,
-			k1->sample.position.x,
-			clipCtrl->keyframeParameter
-		);
-		sample_out->position.y = a3lerp(
-			k0->sample.position.y,
-			k1->sample.position.y,
-			clipCtrl->keyframeParameter
-		);
-		sample_out->position.z = a3lerp(
-			k0->sample.position.z,
-			k1->sample.position.z,
-			clipCtrl->keyframeParameter
-		);
+		switch (clipCtrl->playbackDirection)
+		{
+		case(-1):
+			sample_out->position.x = a3lerp(
+				k1->sample.position.x,
+				k0->sample.position.x,
+				clipCtrl->keyframeParameter
+			);
+			sample_out->position.y = a3lerp(
+				k1->sample.position.y,
+				k0->sample.position.y,
+				clipCtrl->keyframeParameter
+			);
+			sample_out->position.z = a3lerp(
+				k1->sample.position.z,
+				k0->sample.position.z,
+				clipCtrl->keyframeParameter
+			);
+			break;
+		case(1):
+			sample_out->position.x = a3lerp(
+				k0->sample.position.x,
+				k1->sample.position.x,
+				clipCtrl->keyframeParameter
+			);
+			sample_out->position.y = a3lerp(
+				k0->sample.position.y,
+				k1->sample.position.y,
+				clipCtrl->keyframeParameter
+			);
+			sample_out->position.z = a3lerp(
+				k0->sample.position.z,
+				k1->sample.position.z,
+				clipCtrl->keyframeParameter
+			);
+			break;
+		default:
+			break;
+		}
+		
 
 		// 3: spline (catmull-rom, cubic hermite, etc)
 
