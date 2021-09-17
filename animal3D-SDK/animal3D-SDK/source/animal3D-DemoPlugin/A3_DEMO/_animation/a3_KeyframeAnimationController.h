@@ -76,7 +76,8 @@ struct a3_ClipController
 	a3_Clip* currentClip;
 
 	// Pointer to current keyframe
-	a3_Keyframe* currentKeyframe0, currentKeyframe1;
+	a3_Keyframe* currentKeyframe0;
+	a3_Keyframe* currentKeyframe1;
 
 	a3real timeMultiplier;
 };

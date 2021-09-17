@@ -71,22 +71,28 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 					if (clipCtrl->playbackDirection == -1)
 					{
 						clipCtrl->keyframe0 = clipCtrl->currentClip->lastKeyframe;
+						clipCtrl->keyframe1 = clipCtrl->keyframe0 - 1;
 					}
 					else 
 					{
 						clipCtrl->keyframe0 = clipCtrl->currentClip->firstKeyframe;
+						clipCtrl->keyframe1 = clipCtrl->keyframe0 + 1;
 					}
 					
 					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
+					clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 				}
 				else
 				{
 					// Increment keyframe index
 					clipCtrl->keyframe0++;
+					clipCtrl->keyframe1 = (clipCtrl->keyframe0 + 1) % clipCtrl->currentClip->keyframeCount + clipCtrl->currentClip->firstKeyframe;
 
 					// Set new keyframe
 					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
 					clipCtrl->currentKeyframe0->index = clipCtrl->keyframe0;
+					clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
+					clipCtrl->currentKeyframe1->index = clipCtrl->keyframe1;
 				}
 
 				// Reset keyframe time including overflow
@@ -127,21 +133,26 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, const a3real dt
 					if (clipCtrl->playbackDirection == 1)
 					{
 						clipCtrl->keyframe0 = clipCtrl->currentClip->firstKeyframe;
+						clipCtrl->keyframe1 = clipCtrl->keyframe0 + 1;
 					}
 					else 
 					{
 						clipCtrl->keyframe0 = clipCtrl->currentClip->lastKeyframe;
+						clipCtrl->keyframe1 = clipCtrl->keyframe0 - 1;
 					}
 
 					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
+					clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 				}
 				else
 				{
 					// Decrement keyframe index
 					clipCtrl->keyframe0--;
+					clipCtrl->keyframe1 = (clipCtrl->keyframe0 - 1) % clipCtrl->currentClip->keyframeCount + clipCtrl->currentClip->firstKeyframe;
 
 					// Set new keyframe
 					clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
+					clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 				}
 
 				// Reset keyframe time including overflow
@@ -185,6 +196,8 @@ inline a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipP
 	// Set current keyframe
 	clipCtrl->keyframe0 = clipPool->clip[clipIndex_pool].firstKeyframe;
 	clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
+	clipCtrl->keyframe1 = (clipCtrl->keyframe0 + 1) % clipCtrl->currentClip->keyframeCount + clipCtrl->currentClip->firstKeyframe;
+	clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 
 	// Reset times
 	clipCtrl->clipTime = 0;
@@ -207,11 +220,24 @@ inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Samp
 		// 2: lerp
 		// k = k0 + (k1 - k0)param
 		sample_out->time = clipCtrl->keyframeTime;
-		/*sample_out->value = a3lerp(
-			clipCtrl->keyframe0->sample.value,
-			clipCtrl->keyframe1->sample.value,
+		const a3_Keyframe* k0 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe0];
+		const a3_Keyframe* k1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
+
+		sample_out->position.x = a3lerp(
+			k0->sample.position.x,
+			k1->sample.position.x,
 			clipCtrl->keyframeParameter
-		);*/
+		);
+		sample_out->position.y = a3lerp(
+			k0->sample.position.y,
+			k1->sample.position.y,
+			clipCtrl->keyframeParameter
+		);
+		sample_out->position.z = a3lerp(
+			k0->sample.position.z,
+			k1->sample.position.z,
+			clipCtrl->keyframeParameter
+		);
 
 		// 3: spline (catmull-rom, cubic hermite, etc)
 

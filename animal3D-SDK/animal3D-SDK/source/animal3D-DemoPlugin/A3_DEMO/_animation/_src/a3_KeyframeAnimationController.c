@@ -53,6 +53,8 @@ a3i32 a3clipControllerInit(a3_ClipController* clipCtrl_out, const a3byte ctrlNam
 	// Set current keyframe
 	clipCtrl_out->keyframe0 = clipPool->clip[clipIndex_pool].firstKeyframe;
 	clipCtrl_out->currentKeyframe0 = &clipCtrl_out->currentClip->keyframePool->keyframe[clipPool->clip->firstKeyframe];
+	clipCtrl_out->keyframe1 = (clipCtrl_out->keyframe0 + 1) % clipCtrl_out->currentClip->keyframeCount + clipCtrl_out->currentClip->firstKeyframe;
+	clipCtrl_out->currentKeyframe1 = &clipCtrl_out->currentClip->keyframePool->keyframe[clipCtrl_out->keyframe1];
 
 	clipCtrl_out->timeMultiplier = 1.0f;
 
@@ -68,6 +70,8 @@ void a3clipControllerSetKeyframe(a3_ClipController* clipCtrl, const a3ui32 keyfr
 		// Set index based on keyframeIndex
 		clipCtrl->keyframe0 = keyframeIndex;
 		clipCtrl->currentKeyframe0 = &clipCtrl->currentClip->keyframePool->keyframe[keyframeIndex];
+		clipCtrl->keyframe1 = (keyframeIndex + 1) % clipCtrl->currentClip->keyframeCount + clipCtrl->currentClip->firstKeyframe;
+		clipCtrl->currentKeyframe1 = &clipCtrl->currentClip->keyframePool->keyframe[clipCtrl->keyframe1];
 		clipCtrl->keyframeTime = 0.0f;
 	}
 }
