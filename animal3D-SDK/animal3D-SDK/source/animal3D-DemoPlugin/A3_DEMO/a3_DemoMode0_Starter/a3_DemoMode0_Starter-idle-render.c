@@ -122,7 +122,7 @@ void a3starter_render_controls(a3_DemoState const* demoState, a3_DemoMode0_Start
 
 	// Display controls
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Playback state: /=forward, .=pause, ,=reverse | Controller select: i=1, o=2, p=3");
+		"Playback state: /=forward, .=pause, ,=reverse | Controller select: i=1, o=2");
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"Press m to cycle through clips | Press n for slow time");
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
@@ -164,25 +164,25 @@ void a3starter_render_controls(a3_DemoState const* demoState, a3_DemoMode0_Start
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"==================================================================");
 
-	// display controller3 data
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Controller: %s | Playback Direction: %i", demoMode->clipController3.name, demoMode->clipController3.playbackDirection);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Index In Pool: %i | Keyframe index In Pool: %i", demoMode->clipController3.clip, demoMode->clipController3.keyframe0);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Clip Time (parameter): %f (%f)", demoMode->clipController3.clipTime, demoMode->clipController3.clipParameter);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Time (parameter): %f (%f)", demoMode->clipController3.keyframeTime, demoMode->clipController3.keyframeParameter);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"Keyframe Data: %i", demoMode->clipController3.currentKeyframe0->sample.value);
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		"==================================================================");
-	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		" ")
-		;a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		" ");
-		a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-		" ");
+	//// display controller3 data
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"Controller: %s | Playback Direction: %i", demoMode->clipController3.name, demoMode->clipController3.playbackDirection);
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"Clip Index In Pool: %i | Keyframe index In Pool: %i", demoMode->clipController3.clip, demoMode->clipController3.keyframe0);
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"Clip Time (parameter): %f (%f)", demoMode->clipController3.clipTime, demoMode->clipController3.clipParameter);
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"Keyframe Time (parameter): %f (%f)", demoMode->clipController3.keyframeTime, demoMode->clipController3.keyframeParameter);
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"Keyframe Data: %i", demoMode->clipController3.currentKeyframe0->sample.value);
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	"==================================================================");
+	//a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	" ")
+	//	;a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	" ");
+	//	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+	//	" ");
 }
 
 

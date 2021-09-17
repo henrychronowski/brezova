@@ -86,7 +86,6 @@ void a3starter_update(a3_DemoState* demoState, a3_DemoMode0_Starter* demoMode, a
 
 	a3clipControllerUpdate(&demoMode->clipController1, (a3real)dt);
 	a3clipControllerUpdate(&demoMode->clipController2, (a3real)dt);
-	a3clipControllerUpdate(&demoMode->clipController3, (a3real)dt);
 }
 
 

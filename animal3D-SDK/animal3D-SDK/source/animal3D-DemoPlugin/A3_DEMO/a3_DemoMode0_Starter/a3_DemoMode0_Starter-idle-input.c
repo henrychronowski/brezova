@@ -80,10 +80,6 @@ void a3starter_input_keyCharPress(a3_DemoState const* demoState, a3_DemoMode0_St
 		// Toggle controller2
 		case 'o': demoMode->activeController = &demoMode->clipController2;
 			break;
-
-		// Toggle controller3
-		case 'p': demoMode->activeController = &demoMode->clipController3;
-			break;
 		
 		// Switch clip
 		case 'm':
