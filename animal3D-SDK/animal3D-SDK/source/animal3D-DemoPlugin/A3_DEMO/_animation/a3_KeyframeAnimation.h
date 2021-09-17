@@ -59,6 +59,7 @@ struct a3_Sample
 {
 	a3real time; // (the x axis)
 	a3real value; // (the y axis)
+	a3vec3 position;
 };
 
 
@@ -97,7 +98,7 @@ a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count
 a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool);
 
 // initialize keyframe
-a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x);
+a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x, const a3vec3 pos);
 
 
 //-----------------------------------------------------------------------------
@@ -170,6 +171,7 @@ a3i32 a3clipPoolRelease(a3_ClipPool* clipPool);
 // initialize clip with first and last indices
 a3i32 a3clipInit(a3_Clip* clip_out, const a3byte clipName[a3keyframeAnimation_nameLenMax], const a3_KeyframePool* keyframePool, const a3ui32 firstKeyframeIndex, const a3ui32 finalKeyframeIndex, a3_ClipPool* clipPool);
 
+// initialize clip transition
 a3i32 a3clipTransitionInit(a3_ClipTransition* transition_out, a3i32 transition, a3_ClipPool* clipPool, a3i32 nextClip);
 
 // get clip index from pool
@@ -181,6 +183,8 @@ a3i32 a3clipCalculateDuration(a3_Clip* clip);
 // calculate keyframes' durations by distributing clip's duration
 a3i32 a3clipDistributeDuration(a3_Clip* clip, const a3real newClipDuration);
 
+
+void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, const char* filepath);
 
 //-----------------------------------------------------------------------------
 

@@ -35,7 +35,7 @@ inline a3i32 a3clipCalculateDuration(a3_Clip* clip)
 	a3f32 clipDuration = 0;
 
 	// Add duration of all keyframes in referenced keyframe pool
-	for (a3ui32 i = 0; i < clip->keyframeCount; i++)
+	for (a3ui32 i = clip->firstKeyframe; i <= clip->lastKeyframe; i++)
 	{
 		clipDuration += clip->keyframePool->keyframe[i].duration;
 	}

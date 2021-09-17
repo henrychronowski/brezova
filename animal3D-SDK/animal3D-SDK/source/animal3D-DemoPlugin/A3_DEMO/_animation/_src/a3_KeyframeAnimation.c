@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 
 // macros to help with names
@@ -64,7 +65,7 @@ a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool)
 }
 
 // initialize keyframe
-a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x)
+a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x, const a3vec3 pos)
 {
 	// Set duration & inverse duration
 	keyframe_out->duration = duration;
@@ -72,6 +73,7 @@ a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3u
 
 	// Set keyframe data
 	keyframe_out->sample.value = (a3real)value_x;
+	keyframe_out->sample.position = pos;
 
 	return 1;
 }
@@ -155,5 +157,80 @@ a3i32 a3clipGetIndexInPool(const a3_ClipPool* clipPool, const a3byte clipName[a3
 	return 1;
 }
 
+
+void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, const char* filepath)
+{
+	FILE* file;
+	a3ui32 count = 0;
+	a3real dur = 0.0f;
+	a3real x = 0, y = 0, z = 0;
+	char buff[20];
+
+	file = fopen(filepath, "r");
+	if (file == NULL)
+	{
+		printf("%s", "failed to open file");
+		return;
+	}
+	fgets(buff, 12, file);
+	count = atoi(buff);
+	printf("%i\n", count);
+
+	a3keyframePoolCreate(keyframePool, count);
+
+	for (a3ui32 i = 0; i < count; i++)
+	{
+		fscanf(file, "%f", &dur);
+
+		fscanf(file, "%f", &x);
+
+		fscanf(file, "%f", &y);
+
+		fscanf(file, "%f", &z);
+
+		a3vec3 pos;
+		pos.x = x;
+		pos.y = y;
+		pos.z =z;
+
+		a3keyframeInit(&keyframePool->keyframe[i], dur, i, pos);
+
+		printf("%f %f %f %f\n", dur, x, y, z);
+	}
+
+	fscanf(file, "%u", &count);
+	printf("%i\n", count);
+
+	a3clipPoolCreate(clipPool, count);
+
+	a3byte name[a3keyframeAnimation_nameLenMax];
+	a3ui32 first, last, fwdTarget, revTarget;
+	a3i32 fwdDir, revDir;
+
+	for (a3ui32 i = 0; i < count; i++)
+	{
+		fscanf(file, "%s", &name);
+
+		fscanf(file, "%u", &first);
+
+		fscanf(file, "%u", &last);
+
+		fscanf(file, "%u", &fwdTarget);
+
+		fscanf(file, "%i", &fwdDir);
+		
+		fscanf(file, "%u", &revTarget);
+		
+		fscanf(file, "%i", &revDir);
+
+		a3clipInit(&clipPool->clip[i], name, keyframePool, first, last, clipPool);
+		a3clipTransitionInit(&clipPool->clip[i].forwardTransition, fwdDir, clipPool, fwdTarget);
+		a3clipTransitionInit(&clipPool->clip[i].reverseTransition, revDir, clipPool, revTarget);
+
+		printf("%s %u %u %u %i %u %i\n", name, first, last, fwdTarget, fwdDir, revTarget, revDir);
+	}
+
+	fclose(file);
+}
 
 //-----------------------------------------------------------------------------
