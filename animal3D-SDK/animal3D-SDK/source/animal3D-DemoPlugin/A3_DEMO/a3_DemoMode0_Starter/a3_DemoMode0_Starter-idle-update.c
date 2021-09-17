@@ -65,6 +65,10 @@ void a3starter_update(a3_DemoState* demoState, a3_DemoMode0_Starter* demoMode, a
 	a3demo_update_objects(demoState, dt,
 		demoMode->object_camera, starterMaxCount_cameraObject, 1, 0);
 
+	a3_Sample evaluated;
+	a3clipControllerEvaluate(&demoMode->clipController1, &evaluated);
+	demoMode->obj_teapot->modelMat.v3.xyz = evaluated.position;
+
 	a3demo_updateProjectorViewProjectionMat(demoMode->proj_camera_main);
 
 	a3demo_update_defaultAnimation(demoState, dt, demoMode->obj_box, 6, 2);

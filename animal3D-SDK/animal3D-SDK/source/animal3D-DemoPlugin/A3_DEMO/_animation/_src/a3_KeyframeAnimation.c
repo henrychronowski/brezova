@@ -174,7 +174,6 @@ void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, 
 	}
 	fgets(buff, 12, file);
 	count = atoi(buff);
-	printf("%i\n", count);
 
 	a3keyframePoolCreate(keyframePool, count);
 
@@ -194,12 +193,9 @@ void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, 
 		pos.z =z;
 
 		a3keyframeInit(&keyframePool->keyframe[i], dur, i, pos);
-
-		printf("%f %f %f %f\n", dur, x, y, z);
 	}
 
 	fscanf(file, "%u", &count);
-	printf("%i\n", count);
 
 	a3clipPoolCreate(clipPool, count);
 
@@ -226,8 +222,6 @@ void a3CustomInitFromFile(a3_ClipPool* clipPool, a3_KeyframePool* keyframePool, 
 		a3clipInit(&clipPool->clip[i], name, keyframePool, first, last, clipPool);
 		a3clipTransitionInit(&clipPool->clip[i].forwardTransition, fwdDir, clipPool, fwdTarget);
 		a3clipTransitionInit(&clipPool->clip[i].reverseTransition, revDir, clipPool, revTarget);
-
-		printf("%s %u %u %u %i %u %i\n", name, first, last, fwdTarget, fwdDir, revTarget, revDir);
 	}
 
 	fclose(file);

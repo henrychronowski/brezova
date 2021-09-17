@@ -95,7 +95,7 @@ a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* cl
 
 void a3clipControllerSetKeyframe(a3_ClipController* clipCtrl, const a3ui32 keyframeIndex);
 
-// evaluate hte current value at time
+// evaluate the current value at time
 a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Sample * sample_out);
 
 //-----------------------------------------------------------------------------

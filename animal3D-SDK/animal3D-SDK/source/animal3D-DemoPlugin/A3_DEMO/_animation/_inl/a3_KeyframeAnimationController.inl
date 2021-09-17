@@ -193,6 +193,34 @@ inline a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipP
 	return 1;
 }
 
+// Evaluate the current value at time
+inline a3i32 a3clipControllerEvaluate(a3_ClipController const* clipCtrl, a3_Sample* sample_out)
+{
+	if (clipCtrl && clipCtrl->currentClip && sample_out)
+	{
+		// 0: no interpolation: step function
+		*sample_out = clipCtrl->currentKeyframe0->sample;
+
+		// 1: nearest
+		// if (param < 0.5) then keyframe0, else keyframe 1
+
+		// 2: lerp
+		// k = k0 + (k1 - k0)param
+		sample_out->time = clipCtrl->keyframeTime;
+		/*sample_out->value = a3lerp(
+			clipCtrl->keyframe0->sample.value,
+			clipCtrl->keyframe1->sample.value,
+			clipCtrl->keyframeParameter
+		);*/
+
+		// 3: spline (catmull-rom, cubic hermite, etc)
+
+
+		return clipCtrl->keyframe0;
+	}
+
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 
