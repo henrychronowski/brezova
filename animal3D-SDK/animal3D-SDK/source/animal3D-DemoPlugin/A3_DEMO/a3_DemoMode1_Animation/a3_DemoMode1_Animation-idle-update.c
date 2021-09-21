@@ -82,11 +82,16 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 			demoMode->object_scene[i].modelMat.m, a3mat4_identity.m);
 	}
 
+	// ****TODO:
 	// Resolve animation: "the 4 steps"
 	// inteprolate
 	// concatenate (with base)
 	// convert
 	// FK
+
+	// ****TODO:
+	// resolve graphics:
+	// upload results of FK to uniform buffers UBO
 	I am putting an error here so I don't lose it'
 }
 

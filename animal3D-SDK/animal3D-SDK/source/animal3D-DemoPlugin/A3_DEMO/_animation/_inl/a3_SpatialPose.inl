@@ -81,7 +81,45 @@ inline a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatial
 {
 	if (mat_out && spatialPose_in)
 	{
+		// RST -> mat4
+		// 
+		// Scale then rotate then translate
+		// RIGHT TO LEFT
+		// M = T * R2 * R1 * R0 * S
+		// (occurs like this)
+		// M = T * ((R2 * R1 * R0) * S)
+		// 
+		//          tx
+		//          ty
+		//          tz
+		//  0  0  0  1
 
+		// Scale
+		// x 0 0 0
+		// 0 y 0 0
+		// 0 0 z 0
+		// 0 0 0 1
+
+		// Rotx
+		// 1  0  0
+		// 0  c -s
+		// 0  s  c
+		// Rotz
+		// c -s  0
+		// s  c  0
+		// 0  0  1
+		// Roty
+		// c  0  s
+		// 0  1  0
+		//-s  0  c
+
+		// Translation
+		// 1 0 0 x
+		// 0 1 0 y
+		// 0 0 1 z
+		// 0 0 0 1
+
+		return 0;
 	}
 	return -1;
 }
@@ -98,9 +136,33 @@ inline a3i32 a3spatialPoseCopy(a3_SpatialPose* spatialPose_out, const a3_Spatial
 
 inline a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose_lh, const a3_SpatialPose* spatialPose_rh)
 {
+	if (spatialPose_out && spatialPose_lh && spatialPose_rh)
+	{
+		//spatialPose_out->transform; NO, matrix has no data yet
+		spatialPose_out->rotation;	//Euler: concat with addition, validate(lh + rh) -> constrain sum to rotational domain
+		spatialPose_out->scale;		// concat with multiplicatoin, comp(lh * rh) -> component-wise
+		spatialPose_out->translate;	// addition, (lh + rh)
+
+		return 0;
+	}
 	return -1;
 }
 
+// Lerp
+a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u)
+{
+	if (spatialPose_out && spatialPose0 && spatialPose1)
+	{
+		// Right to left
+		//spatialPose_out->transform; NO, matrix has no data yet
+		spatialPose_out->rotation;	// Euler: lerp(p0, p1, u) -> (p1 - p0)u + p0
+		spatialPose_out->scale;		// lerp is ok but really should exp_lerp() -> ((p1 * (p0^-1))^u)p0  unsubstantiated function
+		spatialPose_out->translate;	// lerp(p0, p1, u)
+
+		return 0;
+	}
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 
