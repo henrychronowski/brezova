@@ -76,6 +76,17 @@ inline a3i32 a3spatialPoseReset(a3_SpatialPose* spatialPose)
 	return -1;
 }
 
+inline a3i32 a3spatialPoseInit(a3_SpatialPose* spatialPose, a3mat4 transform, a3vec3 rotation, a3vec3 translate, a3vec3 scale)
+{
+	if (spatialPose)
+	{
+		spatialPose->transform = transform;
+		spatialPose->rotation = rotation;
+		spatialPose->translate = translate;
+		spatialPose->scale = scale;
+	}
+}
+
 // convert single node pose to matrix
 inline a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatialPose_in, const a3_SpatialPoseChannel channel, const a3_SpatialPoseEulerOrder order)
 {
@@ -149,20 +160,20 @@ inline a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_Spati
 }
 
 // Lerp
-a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u)
-{
-	if (spatialPose_out && spatialPose0 && spatialPose1)
-	{
-		// Right to left
-		//spatialPose_out->transform; NO, matrix has no data yet
-		spatialPose_out->rotation;	// Euler: lerp(p0, p1, u) -> (p1 - p0)u + p0
-		spatialPose_out->scale;		// lerp is ok but really should exp_lerp() -> ((p1 * (p0^-1))^u)p0  unsubstantiated function
-		spatialPose_out->translate;	// lerp(p0, p1, u)
-
-		return 0;
-	}
-	return -1;
-}
+//a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u)
+//{
+//	if (spatialPose_out && spatialPose0 && spatialPose1)
+//	{
+//		// Right to left
+//		//spatialPose_out->transform; NO, matrix has no data yet
+//		spatialPose_out->rotation;	// Euler: lerp(p0, p1, u) -> (p1 - p0)u + p0
+//		spatialPose_out->scale;		// lerp is ok but really should exp_lerp() -> ((p1 * (p0^-1))^u)p0  unsubstantiated function
+//		spatialPose_out->translate;	// lerp(p0, p1, u)
+//
+//		return 0;
+//	}
+//	return -1;
+//}
 
 //-----------------------------------------------------------------------------
 

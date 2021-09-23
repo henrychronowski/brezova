@@ -752,7 +752,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	printf("\n\n---------------- LOAD SHADERS FINISHED ---------------- \n");
 
 	// ****TODO: allocate UBOs
-	a3bufferCreate(demoState-><ubo name>, "ubo name", a3buffer_uniform, a3index_countMaxShort, 0);
+	//a3bufferCreate(demoState-><ubo name>, "ubo name", a3buffer_uniform, a3index_countMaxShort, 0);
 
 	//done
 	a3shaderProgramDeactivate();

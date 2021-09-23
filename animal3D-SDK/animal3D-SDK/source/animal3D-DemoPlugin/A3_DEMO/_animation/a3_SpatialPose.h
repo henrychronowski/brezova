@@ -121,6 +121,8 @@ a3i32 a3spatialPoseSetTranslation(a3_SpatialPose* spatialPose, const a3f32 tx, c
 // reset single node pose
 a3i32 a3spatialPoseReset(a3_SpatialPose* spatialPose);
 
+a3i32 a3spatialPoseInit(a3_SpatialPose* spatialPose, a3mat4 transform, a3vec3 rotation, a3vec3 translate, a3vec3 scale);
+
 // convert single node pose to matrix
 a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatialPose_in, const a3_SpatialPoseChannel channel, const a3_SpatialPoseEulerOrder order);
 

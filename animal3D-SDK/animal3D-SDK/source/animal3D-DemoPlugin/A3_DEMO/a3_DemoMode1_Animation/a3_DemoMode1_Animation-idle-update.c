@@ -92,7 +92,7 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	// ****TODO:
 	// resolve graphics:
 	// upload results of FK to uniform buffers UBO
-	I am putting an error here so I don't lose it'
+	//I am putting an error here so I don't lose it'
 }
 
 
