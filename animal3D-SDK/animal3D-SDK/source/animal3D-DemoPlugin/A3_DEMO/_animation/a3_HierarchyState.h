@@ -77,6 +77,10 @@ struct a3_HierarchyState
 {
 	// pointer to hierarcy
 	const a3_Hierarchy* hierarchy;
+
+	a3_HierarchyPose samplePose;
+	a3_HierarchyPose localSpacePose;
+	a3_HierarchyPose objectSpacePose;
 };
 	
 

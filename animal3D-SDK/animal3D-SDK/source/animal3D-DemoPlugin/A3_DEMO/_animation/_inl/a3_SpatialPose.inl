@@ -106,6 +106,18 @@ inline a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatial
 		//  0  0  0  1
 
 		// Scale
+		a3real3MulS(mat_out->m[0], spatialPose_in->scale.x);
+		a3real3MulS(mat_out->m[1], spatialPose_in->scale.y);
+		a3real3MulS(mat_out->m[2], spatialPose_in->scale.z);
+
+		// Rotate
+		a3real4x4SetRotateXYZ(mat_out->m, spatialPose_in->rotation.x, spatialPose_in->rotation.y, spatialPose_in->rotation.z);
+
+		// Translate
+		mat_out->v3.xyz = spatialPose_in->translate;
+
+
+		// Scale
 		// x 0 0 0
 		// 0 y 0 0
 		// 0 0 z 0
@@ -130,7 +142,7 @@ inline a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatial
 		// 0 0 1 z
 		// 0 0 0 1
 
-		return 0;
+		return 1;
 	}
 	return -1;
 }
@@ -140,7 +152,10 @@ inline a3i32 a3spatialPoseCopy(a3_SpatialPose* spatialPose_out, const a3_Spatial
 {
 	if (spatialPose_out && spatialPose_in)
 	{
-
+		spatialPose_out->transform = spatialPose_in->transform;
+		spatialPose_out->rotation = spatialPose_in->rotation;
+		spatialPose_out->translate = spatialPose_in->translate;
+		spatialPose_out->scale = spatialPose_in->scale;
 	}
 	return -1;
 }

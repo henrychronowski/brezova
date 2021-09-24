@@ -98,6 +98,8 @@ enum a3_DemoState_ObjectMaxCount
 
 	demoStateMaxCount_shaderProgram = 32,
 
+	demoStateMaxCount_uniformBuffer = 2,
+
 	demoStateMaxCount_texture = 8,
 
 	demoStateMaxCount_framebuffer = 2,
@@ -284,12 +286,16 @@ struct a3_DemoState
 
 	// ****TODO: UBO
 
-	//union {
-		//a3UniformBuffer ubo[demoStateMaxCount_uniformBuffer];
 
-		//struct{
-		//stuff
-	//}
+	union {
+		a3_UniformBuffer ubo[demoStateMaxCount_uniformBuffer];
+
+		struct {
+			a3_UniformBuffer
+				ubo_transformLMVP_bone[2],
+				ubo_transformLMVP_joint[2];
+		};
+	};
 
 
 	// textures
