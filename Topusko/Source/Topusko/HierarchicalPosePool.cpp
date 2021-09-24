@@ -41,3 +41,19 @@ int HierarchicalPosePool::CreateHierarchicalPosePool(const Hierarchy* hierarchy,
 
 	return -1;
 }
+
+int HierarchicalPosePool::DeleteHierarchicalPosePool()
+{
+	if (mHierarchy)
+	{
+		free(mHierarchicalPoses);
+		free(mSpatialPosePool);
+		free((void*)mHierarchy);
+
+		mHierarchy = nullptr;
+
+		return 1;
+	}
+
+	return -1;
+}

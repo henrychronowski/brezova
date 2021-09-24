@@ -15,6 +15,7 @@ public:
 	~HierarchicalPosePool();
 
 	int CreateHierarchicalPosePool(const Hierarchy* hierarchy, const size_t poseCount);
+	int DeleteHierarchicalPosePool();
 
 public:
 	
