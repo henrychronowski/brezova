@@ -60,7 +60,7 @@ a3i32 a3hierarchyPoseGroupCreate(a3_HierarchyPoseGroup *poseGroup_out, const a3_
 
 		for (a3ui32 j = 0; j < poseGroup_out->spatialPoseCount; j++)
 		{
-			a3spatialPoseReset(poseGroup_out->spatialPosePool + i);
+			a3spatialPoseReset(poseGroup_out->spatialPosePool + j);
 		}
 
 		// done
