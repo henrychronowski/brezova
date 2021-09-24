@@ -1,8 +1,9 @@
-// Advanced Animation Programming Lab 2\nEthan Heil, Henry Chronowski
+// Advanced Animation Programming Lab2: Ethan Heil, Henry Chronowski
 
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HierarchyNode.h"
 
 /**
  * 
@@ -12,4 +13,12 @@ class TOPUSKO_API Hierarchy
 public:
 	Hierarchy();
 	~Hierarchy();
+
+	int CreateHierarchy(const size_t numNodes, const FString* names);
+	int DeleteHierarchy();
+
+public:
+
+	HierarchyNode* mHierarchyNodes;
+	size_t mNodeCount;
 };
