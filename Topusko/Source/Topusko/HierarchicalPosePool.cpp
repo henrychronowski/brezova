@@ -23,6 +23,7 @@ int HierarchicalPosePool::CreateHierarchicalPosePool(const Hierarchy* hierarchy,
 		mHierarchicalPoseCount = poseCount;
 
 		dataSize = sizeof(SpatialPose) * (poseCount * hierarchy->mNodeCount);
+		mSpatialPosePool = (SpatialPose*)malloc(dataSize);
 		memset(mSpatialPosePool, 0, dataSize);
 
 		mSpatialPoseCount = poseCount * hierarchy->mNodeCount;

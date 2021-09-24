@@ -2,6 +2,7 @@
 
 
 #include "Hierarchy.h"
+#include <cassert>
 
 Hierarchy::Hierarchy()
 {
@@ -9,7 +10,7 @@ Hierarchy::Hierarchy()
 
 Hierarchy::~Hierarchy()
 {
-	DeleteHierarchy();
+	//DeleteHierarchy();
 }
 
 int Hierarchy::CreateHierarchy(const size_t numNodes, const FString* names)
@@ -21,11 +22,12 @@ int Hierarchy::CreateHierarchy(const size_t numNodes, const FString* names)
 		mHierarchyNodes = (HierarchyNode*)malloc(dataSize);
 		memset(mHierarchyNodes, 0, dataSize);
 
-		mNodeCount = numNodes;
+		mNodeCount = 32;
+		//mNodeCount = numNodes;
 
 		for (int i = 0; i < numNodes; ++i)
 		{
-			mHierarchyNodes[i].mName = names[i];
+		//	mHierarchyNodes[i].mName = names[i];
 		}
 
 		return mNodeCount;
@@ -36,6 +38,7 @@ int Hierarchy::CreateHierarchy(const size_t numNodes, const FString* names)
 
 int Hierarchy::DeleteHierarchy()
 {
+	assert(mHierarchyNodes);
 	if (mHierarchyNodes)
 	{
 		free(mHierarchyNodes);
@@ -43,6 +46,24 @@ int Hierarchy::DeleteHierarchy()
 		mNodeCount = 0;
 
 		return 1;
+	}
+
+	return -1;
+}
+
+int Hierarchy::SetNode(const size_t index, const int parentIndex, const FString name)
+{
+	HierarchyNode* node;
+	node = new HierarchyNode();
+
+	if (mHierarchyNodes && index < mNodeCount)
+	{
+		if ((int)index > parentIndex)
+		{
+			node->InitHierarchyNode(name, index, parentIndex);
+
+			return index;
+		}
 	}
 
 	return -1;
