@@ -69,6 +69,7 @@ enum a3_SpatialPoseChannel
 	a3poseChannel_orient_x = 0x0001,
 	a3poseChannel_orient_y = 0x0002,
 	a3poseChannel_orient_z = 0x0004,
+	a3poseChannel_orient_w = 0x0008,
 	a3poseChannel_orient_xy = a3poseChannel_orient_x | a3poseChannel_orient_y,
 	a3poseChannel_orient_yz = a3poseChannel_orient_y | a3poseChannel_orient_z,
 	a3poseChannel_orient_zx = a3poseChannel_orient_z | a3poseChannel_orient_x,
@@ -78,6 +79,7 @@ enum a3_SpatialPoseChannel
 	a3poseChannel_scale_x = 0x0010,
 	a3poseChannel_scale_y = 0x0020,
 	a3poseChannel_scale_z = 0x0040,
+	a3poseChannel_scale_w = 0x0080,
 	a3poseChannel_scale_xy = a3poseChannel_scale_x | a3poseChannel_scale_y,
 	a3poseChannel_scale_yz = a3poseChannel_scale_y | a3poseChannel_scale_z,
 	a3poseChannel_scale_zx = a3poseChannel_scale_z | a3poseChannel_scale_x,
@@ -87,6 +89,7 @@ enum a3_SpatialPoseChannel
 	a3poseChannel_translate_x = 0x0100,
 	a3poseChannel_translate_y = 0x0200,
 	a3poseChannel_translate_z = 0x0400,
+	a3poseChannel_translate_w = 0x0800,
 	a3poseChannel_translate_xy = a3poseChannel_translate_x | a3poseChannel_translate_y,
 	a3poseChannel_translate_yz = a3poseChannel_translate_y | a3poseChannel_translate_z,
 	a3poseChannel_translate_zx = a3poseChannel_translate_z | a3poseChannel_translate_x,
@@ -100,7 +103,10 @@ enum a3_SpatialPoseChannel
 struct a3_SpatialPose
 {
 	a3mat4 transform;
-	a3vec3 rotation, scale, translate;
+	a3vec4 rotate_quat, rotate_euler, scale, translate;
+
+	// quat rotate: encoded angle & axis
+	// q = cos(x/2) + sin(x/2)n
 };
 
 
@@ -121,7 +127,7 @@ a3i32 a3spatialPoseSetTranslation(a3_SpatialPose* spatialPose, const a3f32 tx, c
 // reset single node pose
 a3i32 a3spatialPoseReset(a3_SpatialPose* spatialPose);
 
-a3i32 a3spatialPoseInit(a3_SpatialPose* spatialPose, a3mat4 transform, a3vec3 rotation, a3vec3 translate, a3vec3 scale);
+a3i32 a3spatialPoseInit(a3_SpatialPose* spatialPose, a3mat4 transform, a3vec4 rotation, a3vec4 translate, a3vec4 scale);
 
 // convert single node pose to matrix
 a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatialPose_in, const a3_SpatialPoseChannel channel, const a3_SpatialPoseEulerOrder order);
@@ -130,10 +136,10 @@ a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatialPose_in
 a3i32 a3spatialPoseCopy(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose_in);
 
 // concatenate/combine
-a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose_lh, const a3_SpatialPose* spatialPose_rh);
+a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose_lh, const a3_SpatialPose* spatialPose_rh, const a3boolean usingQuaternion);
 
 // Lerp
-a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u);
+a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u, const a3boolean usingQuaternion);
 
 
 //-----------------------------------------------------------------------------
