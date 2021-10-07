@@ -92,12 +92,13 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	// ****TODO:
 	// resolve graphics:
 	// upload results of FK to uniform buffers UBO
-	//I am putting an error here so I don't lose it'
 
 
 
 
-
+	a3bufferRefillOffset(demoState->ubo_mvp, 0, 0, sizeof(demoMode->skeletonPose_render), demoMode->skeletonPose_render);
+	a3bufferRefillOffset(demoState->ubo_mvp, 0, sizeof(demoMode->skeletonPose_render), sizeof(demoMode->hierarchyDepth_skel), demoMode->hierarchyDepth_skel);
+	a3bufferRefillOffset(demoState->ubo_mvp + 1, 0, 0, sizeof(demoMode->skeletonPose_renderAxis), demoMode->skeletonPose_renderAxis);
 	a3bufferRefillOffset(demoState->ubo_transformLMVP_bone, 0, 0, sizeof(demoMode->skeletonPose_transformLMVP_bone), demoMode->skeletonPose_transformLMVP_bone);
 	a3bufferRefillOffset(demoState->ubo_transformLMVP_joint, 0, 0, sizeof(demoMode->skeletonPose_transformLMVP_joint), demoMode->skeletonPose_transformLMVP_joint);
 }

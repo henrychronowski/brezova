@@ -134,7 +134,11 @@ typedef enum a3_DemoMode1_Animation_TargetName				a3_DemoMode1_Animation_TargetN
 
 		a3mat4 skeletonPose_transformLMVP_bone[animateMaxCount_skeletonJoint], skeletonPose_transformLMVP_joint[animateMaxCount_skeletonJoint];
 
+		a3mat4 skeletonPose_localMVP[animateMaxCount_skeletonJoint], skeletonPose_objectMVP[animateMaxCount_skeletonJoint];
+		a3mat4 skeletonPose_render[animateMaxCount_skeletonJoint], skeletonPose_renderAxis[animateMaxCount_skeletonJoint];
+
 		// skeletal animation
+		a3ui32 hierarchyDepth_skel[animateMaxCount_skeletonJoint];
 		a3_Hierarchy hierarchy_skel[1];
 		a3_HierarchyState hierarchyState_skel[1];
 		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[1];

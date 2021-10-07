@@ -43,7 +43,7 @@ a3i32 a3hierarchyPoseGroupCreate(a3_HierarchyPoseGroup *poseGroup_out, const a3_
 
 		// allocate everything (one malloc)
 		//??? = (...)malloc(sz);
-		a3ui8* posePool = /*(a3ui32*)*/malloc(hierarchyPosesSize + spatialPosePoolSize);
+		a3ui8* posePool = (a3ui8*) malloc(hierarchyPosesSize + spatialPosePoolSize);
 
 		// set pointers
 		poseGroup_out->hierarchy = hierarchy;
