@@ -64,11 +64,15 @@ struct a3_HierarchyPoseGroup
 	// number of hierarchical poses
 	a3ui32 poseCount;
 
+	a3_HierarchyPose* hierarchyPoses;
+
 	a3_SpatialPose* spatialPosePool;
 
 	a3_HierarchyPose* hierarchyPoses;
 
 	a3ui32 spatialPoseCount;
+
+	a3_SpatialPoseEulerOrder eulerOrder;
 };
 
 
