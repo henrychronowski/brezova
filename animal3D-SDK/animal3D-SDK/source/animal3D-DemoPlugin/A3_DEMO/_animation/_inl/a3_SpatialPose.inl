@@ -35,7 +35,9 @@ inline a3i32 a3spatialPoseSetRotation(a3_SpatialPose* spatialPose, const a3f32 r
 {
 	if (spatialPose)
 	{
-
+		spatialPose->rotation.x = rx_degrees;
+		spatialPose->rotation.y = ry_degrees;
+		spatialPose->rotation.z = rz_degrees;
 	}
 	return -1;
 }
@@ -45,7 +47,9 @@ inline a3i32 a3spatialPoseSetScale(a3_SpatialPose* spatialPose, const a3f32 sx, 
 {
 	if (spatialPose)
 	{
-
+		spatialPose->scale.x = sx;
+		spatialPose->scale.y = sy;
+		spatialPose->scale.z = sz;
 	}
 	return -1;
 }
@@ -55,7 +59,9 @@ inline a3i32 a3spatialPoseSetTranslation(a3_SpatialPose* spatialPose, const a3f3
 {
 	if (spatialPose)
 	{
-
+		spatialPose->translate.x = tx;
+		spatialPose->translate.y = ty;
+		spatialPose->translate.z = tz;
 	}
 	return -1;
 }
@@ -92,55 +98,54 @@ inline a3i32 a3spatialPoseConvert(a3mat4* mat_out, const a3_SpatialPose* spatial
 {
 	if (mat_out && spatialPose_in)
 	{
-		// RST -> mat4
-		// 
-		// Scale then rotate then translate
-		// RIGHT TO LEFT
-		// M = T * R2 * R1 * R0 * S
-		// (occurs like this)
-		// M = T * ((R2 * R1 * R0) * S)
-		// 
-		//          tx
-		//          ty
-		//          tz
-		//  0  0  0  1
+		// Translate
+		mat_out->v3.xyz = spatialPose_in->translate;
+
+		// Check euler angle order
+		switch (order)
+		{
+			case a3poseEulerOrder_xyz:
+				// Rotate
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+			break;
+			case a3poseEulerOrder_zxy:
+				// Rotate
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+			break;
+			case a3poseEulerOrder_yxz:
+				// Rotate
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+			break;
+			case a3poseEulerOrder_zyx:
+				// Rotate
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+			break;
+			case a3poseEulerOrder_yzx:
+				// Rotate
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+			break;
+			case a3poseEulerOrder_xzy:
+				// Rotate
+				a3real4x4SetRotateX(mat_out->m, spatialPose_in->rotation.x);
+				a3real4x4SetRotateZ(mat_out->m, spatialPose_in->rotation.z);
+				a3real4x4SetRotateY(mat_out->m, spatialPose_in->rotation.y);
+			break;
+		}
 
 		// Scale
 		a3real3MulS(mat_out->m[0], spatialPose_in->scale.x);
 		a3real3MulS(mat_out->m[1], spatialPose_in->scale.y);
 		a3real3MulS(mat_out->m[2], spatialPose_in->scale.z);
-
-		// Rotate
-		a3real4x4SetRotateXYZ(mat_out->m, spatialPose_in->rotation.x, spatialPose_in->rotation.y, spatialPose_in->rotation.z);
-
-		// Translate
-		mat_out->v3.xyz = spatialPose_in->translate;
-
-
-		// Scale
-		// x 0 0 0
-		// 0 y 0 0
-		// 0 0 z 0
-		// 0 0 0 1
-
-		// Rotx
-		// 1  0  0
-		// 0  c -s
-		// 0  s  c
-		// Rotz
-		// c -s  0
-		// s  c  0
-		// 0  0  1
-		// Roty
-		// c  0  s
-		// 0  1  0
-		//-s  0  c
-
-		// Translation
-		// 1 0 0 x
-		// 0 1 0 y
-		// 0 0 1 z
-		// 0 0 0 1
 
 		return 1;
 	}
