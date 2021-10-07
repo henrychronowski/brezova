@@ -185,20 +185,27 @@ inline a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_Spati
 }
 
 // Lerp
-//a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u)
-//{
-//	if (spatialPose_out && spatialPose0 && spatialPose1)
-//	{
-//		// Right to left
-//		//spatialPose_out->transform; NO, matrix has no data yet
-//		spatialPose_out->rotation;	// Euler: lerp(p0, p1, u) -> (p1 - p0)u + p0
-//		spatialPose_out->scale;		// lerp is ok but really should exp_lerp() -> ((p1 * (p0^-1))^u)p0  unsubstantiated function
-//		spatialPose_out->translate;	// lerp(p0, p1, u)
-//
-//		return 0;
-//	}
-//	return -1;
-//}
+a3i32 a3spatialPoseLerp(a3_SpatialPose* spatialPose_out, const a3_SpatialPose* spatialPose0, const a3_SpatialPose* spatialPose1, const a3real u)
+{
+	if (spatialPose_out && spatialPose0 && spatialPose1)
+	{
+		// Right to left
+		//spatialPose_out->transform; NO, matrix has no data yet
+		spatialPose_out->rotation;	// Euler: lerp(p0, p1, u) -> (p1 - p0)u + p0
+		spatialPose_out->scale;		// lerp is ok but really should exp_lerp() -> ((p1 * (p0^-1))^u)p0  unsubstantiated function
+		spatialPose_out->translate;	// lerp(p0, p1, u)
+
+		a3real3Lerp(spatialPose_out->rotation.v, spatialPose0->rotation.v, spatialPose1->rotation.v, u);
+
+		// TODO: Need to change to explerp
+		a3real3Lerp(spatialPose_out->scale.v, spatialPose0->scale.v, spatialPose1->scale.v, u);
+
+		a3real3Lerp(spatialPose_out->scale.v, spatialPose0->translate.v, spatialPose1->translate.v, u);
+
+		return 0;
+	}
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 
