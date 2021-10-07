@@ -169,12 +169,17 @@ inline a3i32 a3spatialPoseConcat(a3_SpatialPose* spatialPose_out, const a3_Spati
 {
 	if (spatialPose_out && spatialPose_lh && spatialPose_rh)
 	{
-		//spatialPose_out->transform; NO, matrix has no data yet
-		spatialPose_out->rotation;	//Euler: concat with addition, validate(lh + rh) -> constrain sum to rotational domain
-		spatialPose_out->scale;		// concat with multiplicatoin, comp(lh * rh) -> component-wise
-		spatialPose_out->translate;	// addition, (lh + rh)
+		// Concat rotation
+		a3real3Sum(spatialPose_out->rotation.v, spatialPose_lh->rotation.v, spatialPose_rh->rotation.v);
 
-		return 0;
+		// Concat scale
+		spatialPose_out->scale = spatialPose_lh->scale;
+		a3real3MulComp(spatialPose_out->scale.v, spatialPose_rh->scale.v);
+
+		// Concat translation
+		a3real3Sum(spatialPose_out->translate.v, spatialPose_lh->translate.v, spatialPose_rh->translate.v);
+
+		return 1;
 	}
 	return -1;
 }
