@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define COMMENT '#'
 #define END_FILE "[ENDOFFILE]"
@@ -166,14 +167,18 @@ a3i32 a3hierarchyPoseGroupLoadHTR(a3_HierarchyPoseGroup* poseGroup_out, a3_Hiera
 
 		a3byte* line = "";
 
-		while (line != END_FILE)
+		printf("Loading animation file...\n");
+
+		while (strcmp(line, END_FILE) != 0)
 		{
 			a3i32 commentResult = a3CheckComment(line, inFile);
-			if (line == SECTION_HEADER)
-			{
+			if (strcmp(line, SECTION_HEADER) == 0)
+				a3ReadHTRHeader(line, inFile, poseGroup_out, hierarchy_out);
+			if(strcmp(line, SECTION_SEGMENT_NAME_HIERARCHY) == 0)
+				a3ReadHTRNamesAndHierarchy(line, inFile, poseGroup_out,	hierarchy_out);
 				
-			}
 		}
+		printf("Finished!\n");
 	}
 	return -1;
 }
@@ -202,6 +207,7 @@ a3i32 a3CheckComment(a3byte* line, FILE* file)
 
 		if (buffer != END_FILE)
 		{
+			buffer[strcspn(buffer, "\n")] = '\0';
 			strcpy_s(line, 128, buffer);
 			return 1;
 		}
@@ -210,69 +216,116 @@ a3i32 a3CheckComment(a3byte* line, FILE* file)
 	return -1;
 }
 
-a3i32 a3ReadHTRHeader(a3byte* line, FILE* file)
+a3i32 a3ReadHTRHeader(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out)
 {
 	if (file)
 	{
 		a3byte* key = "";
 		a3byte* value = "";
 
-		do
+		while (true) // Henry made me do this
 		{
-			fscanf(file, "%s %s", key, value);
-		} while (key != END_FILE && key[0] == COMMENT);
+			do
+			{
+				if (key[0] == COMMENT)
+					fgets(key, 128, file);
+				fscanf(file, "%s", key);
+			} while (key != END_FILE && key[0] == COMMENT);
 
-		if (key == "FileType")
-		{
+			if (strcmp(key, "FileType") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "DataType") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "FileVersion") == 0)
+			{
+				fscanf(file, "%s", value);
 
-		}
-		else if (key == "DataType")
-		{
-
-		}
-		else if (key == "FileVersion")
-		{
-
-		}
-		else if (key == "NumSegments")
-		{
-
-		}
-		else if (key == "NumFrames")
-		{
-
-		}
-		else if (key == "DataFrameRate")
-		{
-
-		}
-		else if (key == "EulerRotationOrder")
-		{
-
-		}
-		else if (key == "CalibrationUnits")
-		{
-
-		}
-		else if (key == "RotationUnits")
-		{
-
-		}
-		else if (key == "GlobalAxisOfGravity")
-		{
-
-		}
-		else if (key == "BoneLengthAxis")
-		{
-
-		}
-		else if (key == "ScaleFactor")
-		{
-
+			}
+			else if (strcmp(key, "NumSegments") == 0)
+			{
+				fscanf(file, "%s", value);
+				hierarchy_out->numNodes = atoi(value);
+			}
+			else if (strcmp(key, "NumFrames") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "DataFrameRate") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "EulerRotationOrder") == 0)
+			{
+				fscanf(file, "%s", value);
+				a3GetEulerOrderFromValue(value);
+			}
+			else if (strcmp(key, "CalibrationUnits") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "RotationUnits") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "GlobalAxisofGravity") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "BoneLengthAxis") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else if (strcmp(key, "ScaleFactor") == 0)
+			{
+				fscanf(file, "%s", value);
+			}
+			else
+			{
+				strcpy_s(line, 128, key);
+				return 1;
+			}
 		}
 	}
 
 	return -1;
+}
+
+a3i32 a3ReadHTRNamesAndHierarchy(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out)
+{
+	if (file)
+	{
+		a3byte* key = "";
+		a3byte* value = "";
+
+		while (true)
+		{
+			
+		}
+	}
+
+	return -1;
+}
+
+a3_SpatialPoseEulerOrder a3GetEulerOrderFromValue(a3byte* value)
+{
+	if(value == "XYZ")
+		return a3poseEulerOrder_xyz;
+	if(value == "XZY")
+		return a3poseEulerOrder_xzy;
+	if(value == "YXZ")
+		return a3poseEulerOrder_yxz;
+	if(value == "YZX")
+		return a3poseEulerOrder_yzx;
+	if(value == "ZXY")
+		return a3poseEulerOrder_zxy;
+	if(value == "ZYX")
+		return a3poseEulerOrder_zyx;
+
+	return a3poseEulerOrder_xyz;
 }
 
 //-----------------------------------------------------------------------------
