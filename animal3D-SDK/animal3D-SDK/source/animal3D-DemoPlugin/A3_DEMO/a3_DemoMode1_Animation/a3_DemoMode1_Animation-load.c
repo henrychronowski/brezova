@@ -76,7 +76,7 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	//	a3i32 rootJointIndex, upperSpineJointIndex, clavicleJointIndex, pelvisJointIndex;
 
 	//	// initialize hierarchy
-	//	hierarchy = demoMode->hierarchy_skel;
+		hierarchy = demoMode->hierarchy_skel;
 	//	a3hierarchyCreate(hierarchy, jointCount, 0);
 
 	//	// set up joint relationships

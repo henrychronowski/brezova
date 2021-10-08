@@ -176,7 +176,9 @@ a3i32 a3hierarchyPoseGroupLoadHTR(a3_HierarchyPoseGroup* poseGroup_out, a3_Hiera
 				a3ReadHTRHeader(line, inFile, poseGroup_out, hierarchy_out);
 			if(strcmp(line, SECTION_SEGMENT_NAME_HIERARCHY) == 0)
 				a3ReadHTRNamesAndHierarchy(line, inFile, poseGroup_out,	hierarchy_out);
-				
+			if(strcmp(line, SECTION_BASE_POSITION) == 0)
+				a3ReadHTRBasePosition(line, inFile, poseGroup_out, hierarchy_out);
+			
 		}
 		printf("Finished!\n");
 	}
@@ -220,8 +222,8 @@ a3i32 a3ReadHTRHeader(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup
 {
 	if (file)
 	{
-		a3byte* key = "";
-		a3byte* value = "";
+		a3byte* key = malloc(sizeof(a3byte) * 128);
+		a3byte* value = malloc(sizeof(a3byte) * 128);
 
 		while (true) // Henry made me do this
 		{
@@ -286,9 +288,13 @@ a3i32 a3ReadHTRHeader(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup
 			else
 			{
 				strcpy_s(line, 128, key);
-				return 1;
+				break;
 			}
 		}
+
+		free(key);
+		free(value);
+		return 1;
 	}
 
 	return -1;
@@ -298,15 +304,67 @@ a3i32 a3ReadHTRNamesAndHierarchy(a3byte* line, FILE* file, a3_HierarchyPoseGroup
 {
 	if (file)
 	{
-		a3byte* key = "";
-		a3byte* value = "";
+		a3byte* key = malloc(sizeof(a3byte) * 128);
+		a3byte* value = malloc(sizeof(a3byte) * 128);
+
+		// indices of joints, their parents and branching joints
+		a3ui32 jointIndex = 0;
+		a3i32 jointParentIndex = -1;
+		//a3i32 rootJointIndex, upperSpineJointIndex, clavicleJointIndex, pelvisJointIndex;
+
+		// initialize hierarchy
+		// hierarchy_out = demoMode->hierarchy_skel;
+		a3hierarchyCreate(hierarchy_out, hierarchy_out->numNodes, 0);
 
 		while (true)
 		{
-			
+			do
+			{
+				if (key[0] == COMMENT)
+					fgets(key, 128, file);
+				fscanf(file, "%s", key);
+			} while (key != END_FILE && key[0] == COMMENT);
+
+			if (strcmp(key, SECTION_BASE_POSITION) == 0)
+			{
+				strcpy_s(line, 128, key);
+				break;
+			}
+			else
+			{
+				fscanf(file, "%s", value);
+
+				if (strcmp(value, "GLOBAL") == 0)
+				{
+					jointParentIndex = -1;
+				}
+				else
+				{
+					for (a3i32 i = jointIndex; i >= 0; i--)
+					{
+						if (strcmp(hierarchy_out->nodes[i].name, value) == 0)
+						{
+							jointParentIndex = i;
+							break;
+						}
+					}
+				}
+
+				a3hierarchySetNode(hierarchy_out, jointIndex, jointParentIndex, key);
+				jointIndex++;
+			}
 		}
+
+		free(key);
+		free(value);
+		return 1;
 	}
 
+	return -1;
+}
+
+a3i32 a3ReadHTRBasePosition(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out)
+{
 	return -1;
 }
 
