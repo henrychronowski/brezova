@@ -143,6 +143,8 @@ a3i32 a3ReadHTRNamesAndHierarchy(a3byte* line, FILE* file, a3_Hierarchy* hierarc
 
 a3i32 a3ReadHTRBasePosition(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out);
 
+a3i32 a3ReadHTRBonePoses(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out);
+
 a3_SpatialPoseEulerOrder a3GetEulerOrderFromValue(a3byte* value);
 
 
