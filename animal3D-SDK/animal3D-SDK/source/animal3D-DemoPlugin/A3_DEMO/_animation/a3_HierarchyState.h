@@ -139,7 +139,7 @@ a3i32 a3CheckComment(a3byte* line, FILE* file);
 
 a3i32 a3ReadHTRHeader(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out);
 
-a3i32 a3ReadHTRNamesAndHierarchy(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out);
+a3i32 a3ReadHTRNamesAndHierarchy(a3byte* line, FILE* file, a3_Hierarchy* hierarchy_out);
 
 a3i32 a3ReadHTRBasePosition(a3byte* line, FILE* file, a3_HierarchyPoseGroup* poseGroup_out, a3_Hierarchy* hierarchy_out);
 

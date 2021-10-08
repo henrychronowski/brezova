@@ -128,13 +128,13 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	hierarchy = demoMode->hierarchy_skel;
 	hierarchyPoseGroup = demoMode->hierarchyPoseGroup_skel;
 	hierarchyPoseGroup->hierarchy = 0;
-	a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 4);
+	//a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 4);
 
 	a3hierarchyPoseGroupLoadHTR(hierarchyPoseGroup, hierarchy, EGNARO_FILE_PATH);
 
 	// define "bind pose" or "base pose" or the initial transformation 
 	//	description for each joint (not a literal transform)
-	p = 0;
+	/*p = 0;
 	j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 	spatialPose = hierarchyPoseGroup->hierarchyPoses[p].spatialPose + j;
 	a3spatialPoseSetTranslation(spatialPose, 0.0f, 0.0f, +3.6f);
@@ -304,7 +304,7 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	
 	j = a3hierarchyGetNodeIndex(hierarchy, "skel:toe_l");
 	spatialPose = hierarchyPoseGroup->hierarchyPoses[p].spatialPose + j;
-	a3spatialPoseSetTranslation(spatialPose, -0.5f, 0.0f, 0.0f);
+	a3spatialPoseSetTranslation(spatialPose, -0.5f, 0.0f, 0.0f);*/
 
 
 	// each remaining pose represents a "delta" from the base
