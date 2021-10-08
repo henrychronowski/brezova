@@ -31,6 +31,7 @@
 #include "../a3_DemoMode1_Animation.h"
 
 #include "../a3_DemoState.h"
+#include <stdio.h>
 
 
 //-----------------------------------------------------------------------------
@@ -433,8 +434,16 @@ void a3animation_load(a3_DemoState const* demoState, a3_DemoMode1_Animation* dem
 	demoMode->targetCount[animation_passComposite] = 1;
 
 
+
 	// setup
 	a3animation_init_animation(demoState, demoMode);
+
+	for (unsigned int i = 0;  i < demoMode->hierarchy_skel->numNodes; i++)
+	{
+		a3vec3 red = demoMode->hierarchyState_skel->objectSpacePose.spatialPose[i].translate;
+
+		printf("%f %f %f\n", red.x, red.y, red.z);
+	}
 }
 
 
