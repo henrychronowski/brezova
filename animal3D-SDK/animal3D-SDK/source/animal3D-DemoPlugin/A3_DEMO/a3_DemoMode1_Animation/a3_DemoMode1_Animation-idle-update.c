@@ -96,10 +96,8 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	a3hierarchyPoseConvert(&demoMode->hierarchyState_skel->localSpacePose, demoMode->hierarchyState_skel->hierarchy->numNodes, 0, a3poseEulerOrder_xyz);
 	a3kinematicsSolveForward(demoMode->hierarchyState_skel);
 
-	// ****TODO:
-	// resolve graphics:
-	// upload results of FK to uniform buffers UBO
 
+	// upload results of FK to uniform buffers UBO
 	a3mat4 skeletonMVP;
 	a3real4x4Product(skeletonMVP.m, activeCamera->viewProjectionMat.m, demoMode->obj_skeleton->modelMat.m);
 
@@ -150,14 +148,6 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		a3real4x4Concat(pose[i].transform.m, joint[i].m);
 		a3real4x4Concat(skeletonMVP.m, joint[i].m);
 	}
-
-	for (unsigned int i = 0; i < demoMode->hierarchy_skel->numNodes; i++)
-	{
-		a3vec3 red = demoMode->hierarchyState_skel->samplePose.spatialPose[i].translate;
-
-		printf("%f %f %f\n", red.x, red.y, red.z);
-	}
-	
 
 	a3bufferRefillOffset(demoState->ubo_transformLMVP_bone, 0, 0, sizeof(demoMode->skeletonPose_transformLMVP_bone), demoMode->skeletonPose_transformLMVP_bone);
 	a3bufferRefillOffset(demoState->ubo_transformLMVP_joint, 0, 0, sizeof(demoMode->skeletonPose_transformLMVP_joint), demoMode->skeletonPose_transformLMVP_joint);

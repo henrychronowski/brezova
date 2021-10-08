@@ -27,6 +27,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define COMMENT '#'
+#define END_FILE "[ENDOFFILE]"
+#define SECTION_HEADER "[Header]"
+#define SECTION_SEGMENT_NAME_HIERARCHY "[SegmentNames&Hierarchy]"
+#define SECTION_BASE_POSITION "[BasePosition]"
+
+
 
 //-----------------------------------------------------------------------------
 
@@ -150,7 +157,23 @@ a3i32 a3hierarchyPoseGroupLoadHTR(a3_HierarchyPoseGroup* poseGroup_out, a3_Hiera
 {
 	if (poseGroup_out && !poseGroup_out->poseCount && hierarchy_out && !hierarchy_out->numNodes && resourceFilePath && *resourceFilePath)
 	{
+		FILE* inFile;
 
+		inFile = fopen(resourceFilePath, "r");
+
+		if(!inFile)
+			return -1;
+
+		a3byte* line = "";
+
+		while (line != END_FILE)
+		{
+			a3i32 commentResult = a3CheckComment(line, inFile);
+			if (line == SECTION_HEADER)
+			{
+				
+			}
+		}
 	}
 	return -1;
 }
@@ -165,5 +188,91 @@ a3i32 a3hierarchyPoseGroupLoadBVH(a3_HierarchyPoseGroup* poseGroup_out, a3_Hiera
 	return -1;
 }
 
+
+a3i32 a3CheckComment(a3byte* line, FILE* file)
+{
+	if (file)
+	{
+		a3byte* buffer = "";
+		
+		do 
+		{
+			fgets(buffer, 128, file);
+		} while (buffer != END_FILE && buffer[0] == COMMENT);
+
+		if (buffer != END_FILE)
+		{
+			strcpy_s(line, 128, buffer);
+			return 1;
+		}
+	}
+		
+	return -1;
+}
+
+a3i32 a3ReadHTRHeader(a3byte* line, FILE* file)
+{
+	if (file)
+	{
+		a3byte* key = "";
+		a3byte* value = "";
+
+		do
+		{
+			fscanf(file, "%s %s", key, value);
+		} while (key != END_FILE && key[0] == COMMENT);
+
+		if (key == "FileType")
+		{
+
+		}
+		else if (key == "DataType")
+		{
+
+		}
+		else if (key == "FileVersion")
+		{
+
+		}
+		else if (key == "NumSegments")
+		{
+
+		}
+		else if (key == "NumFrames")
+		{
+
+		}
+		else if (key == "DataFrameRate")
+		{
+
+		}
+		else if (key == "EulerRotationOrder")
+		{
+
+		}
+		else if (key == "CalibrationUnits")
+		{
+
+		}
+		else if (key == "RotationUnits")
+		{
+
+		}
+		else if (key == "GlobalAxisOfGravity")
+		{
+
+		}
+		else if (key == "BoneLengthAxis")
+		{
+
+		}
+		else if (key == "ScaleFactor")
+		{
+
+		}
+	}
+
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
