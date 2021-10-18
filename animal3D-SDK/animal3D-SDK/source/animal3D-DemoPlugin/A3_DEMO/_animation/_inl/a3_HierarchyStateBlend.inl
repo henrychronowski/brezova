@@ -88,6 +88,29 @@ inline a3_SpatialPose* a3SpatialPoseOpNegate(a3_SpatialPose* pose_out, a3_Spatia
 	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpConcat(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_lh, a3_SpatialPose* const pose_rh)
+{
+	if (pose_out && pose_lh && pose_rh)
+	{
+		// Assign the data from pose_in to pose_out
+		*pose_out = *pose_lh;
+
+		// Concatenate orientation
+		a3quatProduct(pose_out->orientation.v, pose_lh->orientation.v, pose_rh->orientation.v);
+		// Concatenate Euler angles
+		a3real4Add(pose_out->angles.v, pose_rh->angles.v);
+		// Concatenate Scale
+		a3real4MulComp(pose_out->scale.v, pose_rh->angles.v);
+		// Concatenate Translation
+		a3real4Add(pose_out->translation.v, pose_rh->translation.v);
+
+		// Calculate transformation
+		a3spatialPoseConvert(pose_out, a3poseChannel_none,	a3poseEulerOrder_xyz);
+	}
+
+	return pose_out;
+}
+
 // pointer-based LERP operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3real const u)
 {
