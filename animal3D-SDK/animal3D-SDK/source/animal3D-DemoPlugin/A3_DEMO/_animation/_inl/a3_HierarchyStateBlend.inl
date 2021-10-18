@@ -111,6 +111,20 @@ inline a3_SpatialPose* a3SpatialPoseOpConcat(a3_SpatialPose* pose_out, a3_Spatia
 	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpNearest(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* const pose1, a3real const u)
+{
+	if (pose_out)
+	{
+		// Check interpolation parameter
+		if(u >= 0.5)
+			*pose_out = *pose1;	// Second control pose
+		else
+			*pose_out = *pose0; // First control pose
+	}
+
+	return pose_out;
+}
+
 // pointer-based LERP operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3real const u)
 {
