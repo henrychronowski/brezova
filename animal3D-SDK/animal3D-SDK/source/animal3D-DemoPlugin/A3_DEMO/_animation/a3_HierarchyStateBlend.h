@@ -142,6 +142,9 @@ a3_HierarchyPose* a3hierarchyPoseOpDeconcat(a3_HierarchyPose* pose_out, a3_Hiera
 // Pointer-based scale for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpScale(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, a3real blendParam, a3ui32 const nodeCount);
 
+// Pointer-based triangular interpolation for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpTriangular(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3real u1, a3real u2, a3ui32 const nodeCount);
+
 //-----------------------------------------------------------------------------
 
 

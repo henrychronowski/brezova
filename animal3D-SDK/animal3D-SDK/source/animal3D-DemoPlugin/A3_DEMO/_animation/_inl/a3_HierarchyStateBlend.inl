@@ -498,6 +498,20 @@ inline a3_HierarchyPose* a3hierarchyPoseOpScale(a3_HierarchyPose* pose_out, a3_H
 	return pose_out;
 }
 
+// Pointer-based triangular interpolation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpTriangular(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3real u1, a3real u2, a3ui32 const nodeCount)
+{
+	if (pose_out && pose0 && pose1 && pose2)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3SpatialPoseOpTriangular(&pose_out->pose[i], &pose0->pose[i], &pose1->pose[i], &pose2->pose[i], u1, u2);
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 
