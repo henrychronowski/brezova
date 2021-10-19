@@ -98,6 +98,9 @@ a3_SpatialPose* a3SpatialPoseOpBiNearest(a3_SpatialPose* pose_out, a3_SpatialPos
 // Pointer-based bi-linear interpolation
 a3_SpatialPose* a3SpatialPoseOpBiLinear(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* poseA, a3_SpatialPose* poseB, a3real u0, a3real u1, a3real u);
 
+// Pointer-based bi-cubic interpolation
+a3_SpatialPose* a3SpatialPoseOpBiCubic(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* pose2, a3_SpatialPose* pose3, a3_SpatialPose* pose4, a3_SpatialPose* pose5, a3_SpatialPose* pose6, a3_SpatialPose* pose7, a3_SpatialPose* pose8, a3_SpatialPose* pose9, a3_SpatialPose* pose10, a3_SpatialPose* pose11, a3_SpatialPose* pose12, a3_SpatialPose* pose13, a3_SpatialPose* pose14, a3_SpatialPose* pose15, a3real u0, a3real u1, a3real u2, a3real u3, a3real u4);
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity

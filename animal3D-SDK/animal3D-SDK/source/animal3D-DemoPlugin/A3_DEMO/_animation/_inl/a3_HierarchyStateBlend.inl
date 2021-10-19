@@ -311,6 +311,27 @@ inline a3_SpatialPose* a3SpatialPoseOpBiLinear(a3_SpatialPose* pose_out, a3_Spat
 	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpBiCubic(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* pose2, a3_SpatialPose* pose3, a3_SpatialPose* pose4, a3_SpatialPose* pose5, a3_SpatialPose* pose6, a3_SpatialPose* pose7, a3_SpatialPose* pose8, a3_SpatialPose* pose9, a3_SpatialPose* pose10, a3_SpatialPose* pose11, a3_SpatialPose* pose12, a3_SpatialPose* pose13, a3_SpatialPose* pose14, a3_SpatialPose* pose15, a3real u0, a3real u1, a3real u2, a3real u3, a3real u4)
+{
+	if (pose_out && pose0 && pose1 && pose2 && pose3 && pose4 && pose5 && pose6 && pose7 && pose8 && pose9 && pose10 && pose11 && pose12 && pose13 && pose14 && pose15)
+	{
+		a3_SpatialPose* tmp0;
+		a3_SpatialPose* tmp1;
+		a3_SpatialPose* tmp2;
+
+		// Blend individuals
+		a3SpatialPoseOpCubic(pose_out, pose0, pose1, pose2, pose3, u0);
+		a3SpatialPoseOpCubic(tmp0, pose4, pose5, pose6, pose7, u1);
+		a3SpatialPoseOpCubic(tmp1, pose8, pose9, pose10, pose11, u2);
+		a3SpatialPoseOpCubic(tmp2, pose12, pose13, pose14, pose15, u3);
+
+		// Blend the blend results
+		a3SpatialPoseOpCubic(pose_out, pose_out, tmp0, tmp1, tmp2, u4);
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity
