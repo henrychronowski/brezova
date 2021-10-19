@@ -30,6 +30,44 @@
 
 //-----------------------------------------------------------------------------
 
+inline a3vec4 a3vec4Lerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	// Lerp
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4Lerp(out_vec.v, v0.v, v1.v, u);
+
+	return out_vec;
+}
+
+inline a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	
+	// Log lerp each component - https://www.cmu.edu/biolphys/deserno/pdf/log_interpol.pdf
+	out_vec.x = powf(v1.x, u) * powf(v1.x, u-1);
+	out_vec.x = powf(v1.y, u) * powf(v1.y, u-1);
+	out_vec.x = powf(v1.z, u) * powf(v1.z, u-1);
+	out_vec.x = powf(v1.w, u) * powf(v1.w, u-1);
+	
+	return out_vec;
+}
+
+inline a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4Slerp(out_vec.v, v0.v, v1.v, u);
+
+	return out_vec;
+}
+
+inline a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4NLerp(out_vec.v, v0.v, v1.v, u);
+
+	return out_vec;
+}
+
 // pointer-based reset/identity operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpIdentity(a3_SpatialPose* pose_out)
 {
@@ -128,6 +166,14 @@ inline a3_SpatialPose* a3SpatialPoseOpNearest(a3_SpatialPose* pose_out, a3_Spati
 // pointer-based LERP operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3real const u)
 {
+	// Interpolate quaternion rotation
+	pose_out->orientation = a3vec4SLerp(pose0->orientation, pose1->orientation, u);
+	// Interpolate Euler rotation
+	pose_out-> angles = a3vec4Lerp(pose0->angles, pose1->angles, u);
+	// Interpolate scale
+	pose_out->scale = a3vec4LogLerp(pose0->scale, pose1->scale, u);
+	// Interpolate translation
+	pose_out->translation = a3vec4Lerp(pose0->translation, pose1->translation, u);
 
 	// done
 	return pose_out;

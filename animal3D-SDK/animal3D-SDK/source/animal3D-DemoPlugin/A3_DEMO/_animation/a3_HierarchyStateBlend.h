@@ -45,25 +45,14 @@ typedef struct a3_SpatialPoseBlendOpLerp
 	a3_BlendOpLerp opOrientation, opAngles, opScale, opTranslation;
 } a3_SpatialPoseBlendOpLerp;
 
-inline a3vec4 a3vec4Lerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
-{
-	return v0;
-}
 
-inline a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
-{
-	return v0;
-}
+a3vec4 a3vec4Lerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 
-inline a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
-{
-	return v0;
-}
+a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 
-inline a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
-{
-	return v0;
-}
+a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
+a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 
 //-----------------------------------------------------------------------------
 
