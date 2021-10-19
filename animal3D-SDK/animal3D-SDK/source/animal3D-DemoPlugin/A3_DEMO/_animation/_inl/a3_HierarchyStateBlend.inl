@@ -526,6 +526,20 @@ inline a3_HierarchyPose* a3hierarchyPoseOpBiNearest(a3_HierarchyPose* pose_out, 
 	return pose_out;
 }
 
+// Pointer-based bi-linear interpolation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* poseA, a3_HierarchyPose* poseB, a3real u0, a3real u1, a3real u, a3ui32 const nodeCount)
+{
+	if (pose_out && pose0 && pose1 && poseA && poseB)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3SpatialPoseOpBiLinear(&pose_out->pose[i], &pose0->pose[i], &pose1->pose[i], &poseA->pose[i], &poseB->pose[i], u0, u1, u);
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 
