@@ -208,7 +208,7 @@ inline a3_SpatialPose* a3SpatialPoseOpCubic(a3_SpatialPose* pose_out, a3_Spatial
 //-----------------------------------------------------------------------------
 
 
-inline a3_SpatialPose* a3SpatialPoseDeconcat(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_lh, a3_SpatialPose* const pose_rh)
+inline a3_SpatialPose* a3SpatialPoseOpDeconcat(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_lh, a3_SpatialPose* const pose_rh)
 {
 	if (pose_out && pose_lh && pose_rh)
 	{
@@ -227,8 +227,42 @@ inline a3_SpatialPose* a3SpatialPoseDeconcat(a3_SpatialPose* pose_out, a3_Spatia
 		// Calculate transformation
 		a3spatialPoseConvert(pose_out, a3poseChannel_none, a3poseEulerOrder_xyz);
 	}
+
+	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpScale(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_in, a3real blendParam)
+{
+	if (pose_out && pose_in)
+	{
+		// Interpolate between poses
+		a3spatialPoseOpLERP(pose_out, a3spatialPoseOpIdentity(pose_out), pose_in, blendParam);
+	}
+
+	return pose_out;
+}
+
+inline a3_SpatialPose* a3SpatialPoseOpTriangular(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* pose2, a3real u1, a3real u2)
+{
+	if (pose_out && pose0 && pose1 && pose2)
+	{
+		a3real u0 = 1 - u1 - u2;
+		a3_SpatialPose* tmp;
+
+		// Scale initial pose (pose 0)
+		a3SpatialPoseOpScale(pose_out, pose0, u0);
+		// Scale pose 1
+		a3SpatialPoseOpScale(tmp, pose1, u1);
+		// Concatenate pose 0 and pose 1
+		a3SpatialPoseOpConcat(pose_out, pose_out, tmp);
+		// Scale pose 2
+		a3SpatialPoseOpScale(tmp, pose2, u2);
+		// Concatenate pose 2 with the result of concat(pose0, pose1)
+		a3SpatialPoseOpConcat(pose_out, pose_out, tmp);
+	}
+
+	return pose_out;
+}
 
 //-----------------------------------------------------------------------------
 
