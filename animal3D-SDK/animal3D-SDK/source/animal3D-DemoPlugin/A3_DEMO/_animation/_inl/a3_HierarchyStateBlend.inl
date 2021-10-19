@@ -264,6 +264,34 @@ inline a3_SpatialPose* a3SpatialPoseOpTriangular(a3_SpatialPose* pose_out, a3_Sp
 	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpBiNearest(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* poseA, a3_SpatialPose* poseB, a3real u0, a3real u1, a3real u)
+{
+	if (pose_out && pose0 && pose1 && poseA && poseB)
+	{
+		if (u >= 0.5f)
+		{
+			if (u1 >= 0.5f)
+			{
+				*pose_out = *poseB;
+			}
+			else
+			{
+				*pose_out = *poseA;
+			}
+		}
+		else if(u0 >= 0.5f)
+		{
+			*pose_out = *pose1;
+		}
+		else
+		{
+			*pose_out = *pose0;
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity
