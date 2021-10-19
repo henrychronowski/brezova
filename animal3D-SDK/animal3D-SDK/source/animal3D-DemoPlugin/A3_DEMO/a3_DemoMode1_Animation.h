@@ -35,6 +35,7 @@
 #include "_a3_demo_utilities/a3_DemoSceneObject.h"
 
 #include "_animation/a3_HierarchyStateBlend.h"
+#include "_animation/a3_KeyframeAnimationController.h"
 
 
 //-----------------------------------------------------------------------------
@@ -116,6 +117,8 @@ typedef enum a3_DemoMode1_Animation_TargetName				a3_DemoMode1_Animation_TargetN
 		animation_target_scene_max,
 	};
 
+	// TODO: Add names for blend operation tests
+
 
 //-----------------------------------------------------------------------------
 
@@ -132,7 +135,7 @@ typedef enum a3_DemoMode1_Animation_TargetName				a3_DemoMode1_Animation_TargetN
 
 		// skeletal animation
 		a3_Hierarchy hierarchy_skel[1];
-		a3_HierarchyState hierarchyState_skel[2];
+		a3_HierarchyState hierarchyState_skel[4];
 		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[1];
 		a3mat4 mvp_joint[128], mvp_bone[128], t_skin[128];
 		a3dualquat dq_skin[128];
@@ -163,6 +166,10 @@ typedef enum a3_DemoMode1_Animation_TargetName				a3_DemoMode1_Animation_TargetN
 					proj_camera_main[1];
 			};
 		};
+
+		a3_KeyframePool keyframePool;
+		a3_ClipController clipController;
+		a3_ClipPool clipPool;
 	};
 
 

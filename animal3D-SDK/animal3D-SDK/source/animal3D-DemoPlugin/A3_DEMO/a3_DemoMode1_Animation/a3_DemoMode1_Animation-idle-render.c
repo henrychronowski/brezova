@@ -121,6 +121,14 @@ void a3animation_render_controls(a3_DemoState const* demoState, a3_DemoMode1_Ani
 		"    Display mode (%u / %u) ('J' | 'K'): %s", display + 1, animation_display_max, displayProgramName[display]);
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"    Active camera (%u / %u) ('c' prev | next 'v'): %s", activeCamera + 1, animation_camera_max, cameraText[activeCamera]);
+
+
+	// TODO: Add controls description (Left and Right arrow to cycle through test blend operations)
+
+	// TODO: Add controls/display for clip controller
+
+	// TODO: Render independent variables for current operation
+	// Switch statement based on enum? - has to be unscoped or won't work
 }
 
 

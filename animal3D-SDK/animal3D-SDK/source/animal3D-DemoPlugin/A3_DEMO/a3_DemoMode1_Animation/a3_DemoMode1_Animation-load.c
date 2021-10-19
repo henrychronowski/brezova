@@ -353,12 +353,27 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	hierarchyState->hierarchy = 0;
 	a3hierarchyStateCreate(hierarchyState, hierarchy);
 
+	// CONTROLS: Remaining hierarchy states, maybe need up to 16 for cubic interpolation?
+	hierarchyState = demoMode->hierarchyState_skel + 2;
+	hierarchyState->hierarchy = 0;
+	a3hierarchyStateCreate(hierarchyState, hierarchy);
+
+	hierarchyState = demoMode->hierarchyState_skel + 3;
+	hierarchyState->hierarchy = 0;
+	a3hierarchyStateCreate(hierarchyState, hierarchy);
+
+	// Create keyframe and clip pools
+
+	// Create clips 
+
+	// Create and init clip controller
+
 	// example blend operation
-	a3_SpatialPoseBlendOpLerp testLerp;
-	testLerp.opOrientation = a3vec4SLerp;
-	testLerp.opAngles = a3vec4Lerp;
-	testLerp.opScale = a3vec4LogLerp;
-	testLerp.opTranslation = a3vec4Lerp;
+	//a3_SpatialPoseBlendOpLerp testLerp;
+	//testLerp.opOrientation = a3vec4SLerp;
+	//testLerp.opAngles = a3vec4Lerp;
+	//testLerp.opScale = a3vec4LogLerp;
+	//testLerp.opTranslation = a3vec4Lerp;
 
 	//...
 	// resultAngles = testLerp.opAngles(/*args*/);

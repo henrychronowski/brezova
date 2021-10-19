@@ -106,10 +106,11 @@ inline a3_SpatialPose* a3SpatialPoseOpNegate(a3_SpatialPose* pose_out, a3_Spatia
 {
 	if (pose_out && pose_in)
 	{
-		// Not doing quaternion inversion for now (q^-1 = conj(q) / ||q||)
-
 		// Assign the data from pose_in to pose_out
 		*pose_out = *pose_in;
+		
+		// Invert quaternion rotation
+		a3quatInvert(pose_out->orientation.v);
 		// Inverse translation
 		a3real4MulS(pose_out->translation.v, -1);
 		// Inverse Euler rotation
