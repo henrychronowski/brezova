@@ -425,6 +425,20 @@ inline a3_HierarchyPose* a3hierarchyPoseOpInvert(a3_HierarchyPose* pose_out, a3_
 	return pose_out;
 }
 
+// Pointer-based concat operation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpConcat(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_lh, a3_HierarchyPose* const pose_rh, a3ui32 const nodeCount)
+{
+	if (pose_out && pose_lh && pose_rh)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3SpatialPoseOpConcat(&pose_out->pose[i], &pose_lh->pose[i], &pose_rh->pose[i]);
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 
