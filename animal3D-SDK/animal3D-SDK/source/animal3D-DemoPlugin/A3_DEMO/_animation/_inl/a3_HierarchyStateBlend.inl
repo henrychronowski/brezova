@@ -292,6 +292,25 @@ inline a3_SpatialPose* a3SpatialPoseOpBiNearest(a3_SpatialPose* pose_out, a3_Spa
 	return pose_out;
 }
 
+inline a3_SpatialPose* a3SpatialPoseOpBiLinear(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* poseA, a3_SpatialPose* poseB, a3real u0, a3real u1, a3real u)
+{
+	if (pose_out && pose0 && pose1 && poseA && poseB)
+	{
+		a3_SpatialPose* tmp;
+
+		// Interpolate pose 0 and pose 1
+		a3spatialPoseOpLERP(pose_out, pose0, pose1, u0);
+
+		// Interpolate pose A and pose B
+		a3spatialPoseOpLERP(tmp, poseA, poseB, u1);
+
+		// Interpolate the results of the previous 2 interpolations
+		a3spatialPoseOpLERP(pose_out, pose_out, tmp, u);
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity
