@@ -124,6 +124,8 @@ a3_HierarchyPose* a3hierarchyPoseOpConstruct(a3_HierarchyPose* pose_out, a3vec4 
 // Pointer-based copy operation for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpCopy(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, a3ui32 const nodeCount);
 
+// Pointer-based invert operation for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpInvert(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, a3ui32 const nodeCount);
 //-----------------------------------------------------------------------------
 
 

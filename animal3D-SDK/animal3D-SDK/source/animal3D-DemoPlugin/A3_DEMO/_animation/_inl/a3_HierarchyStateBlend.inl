@@ -411,6 +411,20 @@ inline a3_HierarchyPose* a3hierarchyPoseOpCopy(a3_HierarchyPose* pose_out, a3_Hi
 	return pose_out;
 }
 
+// Pointer-based invert operation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpInvert(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, a3ui32 const nodeCount)
+{
+	if (pose_out && pose_in)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3SpatialPoseOpNegate(&pose_out->pose[i], &pose_in->pose[i]);
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 
