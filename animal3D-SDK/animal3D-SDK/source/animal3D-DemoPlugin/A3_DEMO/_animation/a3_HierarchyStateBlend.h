@@ -83,6 +83,10 @@ a3_SpatialPose* a3SpatialPoseOpCubic(a3_SpatialPose* pose_out, a3_SpatialPose co
 
 //-----------------------------------------------------------------------------
 
+a3_SpatialPose* a3SpatialPoseDeconcat(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_lh, a3_SpatialPose* const pose_rh);
+
+//-----------------------------------------------------------------------------
+
 // data-based reset/identity
 a3_SpatialPose a3spatialPoseDOpIdentity();
 

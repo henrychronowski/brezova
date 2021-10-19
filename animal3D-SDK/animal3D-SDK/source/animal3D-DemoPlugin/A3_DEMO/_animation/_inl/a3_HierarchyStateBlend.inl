@@ -205,6 +205,30 @@ inline a3_SpatialPose* a3SpatialPoseOpCubic(a3_SpatialPose* pose_out, a3_Spatial
 	return pose_out;
 }
 
+//-----------------------------------------------------------------------------
+
+
+inline a3_SpatialPose* a3SpatialPoseDeconcat(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_lh, a3_SpatialPose* const pose_rh)
+{
+	if (pose_out && pose_lh && pose_rh)
+	{
+		// Assign the data from pose_in to pose_out
+		*pose_out = *pose_lh;
+
+		// deconcatenate orientation
+		a3quatProduct(pose_out->orientation.v, pose_lh->orientation.v, a3quatInvert(pose_rh->orientation.v));
+		// deconcatenate Euler angles
+		a3real4Sub(pose_out->angles.v, pose_rh->angles.v);
+		// deconcatenate Scale
+		a3real4DivComp(pose_out->scale.v, pose_rh->angles.v);
+		// deconcatenate Translation
+		a3real4Sub(pose_out->translation.v, pose_rh->translation.v);
+
+		// Calculate transformation
+		a3spatialPoseConvert(pose_out, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
+}
+
 
 //-----------------------------------------------------------------------------
 
