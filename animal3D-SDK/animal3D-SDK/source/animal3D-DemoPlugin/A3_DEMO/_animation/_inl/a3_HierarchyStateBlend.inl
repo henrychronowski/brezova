@@ -439,6 +439,23 @@ inline a3_HierarchyPose* a3hierarchyPoseOpConcat(a3_HierarchyPose* pose_out, a3_
 	return pose_out;
 }
 
+// Pointer-based nearest
+inline a3_HierarchyPose* a3hierarchyPoseOpNearest(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_lh, a3_HierarchyPose* const pose_rh, a3real const u)
+{
+	if (pose_out && pose_lh && pose_rh)
+	{
+		if (u >= 0.5f)
+		{
+			*pose_out->pose = *pose_rh->pose;
+		}
+		else
+		{
+			*pose_out->pose = *pose_lh->pose;
+		}
+	}
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 
