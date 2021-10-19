@@ -166,16 +166,42 @@ inline a3_SpatialPose* a3SpatialPoseOpNearest(a3_SpatialPose* pose_out, a3_Spati
 // pointer-based LERP operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3real const u)
 {
-	// Interpolate quaternion rotation
-	pose_out->orientation = a3vec4SLerp(pose0->orientation, pose1->orientation, u);
-	// Interpolate Euler rotation
-	pose_out-> angles = a3vec4Lerp(pose0->angles, pose1->angles, u);
-	// Interpolate scale
-	pose_out->scale = a3vec4LogLerp(pose0->scale, pose1->scale, u);
-	// Interpolate translation
-	pose_out->translation = a3vec4Lerp(pose0->translation, pose1->translation, u);
+	if (pose_out && pose0 && pose1)
+	{
+		// Interpolate quaternion rotation
+		pose_out->orientation = a3vec4SLerp(pose0->orientation, pose1->orientation, u);
+		// Interpolate Euler rotation
+		pose_out->angles = a3vec4Lerp(pose0->angles, pose1->angles, u);
+		// Interpolate scale
+		pose_out->scale = a3vec4LogLerp(pose0->scale, pose1->scale, u);
+		// Interpolate translation
+		pose_out->translation = a3vec4Lerp(pose0->translation, pose1->translation, u);
+
+		// Calculate transform
+		a3spatialPoseConvert(pose_out, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
 
 	// done
+	return pose_out;
+}
+
+inline a3_SpatialPose* a3SpatialPoseOpCubic(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3_SpatialPose const* pose2, a3_SpatialPose const* pose3, a3real const u)
+{
+	if (pose_out && pose0 && pose1 && pose2 && pose3)
+	{
+		// Interpolate quaternion rotation
+		a3real4CatmullRom(pose_out->orientation.v, pose0->orientation.v, pose1->orientation.v, pose2->orientation.v, pose3->orientation.v, u);
+		// Interpolate Euler rotation
+		a3real4CatmullRom(pose_out->angles.v, pose0->angles.v, pose1->angles.v, pose2->angles.v, pose3->angles.v, u);
+		// Interpolate scale
+		a3real4CatmullRom(pose_out->scale.v, pose0->scale.v, pose1->scale.v, pose2->scale.v, pose3->scale.v, u);
+		// Interpolate translation
+		a3real4CatmullRom(pose_out->translation.v, pose0->translation.v, pose1->translation.v, pose2->translation.v, pose3->translation.v, u);
+
+		// Calculate transform
+		a3spatialPoseConvert(pose_out, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
+
 	return pose_out;
 }
 
