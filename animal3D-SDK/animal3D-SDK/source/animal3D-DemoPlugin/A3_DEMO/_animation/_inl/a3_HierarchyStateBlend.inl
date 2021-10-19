@@ -355,9 +355,15 @@ inline a3_SpatialPose a3spatialPoseDOpLERP(a3_SpatialPose const pose0, a3_Spatia
 //-----------------------------------------------------------------------------
 
 // pointer-based reset/identity operation for hierarchical pose
-inline a3_HierarchyPose* a3hierarchyPoseOpIdentity(a3_HierarchyPose* pose_out)
+inline a3_HierarchyPose* a3hierarchyPoseOpIdentity(a3_HierarchyPose* pose_out, a3ui32 const nodeCount)
 {
-
+	if (pose_out)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3spatialPoseOpIdentity(&pose_out->pose[i]);
+		}
+	}
 	// done
 	return pose_out;
 }
