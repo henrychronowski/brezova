@@ -540,6 +540,20 @@ inline a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a
 	return pose_out;
 }
 
+// Pointer-based bi-cubic interpolation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpBiCubic(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3_HierarchyPose* pose3, a3_HierarchyPose* pose4, a3_HierarchyPose* pose5, a3_HierarchyPose* pose6, a3_HierarchyPose* pose7, a3_HierarchyPose* pose8, a3_HierarchyPose* pose9, a3_HierarchyPose* pose10, a3_HierarchyPose* pose11, a3_HierarchyPose* pose12, a3_HierarchyPose* pose13, a3_HierarchyPose* pose14, a3_HierarchyPose* pose15, a3real u0, a3real u1, a3real u2, a3real u3, a3real u4, a3ui32 const nodeCount)
+{
+	if (pose_out && pose0 && pose1 && pose2 && pose3 && pose4 && pose5 && pose6 && pose7 && pose8 && pose9 && pose10 && pose11 && pose12 && pose13 && pose14 && pose15)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3SpatialPoseOpBiCubic(&pose_out->pose[i], &pose0->pose[i], &pose1->pose[i], &pose2->pose[i], &pose3->pose[i], &pose4->pose[i], &pose5->pose[i], &pose6->pose[i], &pose7->pose[i], &pose8->pose[i], &pose9->pose[i], &pose10->pose[i], &pose11->pose[i], &pose12->pose[i], &pose13->pose[i], &pose14->pose[i], &pose15->pose[i], u0, u1, u2, u3, u4);
+		}
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 

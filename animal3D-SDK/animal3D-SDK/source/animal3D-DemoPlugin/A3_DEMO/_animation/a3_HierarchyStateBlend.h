@@ -151,6 +151,9 @@ a3_HierarchyPose* a3hierarchyPoseOpBiNearest(a3_HierarchyPose* pose_out, a3_Hier
 // Pointer-based bi-linear interpolation for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* poseA, a3_HierarchyPose* poseB, a3real u0, a3real u1, a3real u, a3ui32 const nodeCount);
 
+// Pointer-based bi-cubic interpolation for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpBiCubic(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3_HierarchyPose* pose3, a3_HierarchyPose* pose4, a3_HierarchyPose* pose5, a3_HierarchyPose* pose6, a3_HierarchyPose* pose7, a3_HierarchyPose* pose8, a3_HierarchyPose* pose9, a3_HierarchyPose* pose10, a3_HierarchyPose* pose11, a3_HierarchyPose* pose12, a3_HierarchyPose* pose13, a3_HierarchyPose* pose14, a3_HierarchyPose* pose15, a3real u0, a3real u1, a3real u2, a3real u3, a3real u4, a3ui32 const nodeCount);
+
 //-----------------------------------------------------------------------------
 
 
