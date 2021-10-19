@@ -145,6 +145,9 @@ a3_HierarchyPose* a3hierarchyPoseOpScale(a3_HierarchyPose* pose_out, a3_Hierarch
 // Pointer-based triangular interpolation for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpTriangular(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3real u1, a3real u2, a3ui32 const nodeCount);
 
+// Pointer-based bi-nearest interpolation for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpBiNearest(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* poseA, a3_HierarchyPose* poseB, a3real u0, a3real u1, a3real u, a3ui32 const nodeCount);
+
 //-----------------------------------------------------------------------------
 
 
