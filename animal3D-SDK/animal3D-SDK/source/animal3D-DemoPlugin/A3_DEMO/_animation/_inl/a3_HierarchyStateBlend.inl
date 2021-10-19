@@ -44,10 +44,11 @@ inline a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
 	a3vec4 out_vec = a3vec4_zero;
 	
 	// Log lerp each component - https://www.cmu.edu/biolphys/deserno/pdf/log_interpol.pdf
-	out_vec.x = powf(v1.x, u) * powf(v1.x, u-1);
-	out_vec.x = powf(v1.y, u) * powf(v1.y, u-1);
-	out_vec.x = powf(v1.z, u) * powf(v1.z, u-1);
-	out_vec.x = powf(v1.w, u) * powf(v1.w, u-1);
+
+	out_vec.x = powf(v1.x * powf(v0.x, -1), u) * v0.x; //powf(v1.x, u) * powf(v1.x, u-1);
+	out_vec.y = powf(v1.y * powf(v0.y, -1), u) * v0.y;
+	out_vec.z = powf(v1.z * powf(v0.z, -1), u) * v0.z;
+	out_vec.w = powf(v1.w * powf(v0.w, -1), u) * v0.w;
 	
 	return out_vec;
 }
