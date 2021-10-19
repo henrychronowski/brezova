@@ -383,6 +383,19 @@ inline a3_HierarchyPose* a3hierarchyPoseOpLERP(a3_HierarchyPose* pose_out, a3_Hi
 	return pose_out;
 }
 
+// pointer-based construct operation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpConstruct(a3_HierarchyPose* pose_out, a3vec4 const orientation, a3vec4 const angles, a3vec4 const scale, a3vec4 const translation, a3ui32 const nodeCount)
+{
+	if (pose_out)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			a3spatialPoseOpConstruct(&pose_out->pose[i], orientation, angles, scale, translation);
+		}
+	}
+
+	return pose_out;
+}
 
 //-----------------------------------------------------------------------------
 
