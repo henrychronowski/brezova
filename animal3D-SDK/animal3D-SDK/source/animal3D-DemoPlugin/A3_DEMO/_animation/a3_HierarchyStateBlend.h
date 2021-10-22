@@ -38,6 +38,55 @@ extern "C"
 
 #endif	// __cplusplus
 	
+// Robust blend mode for any op
+typedef a3_SpatialPose*(*a3_SpatialPoseBlendOp)(
+	a3_SpatialPose* p_out,
+	a3_SpatialPose const* ctrl[],
+	a3real const param[]
+);
+
+typedef struct a3_SpatialPoseBlendNode
+{
+	a3_SpatialPoseBlendOp op;
+	a3_SpatialPose* p_out;
+	a3_SpatialPose* p_ctrl[8];
+	a3real param[8];
+} a3_SpatialPoseBlendNode;
+
+inline a3_SpatialPoseBlendNode* a3spatialPoseBlendNodeCall(
+	a3_SpatialPoseBlendNode* b
+)
+{
+	b->op(b->p_out, b->p_ctrl, b->param);
+	return b;
+}
+
+// example: lerp
+inline a3_SpatialPose* a3_SpatialPoseBlendLerp(
+	a3_SpatialPose* p_out,
+	a3_SpatialPose const* p_ctrl[2],
+	a3real const param[1]
+)
+{
+	if (p_out && p_ctrl)
+	{
+		a3_SpatialPose const* p0 = p_ctrl[0];
+		a3_SpatialPose const* p1 = p_ctrl[1];
+		a3real const u = param[0];
+
+		a3spatialPoseLerp(p_out, p0, p1, u);
+	}
+
+	return p_out;
+}
+
+//// object based
+//typedef a3_SpatialPose(*a3SpatialPoseBlendOpLerp)(a3_SpatialPose const p0, a3_SpatialPose const p1, a3real const u);
+//
+//// pointer based
+//typedef a3_SpatialPose* (*a3_SpatialPoseBlendOpLerp)(a3_SpatialPose* p_out, a3_SpatialPose const* p0, a3_SpatialPose const* p1, a3real const u);
+
+
 // Blend operation function pointer
 typedef a3vec4(*a3_BlendOpLerp)(a3vec4 const v0, a3vec4 const v1, a3real const u);
 typedef struct a3_SpatialPoseBlendOpLerp
