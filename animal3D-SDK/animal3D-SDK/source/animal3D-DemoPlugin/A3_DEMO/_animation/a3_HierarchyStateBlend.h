@@ -49,8 +49,8 @@ typedef struct a3_SpatialPoseBlendNode
 {
 	a3_SpatialPoseBlendOp op;
 	a3_SpatialPose* p_out;
-	a3_SpatialPose* p_ctrl[8];
-	a3real param[8];
+	a3_SpatialPose const* p_ctrl[8];
+	a3real const* param[8];
 } a3_SpatialPoseBlendNode;
 
 inline a3_SpatialPoseBlendNode* a3spatialPoseBlendNodeCall(
