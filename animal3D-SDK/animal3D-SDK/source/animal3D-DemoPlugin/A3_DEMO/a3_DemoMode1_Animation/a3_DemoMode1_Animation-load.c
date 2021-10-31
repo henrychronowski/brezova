@@ -354,13 +354,13 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	a3hierarchyStateCreate(hierarchyState, hierarchy);
 
 	// CONTROLS: Remaining hierarchy states, maybe need up to 16 for cubic interpolation?
-	hierarchyState = demoMode->hierarchyState_skel + 2;
-	hierarchyState->hierarchy = 0;
-	a3hierarchyStateCreate(hierarchyState, hierarchy);
+	//hierarchyState = demoMode->hierarchyState_skel + 2;
+	//hierarchyState->hierarchy = 0;
+	//a3hierarchyStateCreate(hierarchyState, hierarchy);
 
-	hierarchyState = demoMode->hierarchyState_skel + 3;
-	hierarchyState->hierarchy = 0;
-	a3hierarchyStateCreate(hierarchyState, hierarchy);
+	//hierarchyState = demoMode->hierarchyState_skel + 3;
+	//hierarchyState->hierarchy = 0;
+	//a3hierarchyStateCreate(hierarchyState, hierarchy);
 
 	// Create keyframe and clip pools
 

@@ -111,9 +111,9 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 	// TODO: Switch current blend operation around here we think
 
-	//a3hierarchyPoseCopy(activeHS->objectSpace,
-	//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[0] + 1,
-	//	demoMode->hierarchy_skel->numNodes);
+	a3hierarchyPoseCopy(activeHS->objectSpace,
+		demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[0] + 1,
+		demoMode->hierarchy_skel->numNodes);
 	//a3hierarchyPoseLerp(activeHS->objectSpace,	// use as temp storage
 	//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[0] + 1,
 	//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[1] + 1,
@@ -122,16 +122,16 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	
 	// Subbing in our blend op
 	a3hierarchyPoseOpLERP(activeHS->objectSpace, demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[0] + 1,
-		demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[1] + 1, 
-		demoMode->hierarchyKeyPose_param, 
+		demoMode->hierarchyPoseGroup_skel->hpose + demoMode->hierarchyKeyPose_display[1] + 1,
+		demoMode->hierarchyKeyPose_param,
 		demoMode->hierarchy_skel->numNodes);
-	//a3hierarchyPoseConcat(activeHS->localSpace,	// goal to calculate
-	//	baseHS->localSpace, // holds base pose
-	//	activeHS->objectSpace, // temp storage
-	//	demoMode->hierarchy_skel->numNodes);
+	a3hierarchyPoseConcat(activeHS->localSpace,	// goal to calculate
+		baseHS->localSpace, // holds base pose
+		activeHS->objectSpace, // temp storage
+		demoMode->hierarchy_skel->numNodes);
 	
 	// Subbing in our blend op
-	a3hierarchyPoseOpConcat(activeHS->localSpace, baseHS->localSpace, activeHS->objectSpace, demoMode->hierarchy_skel->numNodes);
+	//a3hierarchyPoseOpConcat(activeHS->localSpace, baseHS->localSpace, activeHS->objectSpace, demoMode->hierarchy_skel->numNodes);
 
 	a3hierarchyPoseConvert(activeHS->localSpace,
 		demoMode->hierarchy_skel->numNodes,

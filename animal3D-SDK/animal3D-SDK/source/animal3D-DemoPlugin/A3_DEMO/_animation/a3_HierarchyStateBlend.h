@@ -57,7 +57,7 @@ inline a3_SpatialPoseBlendNode* a3spatialPoseBlendNodeCall(
 	a3_SpatialPoseBlendNode* b
 )
 {
-	b->op(b->p_out, b->p_ctrl, b->param);
+	b->op(b->p_out, b->p_ctrl, b->param[0]);
 	return b;
 }
 
