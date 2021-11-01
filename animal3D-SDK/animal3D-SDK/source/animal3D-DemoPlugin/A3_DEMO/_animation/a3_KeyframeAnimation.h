@@ -58,6 +58,15 @@ struct a3_Keyframe
 {
 	// index in keyframe pool
 	a3ui32 index;
+
+	// Duration of keyframe
+	a3real duration;
+
+	// Reciprocal of duration
+	a3real durationInverse;
+
+	// Value of sample (Integer for now)
+	a3ui32 data;
 };
 
 // pool of keyframe descriptors
@@ -92,6 +101,24 @@ struct a3_Clip
 
 	// index in clip pool
 	a3ui32 index;
+
+	// Duration of clip
+	a3real duration;
+
+	// Reciprocal of duration
+	a3real durationInverse;
+
+	// Number of Keyframes referenced by clip
+	a3ui32 keyframeCount;
+
+	// index of first keyframe in pool referenced by clip
+	a3ui32 firstKeyframe;
+
+	// index of final keyframe in pool referenced by clip
+	a3ui32 lastKeyframe;
+
+	// Pool of Keyframes referenced by clip
+	const a3_KeyframePool* keyframePool;
 };
 
 // group of clips
