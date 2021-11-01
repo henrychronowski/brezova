@@ -135,14 +135,16 @@ inline a3_SpatialPose* a3SpatialPoseOpConcat(a3_SpatialPose* pose_out, a3_Spatia
 		// Assign the data from pose_in to pose_out
 		*pose_out = *pose_lh;
 
-		// Concatenate orientation
-		a3quatProduct(pose_out->orientation.v, pose_lh->orientation.v, pose_rh->orientation.v);
-		// Concatenate Euler angles
-		a3real4Add(pose_out->angles.v, pose_rh->angles.v);
-		// Concatenate Scale
-		a3real4MulComp(pose_out->scale.v, pose_rh->angles.v);
-		// Concatenate Translation
-		a3real4Add(pose_out->translation.v, pose_rh->translation.v);
+		a3spatialPoseConcat(pose_out, pose_lh, pose_rh);
+
+		//// Concatenate orientation
+		//a3quatProduct(pose_out->orientation.v, pose_lh->orientation.v, pose_rh->orientation.v);
+		//// Concatenate Euler angles
+		//a3real4Add(pose_out->angles.v, pose_rh->angles.v);
+		//// Concatenate Scale
+		//a3real4MulComp(pose_out->scale.v, pose_rh->scale.v);
+		//// Concatenate Translation
+		//a3real4Add(pose_out->translation.v, pose_rh->translation.v);
 
 		// Calculate transformation
 		a3spatialPoseConvert(pose_out, a3poseChannel_none,	a3poseEulerOrder_xyz);
