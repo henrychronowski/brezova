@@ -336,6 +336,20 @@ inline a3_SpatialPose* a3SpatialPoseOpBiCubic(a3_SpatialPose* pose_out, a3_Spati
 	return pose_out;
 }
 
+// pointer-based smoothstep
+inline a3_SpatialPose* a3SpatialPoseOpSmoothstep(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* const pose1, a3real const u)
+{
+	if (pose_out && pose0 && pose1)
+	{
+		// Perform lerp using the cubic hermite interpolation on u to get a new smoothed interpolation parameter
+		a3real hermiteU = 3 * u * u - 2 * u * u * u;
+
+		a3spatialPoseOpLERP(pose_out, pose0, pose1, hermiteU);
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity
