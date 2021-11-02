@@ -336,7 +336,7 @@ inline a3_SpatialPose* a3SpatialPoseOpBiCubic(a3_SpatialPose* pose_out, a3_Spati
 	return pose_out;
 }
 
-// pointer-based smoothstep
+// pointer-based smoothstep operation for single spatial pose
 inline a3_SpatialPose* a3SpatialPoseOpSmoothstep(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* const pose1, a3real const u)
 {
 	if (pose_out && pose0 && pose1)
@@ -350,16 +350,30 @@ inline a3_SpatialPose* a3SpatialPoseOpSmoothstep(a3_SpatialPose* pose_out, a3_Sp
 	return pose_out;
 }
 
-// pointer-based descale
+// pointer-based descale operation for single spatial pose
 inline a3_SpatialPose* a3SpatialPoseOpDescale(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_in, a3real u)
 {
 	if (pose_out && pose_in)
 	{
+		// Perform a lerp between the identity pose and the inverse control pose
 		a3spatialPoseOpLERP(pose_out, a3spatialPoseOpIdentity(pose_out), a3SpatialPoseOpNegate(pose_in, pose_in), u);
 	}
 
 	return pose_out;
 }
+
+// pointer-based convert operation for single spatial pose
+inline a3_SpatialPose* a3SpatialPoseOpConvert(a3_SpatialPose* pose_inout)
+{
+	if (pose_inout)
+	{
+		// Run the convert function on the pose
+		a3spatialPoseConvert(pose_inout, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
+
+	return pose_inout;
+}
+
 
 //-----------------------------------------------------------------------------
 
