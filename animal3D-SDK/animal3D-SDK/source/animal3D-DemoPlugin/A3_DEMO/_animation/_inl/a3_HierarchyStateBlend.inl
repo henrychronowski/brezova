@@ -386,10 +386,14 @@ inline a3_SpatialPose* a3SpatialPoseOpRevert(a3_SpatialPose* pose_inout)
 	return pose_inout;
 }
 
-// pointer-based forward kinematics operation for single spatial pose
-//inline a3_SpatialPose* a3SpatialPoseOpFK(a3_Hierarchy* hierarchy_in, a3)
+//inline a3_SpatialPose* a3spatialPoseOpFK(a3_SpatialPose* pose_out, a3_Hierarchy* hierarchy_in, a3_SpatialPose* localPose)
 //{
-//	a3kinematicsSolveForward
+//	if (pose_out && hierarchy_in && localPose)
+//	{
+//		a3SpatialPoseOpConcat(pose_out, pose_out, localPose);
+//	}
+//
+//	return pose_out;
 //}
 
 
