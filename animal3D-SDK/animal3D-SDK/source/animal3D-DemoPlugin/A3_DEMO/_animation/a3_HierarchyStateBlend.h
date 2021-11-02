@@ -29,6 +29,7 @@
 #include "a3_HierarchyState.h"
 
 #include "a3_Kinematics.h"
+#include "a3_KeyframeAnimationController.h"
 
 
 #ifdef __cplusplus
@@ -102,6 +103,13 @@ a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 
 a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
+//-----------------------------------------------------------------------------
+
+// Clip operations
+
+
+a3_HierarchyPose* a3ClipOpLerp(a3_HierarchyPose* pose_out, a3_ClipController* controller0, a3_ClipController* controller1, a3real u, a3ui32 const nodeCount);
 
 //-----------------------------------------------------------------------------
 

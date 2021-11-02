@@ -28,7 +28,7 @@
 
 #include "animal3D-A3DM/a3math/a3vector.h"
 #include "animal3D-A3DM/a3math/a3interpolation.h"
-#include "a3_SpatialPose.h"
+#include "a3_HierarchyState.h"
 
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ struct a3_Keyframe
 	a3real durationInverse;
 
 	// Value of sample (Integer for now)
-	a3_SpatialPose* data;
+	a3_HierarchyPose* data;
 };
 
 // pool of keyframe descriptors
@@ -88,7 +88,7 @@ a3i32 a3keyframePoolCreate(a3_KeyframePool* keyframePool_out, const a3ui32 count
 a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool);
 
 // initialize keyframe
-a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, a3_SpatialPose* pose);
+a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, a3_HierarchyPose* pose);
 
 
 //-----------------------------------------------------------------------------
