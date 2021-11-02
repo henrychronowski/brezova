@@ -111,6 +111,8 @@ a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
 
 a3_HierarchyPose* a3ClipOpLerp(a3_HierarchyPose* pose_out, a3_ClipController* controller0, a3_ClipController* controller1, a3real u, a3ui32 const nodeCount);
 
+a3_HierarchyPose* a3ClipOpAdd(a3_HierarchyPose* pose_out, a3_ClipController* controller0, a3_ClipController* controller1, a3ui32 const nodeCount);
+
 //-----------------------------------------------------------------------------
 
 // pointer-based reset/identity operation for single spatial pose
