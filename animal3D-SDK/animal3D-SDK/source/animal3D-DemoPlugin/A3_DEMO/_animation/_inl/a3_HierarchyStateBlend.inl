@@ -374,6 +374,24 @@ inline a3_SpatialPose* a3SpatialPoseOpConvert(a3_SpatialPose* pose_inout)
 	return pose_inout;
 }
 
+// pointer-based revert operation for single spatial pose
+inline a3_SpatialPose* a3SpatialPoseOpRevert(a3_SpatialPose* pose_inout)
+{
+	if (pose_inout)
+	{
+		// Calling the restore spatial pose function on the pose
+		a3spatialPoseRestore(pose_inout, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
+
+	return pose_inout;
+}
+
+// pointer-based forward kinematics operation for single spatial pose
+//inline a3_SpatialPose* a3SpatialPoseOpFK(a3_Hierarchy* hierarchy_in, a3)
+//{
+//	a3kinematicsSolveForward
+//}
+
 
 //-----------------------------------------------------------------------------
 
@@ -595,6 +613,66 @@ inline a3_HierarchyPose* a3hierarchyPoseOpBiCubic(a3_HierarchyPose* pose_out, a3
 	}
 
 	return pose_out;
+}
+
+// Pointer-based smoothstep interpolation for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpSmoothstep(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* const pose1, const a3real u, a3ui32 const nodeCount)
+{
+	if (pose_out && pose0 && pose1)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			// hermite interpolation of u is carried out within spatial pose op, maybe could optimize?
+			a3SpatialPoseOpSmoothstep(&pose_out->pose[i], &pose0->pose[i], &pose1->pose[i], u);
+		}
+	}
+
+	return pose_out;
+}
+
+// Pointer-based descale for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseOpDescale(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, const a3real u, a3ui32 const nodeCount)
+{
+	if (pose_out && pose_in)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			// call spatial pose descale
+			a3SpatialPoseOpDescale(&pose_out->pose[i], &pose_in->pose[i], u);
+		}
+	}
+
+	return pose_out;
+}
+
+// Pointer-based convert for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseConvert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
+{
+	if (pose_inout)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			// call spatial pose convert
+			a3SpatialPoseOpConvert(&pose_inout->pose[i]);
+		}
+	}
+
+	return pose_inout;
+}
+
+// Pointer-based revert for hierarchical pose
+inline a3_HierarchyPose* a3hierarchyPoseRevert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
+{
+	if (pose_inout)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+			// call spatial pose revert
+			a3SpatialPoseOpRevert(&pose_inout->pose[i]);
+		}
+	}
+
+	return pose_inout;
 }
 
 //-----------------------------------------------------------------------------
