@@ -363,6 +363,13 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 	//a3hierarchyStateCreate(hierarchyState, hierarchy);
 
 	// Create keyframe and clip pools
+	a3keyframePoolCreate(&demoMode->keyframePool, 81);
+	a3clipPoolCreate(&demoMode->clipPool, 3);
+
+	for (a3ui32 i = 0; i < demoMode->keyframePool.count; i++)
+	{
+		a3keyframeInit(&demoMode->keyframePool.keyframe[i], 0.25f, hierarchyPoseGroup->hpose);
+	}
 
 	// Create clips 
 
