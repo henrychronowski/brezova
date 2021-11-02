@@ -64,14 +64,14 @@ a3i32 a3keyframePoolRelease(a3_KeyframePool* keyframePool)
 }
 
 // initialize keyframe
-a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, const a3ui32 value_x)
+a3i32 a3keyframeInit(a3_Keyframe* keyframe_out, const a3real duration, a3_SpatialPose* pose)
 {
 	// Set duration & inverse duration
 	keyframe_out->duration = duration;
 	keyframe_out->durationInverse = 1.0f / duration;
 
 	// Set keyframe data
-	keyframe_out->data = value_x;
+	keyframe_out->data = pose;
 
 	return 1;
 }
