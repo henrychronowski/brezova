@@ -374,6 +374,18 @@ inline a3_SpatialPose* a3SpatialPoseOpConvert(a3_SpatialPose* pose_inout)
 	return pose_inout;
 }
 
+// pointer-based revert operation for single spatial pose
+inline a3_SpatialPose* a3SpatialPoseOpRevert(a3_SpatialPose* pose_inout)
+{
+	if (pose_inout)
+	{
+		// Calling the restore spatial pose function on the pose
+		a3spatialPoseRestore(pose_inout, a3poseChannel_none, a3poseEulerOrder_xyz);
+	}
+
+	return pose_inout;
+}
+
 
 //-----------------------------------------------------------------------------
 

@@ -137,7 +137,38 @@ inline a3i32 a3spatialPoseRestore(a3_SpatialPose* spatialPose, const a3_SpatialP
 {
 	if (spatialPose)
 	{
+		a3real x, y, z;
 
+		// Get the translation and Euler rotation from the matrix according to the order
+		switch (order)
+		{
+		case a3poseEulerOrder_xyz:
+			a3real4x4GetEulerXYZTranslateIgnoreScale(spatialPose->transform.m, &x, &y, &z, spatialPose->translation.v);
+			break;
+		case a3poseEulerOrder_yzx:
+			break;
+		case a3poseEulerOrder_zxy:
+			break;
+		case a3poseEulerOrder_yxz:
+			break;
+		case a3poseEulerOrder_xzy:
+			break;
+		case a3poseEulerOrder_zyx:
+			a3real4x4GetEulerZYXTranslateIgnoreScale(spatialPose->transform.m, &x, &y, &z, spatialPose->translation.v);
+			break;
+		}
+
+		// Set the values extrapolated from the matrix
+		spatialPose->angles.x = x;
+		spatialPose->angles.y = y;
+		spatialPose->angles.z = z;
+
+		// I think that the above returns will have scale encoded in them (maybe?) so just setting the scale to 1
+		spatialPose->scale.x = 1.0f;
+		spatialPose->scale.y = 1.0f;
+		spatialPose->scale.z = 1.0f;
+
+		return 1;		
 	}
 	return -1;
 }
