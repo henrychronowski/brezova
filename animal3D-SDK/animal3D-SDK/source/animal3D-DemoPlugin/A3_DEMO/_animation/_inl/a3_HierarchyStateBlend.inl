@@ -650,7 +650,7 @@ inline a3_HierarchyPose* a3hierarchyPoseOpDescale(a3_HierarchyPose* pose_out, a3
 }
 
 // Pointer-based convert for hierarchical pose
-inline a3_HierarchyPose* a3hierarchyPoseConvert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
+inline a3_HierarchyPose* a3hierarchyPoseOpConvert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
 {
 	if (pose_inout)
 	{
@@ -665,7 +665,7 @@ inline a3_HierarchyPose* a3hierarchyPoseConvert(a3_HierarchyPose* pose_inout, a3
 }
 
 // Pointer-based revert for hierarchical pose
-inline a3_HierarchyPose* a3hierarchyPoseRevert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
+inline a3_HierarchyPose* a3hierarchyPoseOpRevert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount)
 {
 	if (pose_inout)
 	{

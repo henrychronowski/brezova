@@ -129,6 +129,17 @@ a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose con
 // Pointer-based cubic interpolation operation
 a3_SpatialPose* a3SpatialPoseOpCubic(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3_SpatialPose const* pose2, a3_SpatialPose const* pose3, a3real const u);
 
+// pointer-based smoothstep operation for single spatial pose
+a3_SpatialPose* a3SpatialPoseOpSmoothstep(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* const pose1, a3real const u);
+
+// pointer-based descale operation for single spatial pose
+a3_SpatialPose* a3SpatialPoseOpDescale(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_in, a3real u);
+
+// pointer-based convert operation for single spatial pose
+a3_SpatialPose* a3SpatialPoseOpConvert(a3_SpatialPose* pose_inout);
+
+// pointer-based revert operation for single spatial pose
+a3_SpatialPose* a3SpatialPoseOpRevert(a3_SpatialPose* pose_inout);
 
 //-----------------------------------------------------------------------------
 
@@ -205,6 +216,17 @@ a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a3_Hiera
 // Pointer-based bi-cubic interpolation for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpBiCubic(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* pose2, a3_HierarchyPose* pose3, a3_HierarchyPose* pose4, a3_HierarchyPose* pose5, a3_HierarchyPose* pose6, a3_HierarchyPose* pose7, a3_HierarchyPose* pose8, a3_HierarchyPose* pose9, a3_HierarchyPose* pose10, a3_HierarchyPose* pose11, a3_HierarchyPose* pose12, a3_HierarchyPose* pose13, a3_HierarchyPose* pose14, a3_HierarchyPose* pose15, a3real u0, a3real u1, a3real u2, a3real u3, a3real u4, a3ui32 const nodeCount);
 
+// Pointer-based smoothstep interpolation for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpSmoothstep(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* const pose1, const a3real u, a3ui32 const nodeCount);
+
+// Pointer-based descale for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpDescale(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose_in, const a3real u, a3ui32 const nodeCount);
+
+// Pointer-based convert for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpConvert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount);
+
+// Pointer-based revert for hierarchical pose
+a3_HierarchyPose* a3hierarchyPoseOpRevert(a3_HierarchyPose* pose_inout, a3ui32 const nodeCount);
 
 //-----------------------------------------------------------------------------
 

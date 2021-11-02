@@ -138,7 +138,6 @@ a3i32 a3hierarchyPoseConcat(const a3_HierarchyPose* pose_out, const a3_Hierarchy
 // lerp full hierarchy pose
 a3i32 a3hierarchyPoseLerp(const a3_HierarchyPose* pose_out, const a3_HierarchyPose* pose_0, const a3_HierarchyPose* pose_1, const a3real u, const a3ui32 nodeCount);
 
-
 //-----------------------------------------------------------------------------
 
 // initialize hierarchy state given an initialized hierarchy
