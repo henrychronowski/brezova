@@ -350,6 +350,17 @@ inline a3_SpatialPose* a3SpatialPoseOpSmoothstep(a3_SpatialPose* pose_out, a3_Sp
 	return pose_out;
 }
 
+// pointer-based descale
+inline a3_SpatialPose* a3SpatialPoseOpDescale(a3_SpatialPose* pose_out, a3_SpatialPose* const pose_in, a3real u)
+{
+	if (pose_out && pose_in)
+	{
+		a3spatialPoseOpLERP(pose_out, a3spatialPoseOpIdentity(pose_out), a3SpatialPoseOpNegate(pose_in, pose_in), u);
+	}
+
+	return pose_out;
+}
+
 //-----------------------------------------------------------------------------
 
 // data-based reset/identity
