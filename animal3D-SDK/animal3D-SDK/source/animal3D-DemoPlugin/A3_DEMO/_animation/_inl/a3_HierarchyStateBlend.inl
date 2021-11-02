@@ -107,6 +107,14 @@ inline a3_HierarchyPose* a3ClipOpAdd(a3_HierarchyPose* pose_out, a3_ClipControll
 	return pose_out;
 }
 
+inline a3_HierarchyPose* a3ClipOpScale(a3_HierarchyPose* pose_out, a3_ClipController* controller, a3real param, a3ui32 const nodeCount)
+{
+	a3_HierarchyPose* nextPose = controller->currentClip->keyframePool->keyframe[(controller->keyframe - controller->currentClip->firstKeyframe + 1) % controller->currentClip->keyframeCount].data;
+	a3hierarchyPoseOpLERP(pose_out, controller->currentKeyframe->data, nextPose, controller->keyframeParameter, nodeCount);
+
+	a3hierarchyPoseOpScale(pose_out, pose_out, param, nodeCount);
+}
+
 // pointer-based reset/identity operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpIdentity(a3_SpatialPose* pose_out)
 {
