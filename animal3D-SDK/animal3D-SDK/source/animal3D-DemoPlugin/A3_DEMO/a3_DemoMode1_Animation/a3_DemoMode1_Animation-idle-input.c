@@ -127,13 +127,15 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		{
 			// ****TO-DO:
 			// get directly from joysticks
-			a3f64 joystickValues[2] = { demoState->xcontrol->ctrl.lThumbX_unit, demoState->xcontrol->ctrl.lThumbY_unit };
-			if (a3XboxControlGetLeftJoystick(demoState->xcontrol, joystickValues))
+			a3f64 leftJoystickValues[2] = { demoState->xcontrol->ctrl.lThumbX_unit, demoState->xcontrol->ctrl.lThumbY_unit };
+			a3f64 rightJoystickValues[2] = { demoState->xcontrol->ctrl.rThumbX_unit, demoState->xcontrol->ctrl.rThumbY_unit };
+			if (a3XboxControlGetLeftJoystick(demoState->xcontrol, leftJoystickValues))
 			{
-				if (joystickValues)
-				{
-					printf("%f %f\n", joystickValues[0], joystickValues[1]);
-				}
+				//printf("Left Joystick - x: %f y: %f\n", leftJoystickValues[0], leftJoystickValues[1]);
+			}
+			if (a3XboxControlGetRightJoystick(demoState->xcontrol, rightJoystickValues))
+			{
+				//printf("Right Joystick - x: %f y: %f\n", rightJoystickValues[0], rightJoystickValues[1]);
 			}
 		}
 		else
