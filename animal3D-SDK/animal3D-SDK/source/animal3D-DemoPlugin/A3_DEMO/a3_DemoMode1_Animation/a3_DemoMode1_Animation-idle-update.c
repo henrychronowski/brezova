@@ -177,6 +177,17 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 		// ****TO-DO: 
 		// process input
+		switch (demoMode->ctrl_position)
+		{
+		case animation_input_direct:
+			break;
+		case animation_input_euler:
+			break;
+		case animation_input_interpolate1:
+			break;
+		case animation_input_kinematic:
+			break;
+		}
 
 		// apply input
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
