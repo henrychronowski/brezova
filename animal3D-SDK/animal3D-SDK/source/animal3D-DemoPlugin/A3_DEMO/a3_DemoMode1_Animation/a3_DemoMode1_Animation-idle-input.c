@@ -34,7 +34,7 @@
 #include "../a3_DemoState.h"
 
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
-
+#include <stdio.h>
 
 //-----------------------------------------------------------------------------
 // CALLBACKS
@@ -127,7 +127,14 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		{
 			// ****TO-DO:
 			// get directly from joysticks
-		
+			a3f64 joystickValues[2] = { demoState->xcontrol->ctrl.lThumbX_unit, demoState->xcontrol->ctrl.lThumbY_unit };
+			if (a3XboxControlGetLeftJoystick(demoState->xcontrol, joystickValues))
+			{
+				if (joystickValues)
+				{
+					printf("%f %f\n", joystickValues[0], joystickValues[1]);
+				}
+			}
 		}
 		else
 		{
