@@ -34,6 +34,7 @@
 #include "../a3_DemoState.h"
 
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
+#include <stdlib.h>
 
 
 //-----------------------------------------------------------------------------
@@ -175,11 +176,21 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		a3hierarchyStateUpdateObjectInverse(activeHS);
 		a3hierarchyStateUpdateObjectBindToCurrent(activeHS, baseHS);
 
+		a3_SpatialPose* pose = malloc(sizeof(a3_SpatialPose));
+		a3spatialPoseReset(pose);
+
 		// ****TO-DO: 
 		// process input
 		switch (demoMode->ctrl_position)
 		{
 		case animation_input_direct:
+			a3spatialPoseSetTranslation(pose, (a3f32)demoState->xcontrol->ctrl.lThumbX_unit, (a3f32)demoState->xcontrol->ctrl.lThumbY_unit, 0.0f);
+			a3spatialPoseConcat(activeHS->localSpace->pose, activeHS->animPose->pose, pose);
+			a3hierarchyPoseConvert(activeHS->localSpace,
+				demoMode->hierarchy_skel->numNodes,
+				demoMode->hierarchyPoseGroup_skel->channel,
+				demoMode->hierarchyPoseGroup_skel->order);
+			a3kinematicsSolveForward(activeHS);
 			break;
 		case animation_input_euler:
 			break;
@@ -188,6 +199,8 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		case animation_input_kinematic:
 			break;
 		}
+
+		free(pose);
 
 		// apply input
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
