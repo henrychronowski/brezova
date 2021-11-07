@@ -176,11 +176,10 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		a3hierarchyStateUpdateObjectInverse(activeHS);
 		a3hierarchyStateUpdateObjectBindToCurrent(activeHS, baseHS);
 
-		a3_SpatialPose* pose = malloc(sizeof(a3_SpatialPose));
-		a3spatialPoseReset(pose);
-
 		// ****TO-DO: 
 		// process input
+
+		// Position
 		switch (demoMode->ctrl_position)
 		{
 		case animation_input_direct:
@@ -201,7 +200,22 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 			break;
 		}
 
-		free(pose);
+		//Rotation
+		switch (demoMode->ctrl_rotation)
+		{
+		case animation_input_direct:
+			demoMode->rot = (a3f32)demoState->xcontrol->ctrl.rThumbX_unit * 180.0f;
+			break;
+		case animation_input_euler:
+
+			break;
+		case animation_input_interpolate1:
+
+			break;
+		case animation_input_kinematic:
+
+			break;
+		}
 
 		// apply input
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
