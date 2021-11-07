@@ -188,12 +188,16 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 			demoMode->pos.y = (a3f32)demoState->xcontrol->ctrl.lThumbY_unit;
 			break;
 		case animation_input_euler:
-			demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoState->xcontrol->ctrl.lThumbX_unit / dt);
-			demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoState->xcontrol->ctrl.lThumbY_unit / dt);
+			demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoState->xcontrol->ctrl.lThumbX_unit * dt);
+			demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoState->xcontrol->ctrl.lThumbY_unit * dt);
 			break;
 		case animation_input_interpolate1:
+			demoMode->pos.x = (a3f32)(demoMode->obj_skeleton_ctrl->position.x + (5 * demoState->xcontrol->ctrl.lThumbX_unit - demoMode->obj_skeleton_ctrl->position.x) * dt);
+			demoMode->pos.y = (a3f32)(demoMode->obj_skeleton_ctrl->position.y + (5 * demoState->xcontrol->ctrl.lThumbY_unit - demoMode->obj_skeleton_ctrl->position.y) * dt);
 			break;
 		case animation_input_kinematic:
+			demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoState->xcontrol->ctrl.lThumbX_unit * dt) + (a3f32)(demoState->xcontrol->ctrl.lThumbX_unit * (dt * dt) / 2.0f);
+			demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoState->xcontrol->ctrl.lThumbY_unit * dt) + (a3f32)(demoState->xcontrol->ctrl.lThumbY_unit * (dt * dt) / 2.0f);
 			break;
 		}
 
