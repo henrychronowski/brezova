@@ -184,15 +184,12 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		switch (demoMode->ctrl_position)
 		{
 		case animation_input_direct:
-			a3spatialPoseSetTranslation(pose, (a3f32)demoState->xcontrol->ctrl.lThumbX_unit, (a3f32)demoState->xcontrol->ctrl.lThumbY_unit, 0.0f);
-			a3spatialPoseConcat(activeHS->localSpace->pose, activeHS->animPose->pose, pose);
-			a3hierarchyPoseConvert(activeHS->localSpace,
-				demoMode->hierarchy_skel->numNodes,
-				demoMode->hierarchyPoseGroup_skel->channel,
-				demoMode->hierarchyPoseGroup_skel->order);
-			a3kinematicsSolveForward(activeHS);
+			demoMode->pos.x = (a3f32)demoState->xcontrol->ctrl.lThumbX_unit;
+			demoMode->pos.y = (a3f32)demoState->xcontrol->ctrl.lThumbY_unit;
 			break;
 		case animation_input_euler:
+			demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoState->xcontrol->ctrl.lThumbX_unit / dt);
+			demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoState->xcontrol->ctrl.lThumbY_unit / dt);
 			break;
 		case animation_input_interpolate1:
 			break;
