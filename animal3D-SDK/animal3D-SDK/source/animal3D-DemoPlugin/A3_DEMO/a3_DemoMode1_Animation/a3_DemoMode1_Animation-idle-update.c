@@ -217,13 +217,19 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 			demoMode->rot = (a3f32)demoState->xcontrol->ctrl.rThumbX_unit * 180.0f;
 			break;
 		case animation_input_euler:
-			demoMode->rot = demoMode->obj_skeleton_ctrl->euler.z + (a3f32)(demoState->xcontrol->ctrl.rThumbX_unit * dt) * 180.0f;
+			demoMode->velr = (a3f32)demoState->xcontrol->ctrl.rThumbX_unit * 180.0f;
+			demoMode->rot = demoMode->obj_skeleton_ctrl->euler.z + (a3f32)(demoMode->velr * dt);
 			break;
 		case animation_input_interpolate1:
-			
+			demoMode->rot = (a3f32)(demoMode->obj_skeleton_ctrl->euler.z + (demoState->xcontrol->ctrl.rThumbX_unit * 180 - demoMode->obj_skeleton_ctrl->euler.z) * dt);
+			break;
+		case animation_input_interpolate2:
+			demoMode->velr = (a3f32)(demoMode->velr + (demoState->xcontrol->ctrl.rThumbX_unit * 180 - demoMode->velr) * dt);
+			demoMode->rot = demoMode->obj_skeleton_ctrl->euler.z + (a3f32)(demoMode->velr * dt);
 			break;
 		case animation_input_kinematic:
-
+			demoMode->velr = (a3real)(demoMode->velr + demoState->xcontrol->ctrl.rThumbX_unit * 180 * dt);
+			demoMode->rot = demoMode->obj_skeleton_ctrl->euler.z + demoMode->velr + (a3f32)(demoState->xcontrol->ctrl.rThumbX_unit * 180 * (dt * dt) / 2.0f);
 			break;
 		}
 
