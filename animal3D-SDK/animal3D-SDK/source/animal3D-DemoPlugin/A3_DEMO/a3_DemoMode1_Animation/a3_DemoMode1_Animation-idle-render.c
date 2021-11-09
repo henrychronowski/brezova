@@ -121,6 +121,7 @@ void a3animation_render_controls(a3_DemoState const* demoState, a3_DemoMode1_Ani
 	a3_DemoMode1_Animation_ControlTarget const ctrlTarget = demoMode->ctrl_target;
 	a3_DemoMode1_Animation_InputMode const inputPos = demoMode->ctrl_position;
 	a3_DemoMode1_Animation_InputMode const inputRot = demoMode->ctrl_rotation;
+	a3_ClipController const* clipCtrl = demoMode->clipCtrl;
 
 	// demo modes
 	a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
@@ -147,6 +148,8 @@ void a3animation_render_controls(a3_DemoState const* demoState, a3_DemoMode1_Ani
 			"    Input mode (position) (%u / %u) ('-'/pad X | '='/pad B): %s", inputPos + 1, animation_inputmode_max, inputModeName[inputPos]);
 		a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 			"    Input mode (rotation) (%u / %u) ('_'/pad A | '+'/pad Y): %s", inputRot + 1, animation_inputmode_max, inputModeName[inputRot]);
+		a3textDraw(text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+			"    Branch Clip (rBumper)");
 	}
 }
 

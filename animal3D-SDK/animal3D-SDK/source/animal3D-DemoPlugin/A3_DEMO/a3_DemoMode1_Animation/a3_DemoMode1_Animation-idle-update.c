@@ -147,6 +147,10 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 		a3real const dtr = (a3real)dt;
 		a3_ClipController* clipCtrl = demoMode->clipCtrlA;
 
+		// check branching
+		a3boolean pressed = a3XboxControlGetState(demoState->xcontrol, a3xbox_rightBumper);
+		a3clipControllerCheckBranching(clipCtrl, pressed);
+
 		// update controllers
 		a3clipControllerUpdate(demoMode->clipCtrl, dt);
 		a3clipControllerUpdate(demoMode->clipCtrlA, dt);

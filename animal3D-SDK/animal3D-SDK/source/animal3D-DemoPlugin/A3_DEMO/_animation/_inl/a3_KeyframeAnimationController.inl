@@ -90,6 +90,14 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 			if (clipCtrl->keyframeIndex == clipCtrl->clip->keyframeIndex_final)
 			{
 				// handle forward transition
+				if (clipCtrl->branchCondition)
+				{
+					a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, 5, 24, (a3f64)24.0f);
+				}
+				else if (clipCtrl->clipIndex == 5)
+				{
+					a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, 3, 24, (a3f64)24.0f);
+				}
 
 				// default testing behavior: loop with overstep
 				clipCtrl->keyframeIndex = clipCtrl->clip->keyframeIndex_first;
@@ -117,6 +125,14 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 			if (clipCtrl->keyframeIndex == clipCtrl->clip->keyframeIndex_first)
 			{
 				// handle reverse transition
+				if (clipCtrl->branchCondition)
+				{
+					a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, 5, 24, (a3f64)24.0f);
+				}
+				else if (clipCtrl->clipIndex == 5)
+				{
+					a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, 3, 24, (a3f64)24.0f);
+				}
 
 				// default testing behavior: loop with overstep
 				clipCtrl->keyframeIndex = clipCtrl->clip->keyframeIndex_final;
@@ -146,6 +162,13 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 	return -1;
 }
 
+inline a3boolean a3clipControllerCheckBranching(a3_ClipController* clipCtrl, a3boolean branchCondition)
+{
+	if(clipCtrl)
+		clipCtrl->branchCondition = branchCondition;
+
+	return branchCondition;
+}
 
 //-----------------------------------------------------------------------------
 

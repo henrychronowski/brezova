@@ -60,6 +60,8 @@ struct a3_ClipController
 	// clip and keyframe interpolation parameters
 	a3f64 clipParam, keyframeParam;
 
+	a3boolean branchCondition;
+
 	// clip pool and pointers
 	a3_ClipPool const* clipPool;
 	a3_Clip const* clip;
@@ -80,6 +82,8 @@ a3i32 a3clipControllerSetPlayback(a3_ClipController* clipCtrl, const a3i32 playb
 
 // set clip to play
 a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool, const a3i32 playback_step, const a3f64 playback_stepPerSec);
+
+a3boolean a3clipControllerCheckBranching(a3_ClipController* clipCtrl, a3boolean branchCondition);
 
 //-----------------------------------------------------------------------------
 
