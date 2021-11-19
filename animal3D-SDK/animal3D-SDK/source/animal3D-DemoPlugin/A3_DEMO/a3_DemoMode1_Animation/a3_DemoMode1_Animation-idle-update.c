@@ -227,6 +227,17 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// ****TO-DO: 
 			// make "look-at" matrix
 			// in this example, +Z is towards locator, +Y is up
+			a3vec4 neckPose = activeHS->objectSpace->pose[j].translate;
+			a3vec4 lookDir = controlLocator_neckLookat;
+
+			a3vec4 x = a3vec4_zero;
+			a3real4Normalize(a3real4Sub(lookDir.v, neckPose.v));
+			a3real3Cross(x.xyz.v, a3vec3_y.v, lookDir.v);
+			a3real4Normalize(x.v);
+
+			a3vec4 u = a3vec4_zero;
+			a3real3Cross(u.v, lookDir.v, x.v);
+			a3real2Normalize(u.v);
 
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
