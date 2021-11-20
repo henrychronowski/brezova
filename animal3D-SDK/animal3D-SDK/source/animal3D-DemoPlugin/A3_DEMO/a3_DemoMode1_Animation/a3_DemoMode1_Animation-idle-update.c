@@ -250,6 +250,7 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			printf("Rot: (%f, %f, %f)\n", eulerRot.x, eulerRot.y, eulerRot.z);
 
 			activeHS->objectSpace->pose[j].rotate = eulerRot;
+			a3spatialPoseConvert(&activeHS->objectSpace->pose[j], a3poseChannel_none, a3poseEulerOrder_xyz);
 			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
