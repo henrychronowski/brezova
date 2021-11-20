@@ -32,7 +32,7 @@
 
 //typedef struct a3_DemoState a3_DemoState;
 #include "../a3_DemoState.h"
-
+#include <stdio.h>
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
 
 
@@ -227,11 +227,11 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// ****TO-DO: 
 			// make "look-at" matrix
 			// in this example, +Z is towards locator, +Y is up
-			a3vec4 neckPose = activeHS->objectSpace->pose[j].translate;
+			a3vec4 neckPos = activeHS->objectSpace->pose[j].translate;
 			a3vec4 lookDir = controlLocator_neckLookat;
 
 			a3vec4 x = a3vec4_zero;
-			a3real4Normalize(a3real4Sub(lookDir.v, neckPose.v));
+			a3real4Normalize(a3real4Sub(lookDir.v, neckPos.v));
 			a3real3Cross(x.xyz.v, a3vec3_y.v, lookDir.v);
 			a3real4Normalize(x.v);
 
@@ -239,11 +239,26 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3real3Cross(u.v, lookDir.v, x.v);
 			a3real2Normalize(u.v);
 
+			a3mat4 rot = a3mat4_identity;
+			a3real4x4SetMajors(rot.m, x.v, u.v, lookDir.v, a3vec4_w.v);
+
+			a3real4x4Concat(rot.m, activeHS->objectSpace->pose[j].transformMat.m);
+
+			a3vec4 eulerRot = a3vec4_zero;
+			a3real4x4GetEulerXYZIgnoreScale(rot.m, &eulerRot.x, &eulerRot.y, &eulerRot.z);
+
+			printf("Rot: (%f, %f, %f)\n", eulerRot.x, eulerRot.y, eulerRot.z);
+
+			activeHS->objectSpace->pose[j].rotate = eulerRot;
+			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
 			// resolve local and animation pose for affected joint
 			//	(instead of doing IK for whole skeleton when only one joint has changed)
 
+			a3kinematicsSolveInverseSingle(activeHS, j, activeHS->hierarchy->nodes[j].parentIndex);
+
+			//a3kinematicsSolveForwardPartial(activeHS, j, activeHS->hierarchy->numNodes - j);
 		}
 
 		// RIGHT ARM REACH
