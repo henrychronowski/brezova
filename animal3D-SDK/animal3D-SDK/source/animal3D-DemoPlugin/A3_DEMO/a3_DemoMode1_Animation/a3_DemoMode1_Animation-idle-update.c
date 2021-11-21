@@ -294,11 +294,18 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3real4Sub(shoulderToEffector.v, activeHS->localSpace->pose[j_shoulder].translate.v);
 
 			a3real len = a3real4Length(shoulderToEffector.v);
-			a3real boneLen = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			a3real shouldLen = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
 			a3real elbowLen = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_elbow].translate.v);
 			a3real wristLen = a3real4Distance(activeHS->localSpace->pose[j_elbow].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			a3vec4 wristToEffector = controlLocator_wristConstraint;
+			a3real4Sub(wristToEffector.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			a3vec4 wristToShoulder = activeHS->localSpace->pose[j_shoulder].translate;
+			a3real4Sub(wristToShoulder.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			
 
-			if (len >= boneLen)
+
+
+			if (len >= shouldLen)
 			{
 				a3real4Normalize(shoulderToEffector.v);
 				
@@ -314,7 +321,24 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			}
 			else
 			{
-				
+				a3real semiParameter = (shouldLen + elbowLen + wristLen) / (a3real)2;
+				a3real area = a3sqrtf(semiParameter * (semiParameter - wristLen) * (semiParameter - elbowLen) * (semiParameter - shouldLen));
+				a3real h = (area * (a3real)2) / shouldLen;
+				a3vec4 n = a3vec4_zero;
+				a3real3CrossUnit(n.xyz.v, wristToShoulder.xyz.v, wristToEffector.xyz.v);
+				a3vec4 y = a3vec4_zero;
+				a3real3Cross(y.xyz.v, n.xyz.v, a3real3Normalize(wristToShoulder.xyz.v));
+
+				a3real4MulS(y.v, h);
+
+				a3vec4 x = wristToShoulder;
+				a3real4MulS(x.v, shouldLen * 0.5f);
+
+				a3real4Add(x.v, y.v);
+
+				// Set transform elbow to x, set transform wrist to effector place (should do before length calculations, set rotations
+
+
 			}
 			
 			// ****TO-DO: 
