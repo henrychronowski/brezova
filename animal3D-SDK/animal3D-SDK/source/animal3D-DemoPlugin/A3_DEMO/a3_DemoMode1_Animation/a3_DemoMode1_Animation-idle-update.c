@@ -227,7 +227,7 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// ****TO-DO: 
 			// make "look-at" matrix
 			// in this example, +Z is towards locator, +Y is up
-			a3vec4 neckPos = activeHS->objectSpace->pose[j].translate;
+			a3vec4 neckPos = activeHS->localSpace->pose[j].translate;
 			a3vec4 lookDir = controlLocator_neckLookat;
 
 			a3vec4 x = a3vec4_zero;
@@ -242,24 +242,25 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3mat4 rot = a3mat4_identity;
 			a3real4x4SetMajors(rot.m, x.v, u.v, lookDir.v, a3vec4_w.v);
 
-			a3real4x4Concat(rot.m, activeHS->objectSpace->pose[j].transformMat.m);
+			a3real4x4Concat(rot.m, activeHS->localSpace->pose[j].transformMat.m);
 
 			a3vec4 eulerRot = a3vec4_zero;
 			a3real4x4GetEulerXYZIgnoreScale(rot.m, &eulerRot.x, &eulerRot.y, &eulerRot.z);
-
-			printf("Rot: (%f, %f, %f)\n", eulerRot.x, eulerRot.y, eulerRot.z);
-
-			activeHS->objectSpace->pose[j].rotate = eulerRot;
-			a3spatialPoseConvert(&activeHS->objectSpace->pose[j], a3poseChannel_none, a3poseEulerOrder_xyz);
 			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
 			// resolve local and animation pose for affected joint
 			//	(instead of doing IK for whole skeleton when only one joint has changed)
 
+			activeHS->localSpace->pose[j].rotate = eulerRot;
+			activeHS->objectSpace->pose[j].transformMat = activeHS->localSpace->pose[j].transformMat;
+			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j].transformMat.m, activeHS->objectSpace->pose[j].transformMat.m);
+			activeHS->objectSpace->pose[j].transformMat = activeHS->localSpace->pose[j].transformMat;
+			a3real4x4Concat(activeHS->objectSpace->pose[j].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
+
 			a3kinematicsSolveInverseSingle(activeHS, j, activeHS->hierarchy->nodes[j].parentIndex);
 
-			//a3kinematicsSolveForwardPartial(activeHS, j, activeHS->hierarchy->numNodes - j);
+			a3kinematicsSolveForward(activeHS);
 		}
 
 		// RIGHT ARM REACH
@@ -289,6 +290,32 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// 1) check if solution exists
 			//	-> get vector between base and end effector; if it extends max length, straighten limb
 			//	-> position of end effector's target is at the minimum possible distance along this vector
+			a3vec4 shoulderToEffector = controlLocator_wristEffector;
+			a3real4Sub(shoulderToEffector.v, activeHS->localSpace->pose[j_shoulder].translate.v);
+
+			a3real len = a3real4Length(shoulderToEffector.v);
+			a3real boneLen = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			a3real elbowLen = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_elbow].translate.v);
+			a3real wristLen = a3real4Distance(activeHS->localSpace->pose[j_elbow].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
+
+			if (len >= boneLen)
+			{
+				a3real4Normalize(shoulderToEffector.v);
+				
+				activeHS->localSpace->pose[j_elbow].translate = shoulderToEffector;
+				a3real4MulS(activeHS->localSpace->pose[j_elbow].translate.v, elbowLen);
+
+				a3spatialPoseConvert(&activeHS->localSpace->pose[j_elbow], a3poseChannel_none, a3poseEulerOrder_xyz);
+
+				activeHS->localSpace->pose[j_wrist].translate = shoulderToEffector;
+				a3real4MulS(activeHS->localSpace->pose[j_wrist].translate.v, elbowLen);
+
+				a3spatialPoseConvert(&activeHS->localSpace->pose[j_wrist], a3poseChannel_none, a3poseEulerOrder_xyz);
+			}
+			else
+			{
+				
+			}
 			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
