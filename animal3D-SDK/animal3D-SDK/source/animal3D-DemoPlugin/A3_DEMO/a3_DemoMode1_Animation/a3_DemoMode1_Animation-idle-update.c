@@ -409,6 +409,7 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	a3hierarchyPoseLerp(activeHS_fk->animPose,
 		poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
 		(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+	//a3clipControllerBranchTransitionBlend(clipCtrl_fk, demoMode->clipCtrl, activeHS_fk, poseGroup, demoMode->clipBlendParam);
 	// run FK pipeline
 	a3animation_update_fk(activeHS_fk, baseHS, poseGroup);
 
@@ -515,9 +516,11 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	a3real walkThreshold = 2.0f;
 	a3real yPos = demoMode->obj_skeleton_ctrl->position.y;
 
+	demoMode->clipBlendParam = a3absolute(yPos) * 0.5f;
+
 	if(jumping)
 		a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
-	else if(yPos < runThreshold || yPos > -runThreshold)
+	else if(yPos < runThreshold && yPos > -runThreshold)
 	{
 		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[10], yPos, 1.0f);
 	}

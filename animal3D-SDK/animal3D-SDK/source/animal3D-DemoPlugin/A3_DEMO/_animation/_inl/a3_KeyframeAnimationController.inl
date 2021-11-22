@@ -27,6 +27,7 @@
 #define __ANIMAL3D_KEYFRAMEANIMATIONCONTROLLER_INL
 
 
+
 //-----------------------------------------------------------------------------
 
 inline a3i32 a3clipControllerSetPlayback(a3_ClipController* clipCtrl, const a3i32 playback_step, const a3f64 playback_stepPerSec)
@@ -169,6 +170,39 @@ inline a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const
 		}
 	}
 	return -1;
+}
+
+inline a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController* clipCtrlA, a3_ClipController* clipCtrlB, a3_HierarchyState* active_HS, const a3_HierarchyPoseGroup* active_PoseGroup, a3real blendParam)
+{
+	if (clipCtrlA && clipCtrlB)
+	{
+		a3_HierarchyPose poseA;// = malloc(sizeof(a3_HierarchyPose));
+		a3_HierarchyPose poseB;// = malloc(sizeof(a3_HierarchyPose));
+
+
+		//a3clipControllerUpdate(clipCtrl_fk, dt);
+		a3ui32 sampleIndex0, sampleIndex1;
+
+		sampleIndex0 = clipCtrlA->clipPool->keyframe[clipCtrlA->keyframeIndex].sampleIndex0;
+		sampleIndex1 = clipCtrlA->clipPool->keyframe[clipCtrlA->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(&poseA,
+			active_PoseGroup->hpose + sampleIndex0, active_PoseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrlA->keyframeParam, active_HS->hierarchy->numNodes);
+
+		sampleIndex0 = clipCtrlB->clipPool->keyframe[clipCtrlB->keyframeIndex].sampleIndex0;
+		sampleIndex1 = clipCtrlB->clipPool->keyframe[clipCtrlB->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(&poseB,
+			active_PoseGroup->hpose + sampleIndex0, active_PoseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrlB->keyframeParam, active_HS->hierarchy->numNodes);
+
+		a3hierarchyPoseOpLERP(active_HS->animPose, &poseA, &poseB, blendParam);
+
+		//free(poseA, poseB);
+
+		return active_HS->animPose;
+	}
+
+	return active_HS->animPose;
 }
 
 //-----------------------------------------------------------------------------

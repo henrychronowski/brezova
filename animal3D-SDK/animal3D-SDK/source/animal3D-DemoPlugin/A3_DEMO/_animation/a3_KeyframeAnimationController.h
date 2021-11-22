@@ -28,6 +28,9 @@
 
 
 #include "a3_KeyframeAnimation.h"
+#include "a3_Hierarchy.h"
+#include "a3_HierarchyState.h"
+#include "a3_HierarchyStateBlend.h"
 
 
 //-----------------------------------------------------------------------------
@@ -82,6 +85,7 @@ a3i32 a3clipControllerSetPlayback(a3_ClipController* clipCtrl, const a3i32 playb
 a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool, const a3i32 playback_step, const a3f64 playback_stepPerSec);
 
 a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal);
+a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController* clipCtrlA, a3_ClipController* clipCtrlB, a3_HierarchyState* active_HS, const a3_HierarchyPoseGroup * active_PoseGroup, a3real blendParam);
 //-----------------------------------------------------------------------------
 
 
