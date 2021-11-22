@@ -509,6 +509,18 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 	// ****TO-DO:
 	// process input
+	
+	a3boolean jumping = a3keyboardGetState(demoState->keyboard, a3key_space);
+
+	if(jumping)
+		a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
+	else
+	{
+		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[10], demoMode->obj_skeleton_ctrl->position.y, 1.0f);
+	}
+
+	//a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[10], demoMode->obj_skeleton_ctrl->position.y, 1.0f);
+	
 
 	// apply input
 	//demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);

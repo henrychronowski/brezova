@@ -107,6 +107,76 @@ void a3demo_input_controlObject(
 	}
 }
 
+void a3demo_input_controlCharacter(
+	a3_DemoState* demoState, a3_DemoSceneObject* object,
+	a3f64 const dt, a3real ctrlMoveSpeed, a3real ctrlRotateSpeed)
+{
+	a3real azimuth = 0.0f;
+	a3real elevation = 0.0f;
+	a3boolean rotatingObject = 0, movingObject = 0;
+
+	// using Xbox controller
+	if (a3XboxControlIsConnected(demoState->xcontrol))
+	{
+		// move and rotate camera using joysticks
+		a3f64 lJoystick[2], rJoystick[2], lTrigger[1], rTrigger[1];
+		a3XboxControlGetJoysticks(demoState->xcontrol, lJoystick, rJoystick);
+		a3XboxControlGetTriggers(demoState->xcontrol, lTrigger, rTrigger);
+
+		movingObject = a3demo_moveSceneObject(object,
+			ctrlMoveSpeed * (a3real)(dt),
+			(a3real)(lJoystick[0]),
+			(a3real)(*rTrigger - *lTrigger),
+			(a3real)(-lJoystick[1])
+		);
+		// rotate
+		{
+			azimuth = (a3real)(-rJoystick[0]);
+			elevation = (a3real)(rJoystick[1]);
+
+			// this really defines which way is "up"
+			// mouse's Y motion controls pitch, but X can control yaw or roll
+			// controlling yaw makes Y axis seem "up", roll makes Z seem "up"
+			rotatingObject = a3demo_rotateSceneObject(object,
+				ctrlRotateSpeed * (a3real)(dt * 10.0),
+				// pitch: vertical tilt
+				elevation,
+				// yaw/roll depends on "vertical" axis: if y, yaw; if z, roll
+				a3real_zero,
+				azimuth);
+		}
+	}
+
+	// using mouse and keyboard
+	else
+	{
+		// move using WASDEQ
+		movingObject = a3demo_moveSceneObject(object,
+			ctrlMoveSpeed * (a3real)(dt),
+			(a3real)a3keyboardGetDifference(demoState->keyboard, a3key_D, a3key_A),
+			(a3real)a3keyboardGetDifference(demoState->keyboard, a3key_W, a3key_S),
+			(a3real)a3keyboardGetDifference(demoState->keyboard, a3key_E, a3key_Q)
+		);
+		if (a3mouseIsHeld(demoState->mouse, a3mouse_left))
+		{
+			azimuth = -(a3real)a3mouseGetDeltaX(demoState->mouse);
+			elevation = -(a3real)a3mouseGetDeltaY(demoState->mouse);
+
+			// this really defines which way is "up"
+			// mouse's Y motion controls pitch, but X can control yaw or roll
+			// controlling yaw makes Y axis seem "up", roll makes Z seem "up"
+			rotatingObject = a3demo_rotateSceneObject(object,
+				ctrlRotateSpeed * (a3real)(dt),
+				// pitch: vertical tilt
+				elevation,
+				// yaw/roll depends on "vertical" axis: if y, yaw; if z, roll
+				a3real_zero,
+				azimuth);
+		}
+	}
+}
+
+
 void a3demo_input_controlProjector(
 	a3_DemoState* demoState, a3_DemoProjector* projector,
 	a3f64 const dt, a3real ctrlMoveSpeed, a3real ctrlRotateSpeed, a3real ctrlZoomSpeed)

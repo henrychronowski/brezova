@@ -146,6 +146,30 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 	return -1;
 }
 
+inline a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal)
+{
+	if (clipCtrl && clipA && clipB)
+	{
+		a3ui32 const rate = 24;
+		a3f64 const fps = (a3f64)rate;
+
+		param = a3absolute(param);
+
+		if (param >= goal)
+		{
+			if(clipCtrl->clipIndex != clipB->index)
+				a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, clipB->index, rate, fps);
+			return 1;
+		}
+		else
+		{
+			if (clipCtrl->clipIndex != clipA->index)
+				a3clipControllerSetClip(clipCtrl, clipCtrl->clipPool, clipA->index, rate, fps);
+			return 0;
+		}
+	}
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 
