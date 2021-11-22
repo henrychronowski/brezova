@@ -335,14 +335,32 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 				a3real4Add(x.v, y.v);
 
 				// Set transform elbow to x, set transform wrist to effector place (should do before length calculations, set rotations
+				activeHS->localSpace->pose[j_elbow].translate = x;
+				activeHS->localSpace->pose[j_wrist].translate = controlLocator_wristEffector;
 				
+				a3spatialPoseConvert(&activeHS->localSpace->pose[j_elbow], a3poseChannel_none, a3poseEulerOrder_xyz);
+				a3spatialPoseConvert(&activeHS->localSpace->pose[j_wrist], a3poseChannel_none, a3poseEulerOrder_xyz);
 			}
 			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
 			// work from root to leaf too get correct transformations
-			a3real4x4MakeLookAt(jointTransform_shoulder.m, NULL, activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_elbow].translate.v, a3vec4_y.v);
-			a3real4x4MakeLookAt(jointTransform_elbow.m, NULL, activeHS->localSpace->pose[j_elbow].translate.v, activeHS->localSpace->pose[j_wrist].translate.v, a3vec4_y.v);
+			a3real4x4MakeLookAt(activeHS->localSpace->pose[j_shoulder].transformMat.m, NULL, activeHS->localSpace->pose[j_shoulder].translate.v, 
+								activeHS->localSpace->pose[j_elbow].translate.v, a3vec4_y.v);
+			a3real4x4MakeLookAt(activeHS->localSpace->pose[j_elbow].transformMat.m, NULL, activeHS->localSpace->pose[j_elbow].translate.v, 
+								activeHS->localSpace->pose[j_wrist].translate.v, a3vec4_y.v);
+
+			activeHS->objectSpace->pose[j_shoulder].transformMat = activeHS->localSpace->pose[j_shoulder].transformMat;
+			activeHS->objectSpace->pose[j_elbow].transformMat = activeHS->localSpace->pose[j_neck].transformMat;
+			activeHS->objectSpace->pose[j_wrist].transformMat = activeHS->localSpace->pose[j_wrist].transformMat;
+
+			a3real4x4Concat(activeHS->objectSpace->pose[j_shoulder].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
+			a3real4x4Concat(activeHS->objectSpace->pose[j_elbow].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
+			a3real4x4Concat(activeHS->objectSpace->pose[j_wrist].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
+
+			a3kinematicsSolveInversePartial(activeHS, j_shoulder, 3);
+
+			a3kinematicsSolveForward(activeHS);
 		}
 	}
 }
