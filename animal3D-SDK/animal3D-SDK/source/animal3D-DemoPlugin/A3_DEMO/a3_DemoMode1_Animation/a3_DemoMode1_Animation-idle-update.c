@@ -301,8 +301,6 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3real4Sub(wristToEffector.v, activeHS->localSpace->pose[j_wrist].translate.v);
 			a3vec4 wristToShoulder = activeHS->localSpace->pose[j_shoulder].translate;
 			a3real4Sub(wristToShoulder.v, activeHS->localSpace->pose[j_wrist].translate.v);
-			
-
 
 
 			if (len >= shouldLen)
@@ -337,14 +335,14 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 				a3real4Add(x.v, y.v);
 
 				// Set transform elbow to x, set transform wrist to effector place (should do before length calculations, set rotations
-
-
+				
 			}
 			
 			// ****TO-DO: 
 			// reassign resolved transforms to OBJECT-SPACE matrices
 			// work from root to leaf too get correct transformations
-
+			a3real4x4MakeLookAt(jointTransform_shoulder.m, NULL, activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_elbow].translate.v, a3vec4_y.v);
+			a3real4x4MakeLookAt(jointTransform_elbow.m, NULL, activeHS->localSpace->pose[j_elbow].translate.v, activeHS->localSpace->pose[j_wrist].translate.v, a3vec4_y.v);
 		}
 	}
 }
