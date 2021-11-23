@@ -227,7 +227,7 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// ****TO-DO: 
 			// make "look-at" matrix
 			// in this example, +Z is towards locator, +Y is up
-			a3vec4 neckPos = activeHS->localSpace->pose[j].translate;
+			a3vec4 neckPos = activeHS->localSpace->pose[j].translate; //no w
 			a3vec4 lookDir = controlLocator_neckLookat;
 
 			a3vec4 x = a3vec4_zero;
@@ -237,7 +237,7 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 
 			a3vec4 u = a3vec4_zero;
 			a3real3Cross(u.v, lookDir.v, x.v);
-			a3real2Normalize(u.v);
+			a3real2Normalize(u.v); //fix
 
 			a3mat4 rot = a3mat4_identity;
 			a3real4x4SetMajors(rot.m, x.v, u.v, lookDir.v, a3vec4_w.v);
