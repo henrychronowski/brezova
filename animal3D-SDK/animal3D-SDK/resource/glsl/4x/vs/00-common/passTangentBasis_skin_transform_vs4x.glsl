@@ -54,13 +54,44 @@ out vbVertexData {
 flat out int vVertexID;
 flat out int vInstanceID;
 
+// Rigid bind v = s[j] * v
+vec4 skinRigidLinear(in vec4 v, in int j)
+{
+	return (uSkinMat[j] * v);
+}
+
+// Smooth bind v = sum(w[i] * (s[j[i]] * v)) where i=[0...3]
+//vec4 skinSmoothLinear(in vec4 v, in ivec4 j, in vec4 w)
+//{
+//	vec4 v_out = vec4(0.0);
+//
+//	v_out += w[0] * (uSkinMat[j[0]] * v);
+//	v_out += w[1] * (uSkinMat[j[1]] * v);
+//	v_out += w[2] * (uSkinMat[j[2]] * v);
+//	v_out += w[3] * (uSkinMat[j[3]] * v);
+//
+//	return v_out;
+//}
+
+// TODO: Smooth dual quat blend
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 //	gl_Position = aPosition;
 
-	vTangentBasis_view = uMV_nrm * mat4(aTangent, aBitangent, aNormal, vec4(0.0));
-	vTangentBasis_view[3] = uMV * aPosition;
+	vTangentBasis_view = uMV_nrm * mat4(
+//		aTangent, 
+//		aBitangent, 
+//		aNormal, 
+		skinRigidLinear(vec4(aTangent.xyz, 0.0), aBindIndex[0]),
+		skinRigidLinear(vec4(aBitangent.xyz, 0.0), aBindIndex[0]),
+		skinRigidLinear(vec4(aNormal.xyz, 0.0), aBindIndex[0]),
+		vec4(0.0));
+	vTangentBasis_view[3] = uMV * 
+		//aPosition;
+		skinRigidLinear(aPosition, aBindIndex[0]);
+
 	gl_Position = uP * vTangentBasis_view[3];
 	
 	vTexcoord_atlas = uAtlas * aTexcoord;
