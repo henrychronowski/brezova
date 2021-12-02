@@ -74,6 +74,15 @@ vec4 skinSmoothLinear(in vec4 v, in ivec4 j, in vec4 w)
 }
 
 // TODO: Smooth dual quat blend
+mat4 skinSmoothDGDLB(in ivec4 j, in vec4 w)
+{
+	// Q' = sum(w[i] * Q[j[i]]) where i=[0...3]
+	// M' = convert(Q'/ |Q'|)
+
+	dquat dq = dquat(0.0);
+
+	return dq;
+}
 
 void main()
 {
