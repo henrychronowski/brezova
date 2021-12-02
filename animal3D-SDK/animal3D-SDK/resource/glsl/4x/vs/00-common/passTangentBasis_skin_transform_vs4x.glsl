@@ -73,6 +73,13 @@ vec4 skinSmoothLinear(in vec4 v, in ivec4 j, in vec4 w)
 	return v_out;
 }
 
+mat4 convDQ2Mat4(in dquat dq)
+{
+	// TODO: implement
+	mat4 m_out = mat4(1.0);
+	return m_out;
+}
+
 // TODO: Smooth dual quat blend
 mat4 skinSmoothDGDLB(in ivec4 j, in vec4 w)
 {
@@ -81,7 +88,12 @@ mat4 skinSmoothDGDLB(in ivec4 j, in vec4 w)
 
 	dquat dq = dquat(0.0);
 
-	return dq;
+	dq += w[0] * uSkinDQ[j[0]];
+	dq += w[1] * uSkinDQ[j[1]];
+	dq += w[2] * uSkinDQ[j[2]];
+	dq += w[2] * uSkinDQ[j[3]];
+
+	return convDQ2Mat4(dq / length(dq[0]));
 }
 
 void main()
