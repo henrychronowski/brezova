@@ -30,9 +30,21 @@ layout (location = 8) in vec4 aTexcoord;
 layout (location = 10) in vec4 aTangent;
 layout (location = 11) in vec4 aBitangent;
 
+layout (location = 1) in vec4 aBindWeights;
+layout (location = 7) in ivec4 aBindIndex;
+
 uniform mat4 uP;
 uniform mat4 uMV, uMV_nrm;
 uniform mat4 uAtlas;
+
+#define MAX_JOINTS 128
+#define dquat mat2x4
+
+uniform ubTransformBlend
+{
+	mat4 uSkinMat[MAX_JOINTS];
+	dquat uSkinDQ[MAX_JOINTS];
+};
 
 out vbVertexData {
 	mat4 vTangentBasis_view;
