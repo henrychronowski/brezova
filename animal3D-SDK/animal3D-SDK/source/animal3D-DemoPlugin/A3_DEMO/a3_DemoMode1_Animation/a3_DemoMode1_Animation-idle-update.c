@@ -243,8 +243,8 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3mat4 rot = a3mat4_identity;
 			a3real4x4SetMajors(rot.m, x.v, u.v, lookDir.v, neckPos.v);
 			activeHS->objectSpace->pose[j].transformMat = rot;
-			// invert and store for skinning
 
+			// invert and store for skinning
 			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j].transformMat.m, rot.m);
 			
 			// ****TO-DO: 
@@ -288,97 +288,87 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			//	-> position of end effector's target is at the minimum possible distance along this vector
 
 			// Get relevant vectors and lengths 
-			//a3vec4 shoulderToEffector = controlLocator_wristEffector;
-			//a3real4Sub(shoulderToEffector.v, activeHS->localSpace->pose[j_shoulder].translate.v);
-			//a3real wristEffectorLength = a3real4Length(shoulderToEffector.v);
-			//a3real shoulderElbowLength = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_elbow].translate.v);
-			//a3real elbowWristLength = a3real4Distance(activeHS->localSpace->pose[j_elbow].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			a3vec4 shoulderToEffector = controlLocator_wristEffector;
+			a3vec4 shoulderPos = activeHS->objectSpace->pose[j_shoulder].transformMat.v3;
+			a3vec4 elbowPos = activeHS->objectSpace->pose[j_elbow].transformMat.v3;
+			a3vec4 wristPos = activeHS->objectSpace->pose[j_wrist].transformMat.v3;
+			a3real3Sub(shoulderToEffector.xyz.v, shoulderPos.xyz.v);
+			a3real wristEffectorLength = a3real3Length(shoulderToEffector.xyz.v);
+			a3real shoulderElbowLength = a3real3Distance(shoulderPos.xyz.v, elbowPos.xyz.v);
+			a3real elbowWristLength = a3real3Distance(elbowPos.xyz.v, wristPos.xyz.v);
 
-			//// Get vector with constraint
-			//a3vec4 wristToConstraint = controlLocator_wristConstraint;
-			//a3real4Sub(wristToConstraint.v, activeHS->localSpace->pose[j_wrist].translate.v);
+			// Get vector with constraint
+			a3vec4 wristToConstraint = controlLocator_wristConstraint;
+			a3real3Sub(wristToConstraint.xyz.v, wristPos.v);
 
-			//// If the distance to the wrist effector is greater than the max length of the arm can ignore the constraint
-			//if (wristEffectorLength >= (shoulderElbowLength + elbowWristLength))
-			//{
-			//	// Get direction of effector from the shoulder
-			//	a3real4Normalize(shoulderToEffector.v);
+			// If the distance to the wrist effector is greater than the max length of the arm can ignore the constraint
+			if (wristEffectorLength >= (shoulderElbowLength + elbowWristLength))
+			{
+				// Get direction of effector from the shoulder
+				a3real3Normalize(shoulderToEffector.xyz.v);
 
-			//	// Set the position of the elbow in the direction of the wrist effector scaled by its bone length
-			//	activeHS->localSpace->pose[j_elbow].translate = shoulderToEffector;
-			//	a3real4MulS(activeHS->localSpace->pose[j_elbow].translate.v, shoulderElbowLength);
+				// Set the position of the elbow in the direction of the wrist effector scaled by its bone length
+				elbowPos = shoulderToEffector;
+				a3real3MulS(elbowPos.xyz.v, shoulderElbowLength);
 
-			//	// Set the position of the wrist in the direction of the wrist effector scaled by wrist bone length + elbow length
-			//	activeHS->localSpace->pose[j_wrist].translate = shoulderToEffector;
-			//	a3real4MulS(activeHS->localSpace->pose[j_wrist].translate.v, shoulderElbowLength + elbowWristLength);
+				// Set the position of the wrist in the direction of the wrist effector scaled by wrist bone length + elbow length
+				wristPos = shoulderToEffector;
+				a3real3MulS(wristPos.xyz.v, shoulderElbowLength + elbowWristLength);
+			}
+			// Otherwise calculate correct position of elbow using constraint and Heron's formula
+			else
+			{
+				// Set translation of wrist to location of wrist effector
+				wristPos = controlLocator_wristEffector;
 
-			//	// Run convert blend op to take changes in translation into the transform mat
-			//	a3spatialPoseConvert(&activeHS->localSpace->pose[j_elbow], a3poseChannel_none, a3poseEulerOrder_xyz);
-			//	a3spatialPoseConvert(&activeHS->localSpace->pose[j_wrist], a3poseChannel_none, a3poseEulerOrder_xyz);
-			//}
+				// Get the distance between the wrist in its new position and the shoulder as well as the direction
+				a3real shoulderWristLength = a3real3Distance(shoulderPos.xyz.v, wristPos.xyz.v);
+				a3vec4 wristToShoulder = shoulderPos;
+				a3real3Sub(wristToShoulder.xyz.v, wristPos.xyz.v);
 
-			//// Otherwise calculate correct position of elbow using constraint and Heron's formula
-			//else
-			//{
-			//	// Set translation of wrist to location of wrist effector
-			//	activeHS->localSpace->pose[j_wrist].translate = controlLocator_wristEffector;
+				// Use Heron's formula to calculate the area from the side lengths
+				a3real semiParameter = (shoulderWristLength + shoulderElbowLength + elbowWristLength) / (a3real)2;
+				a3real area = a3sqrtf(semiParameter * (semiParameter - elbowWristLength) * (semiParameter - shoulderElbowLength) * (semiParameter - shoulderWristLength));
 
-			//	// Get the distance between the wrist in its new position and the shoulder as well as the direction
-			//	a3real shoulderWristLength = a3real4Distance(activeHS->localSpace->pose[j_shoulder].translate.v, activeHS->localSpace->pose[j_wrist].translate.v);
-			//	a3vec4 wristToShoulder = activeHS->localSpace->pose[j_shoulder].translate;
-			//	a3real4Sub(wristToShoulder.v, activeHS->localSpace->pose[j_wrist].translate.v);
+				// Extrapolate height from the area
+				a3real h = (area * (a3real)2) / shoulderWristLength;
 
-			//	// Use Heron's formula to calculate the area from the side lengths
-			//	a3real semiParameter = (shoulderWristLength + shoulderElbowLength + elbowWristLength) / (a3real)2;
-			//	a3real area = a3sqrtf(semiParameter * (semiParameter - elbowWristLength) * (semiParameter - shoulderElbowLength) * (semiParameter - shoulderWristLength));
+				// Get the direction of the height of the triangle by constructing a unit vector in the plane constructed by the shoulder, wrist, and constraint orthogonal to the wrist->shoulder vector 
+				a3vec4 n = a3vec4_zero;
+				a3real3CrossUnit(n.xyz.v, wristToShoulder.xyz.v, wristToConstraint.xyz.v);
+				a3vec4 y = a3vec4_zero;
+				a3real3Cross(y.xyz.v, n.xyz.v, a3real3Normalize(wristToShoulder.xyz.v));
 
-			//	// Extrapolate height from the area
-			//	a3real h = (area * (a3real)2) / shoulderWristLength;
+				// Scale vector in direction by the calculated height
+				a3real3MulS(y.xyz.v, h);
 
-			//	// Get the direction of the height of the triangle by constructing a unit vector in the plane constructed by the shoulder, wrist, and constraint orthogonal to the wrist->shoulder vector 
-			//	a3vec4 n = a3vec4_zero;
-			//	a3real3CrossUnit(n.xyz.v, wristToShoulder.xyz.v, wristToConstraint.xyz.v);
-			//	a3vec4 y = a3vec4_zero;
-			//	a3real3Cross(y.xyz.v, n.xyz.v, a3real3Normalize(wristToShoulder.xyz.v));
+				// Normalize the wrist to shoulder vector again as a real 4 cause not sure whether normalizing it as a real 3 will properly set it
+				a3real3Normalize(wristToShoulder.xyz.v);
+				a3vec4 x = wristToShoulder;
 
-			//	// Scale vector in direction by the calculated height
-			//	a3real4MulS(y.v, h);
+				// Get the position along the wrist->shoulder vector that the height vector will originate at
+				a3real3MulS(x.xyz.v, shoulderWristLength * 0.5f);
 
-			//	// Normalize the wrist to shoulder vector again as a real 4 cause not sure whether normalizing it as a real 3 will properly set it
-			//	a3real4Normalize(wristToShoulder.v);
-			//	a3vec4 x = wristToShoulder;
+				// Concat the two vectors to get the final position of the elbow and set the elbow transform
+				a3real3Add(x.xyz.v, y.xyz.v);
+				elbowPos = x;
+			}
+			
+			// ****TO-DO: 
+			// reassign resolved transforms to OBJECT-SPACE matrices
+			// work from root to leaf too get correct transformations
+			a3real4x4MakeLookAt(activeHS->objectSpace->pose[j_shoulder].transformMat.m, NULL, shoulderPos.v, elbowPos.v, a3vec4_y.v);
+			a3real4x4MakeLookAt(activeHS->objectSpace->pose[j_elbow].transformMat.m, NULL, elbowPos.v, wristPos.v, a3vec4_y.v);
 
-			//	// Get the position along the wrist->shoulder vector that the height vector will originate at
-			//	a3real4MulS(x.v, shoulderWristLength * 0.5f);
+			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j_shoulder].transformMat.m, activeHS->objectSpace->pose[j_shoulder].transformMat.m);
+			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j_elbow].transformMat.m, activeHS->objectSpace->pose[j_elbow].transformMat.m);
 
-			//	// Concat the two vectors to get the final position of the elbow and set the elbow transform
-			//	a3real4Add(x.v, y.v);
-			//	activeHS->localSpace->pose[j_elbow].translate = x;
-			//	
-			//	// Run the convert blend op to take changes in wrist and elbow translation and update the transform mat
-			//	a3spatialPoseConvert(&activeHS->localSpace->pose[j_elbow], a3poseChannel_none, a3poseEulerOrder_xyz);
-			//	a3spatialPoseConvert(&activeHS->localSpace->pose[j_wrist], a3poseChannel_none, a3poseEulerOrder_xyz);
-			//}
-			//
-			//// ****TO-DO: 
-			//// reassign resolved transforms to OBJECT-SPACE matrices
-			//// work from root to leaf too get correct transformations
-			//a3real4x4MakeLookAt(activeHS->localSpace->pose[j_shoulder].transformMat.m, NULL, activeHS->localSpace->pose[j_shoulder].translate.v, 
-			//					activeHS->localSpace->pose[j_elbow].translate.v, a3vec4_y.v);
-			//a3real4x4MakeLookAt(activeHS->localSpace->pose[j_elbow].transformMat.m, NULL, activeHS->localSpace->pose[j_elbow].translate.v, 
-			//					activeHS->localSpace->pose[j_wrist].translate.v, a3vec4_y.v);
+			a3kinematicsSolveInversePartial(activeHS, j_shoulder, 3);
 
-			//activeHS->objectSpace->pose[j_shoulder].transformMat = activeHS->localSpace->pose[j_shoulder].transformMat;
-			//activeHS->objectSpace->pose[j_elbow].transformMat = activeHS->localSpace->pose[j_neck].transformMat;
-			//activeHS->objectSpace->pose[j_wrist].transformMat = activeHS->localSpace->pose[j_wrist].transformMat;
-
-			//a3real4x4Concat(activeHS->objectSpace->pose[j_shoulder].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
-			//a3real4x4Concat(activeHS->objectSpace->pose[j_elbow].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
-			//a3real4x4Concat(activeHS->objectSpace->pose[j_wrist].transformMat.m, activeHS->localSpace->pose[0].transformMat.m);
-
-			//a3kinematicsSolveInversePartial(activeHS, j_shoulder, 3);
-
-			//a3kinematicsSolveForward(activeHS);
+			a3spatialPoseRestore(activeHS->localSpace->pose + j_shoulder, poseGroup->channel[j_shoulder], poseGroup->order[j_shoulder]);
+			a3spatialPoseDeconcat(activeHS->animPose->pose + j_shoulder, activeHS->localSpace->pose + j_shoulder, baseHS->localSpace->pose + j_shoulder);
+			a3spatialPoseRestore(activeHS->localSpace->pose + j_elbow, poseGroup->channel[j_elbow], poseGroup->order[j_elbow]);
+			a3spatialPoseDeconcat(activeHS->animPose->pose + j_elbow, activeHS->localSpace->pose + j_elbow, baseHS->localSpace->pose + j_elbow);
 		}
 	}
 }
