@@ -137,6 +137,39 @@ inline a3i32 a3spatialPoseConvert(a3_SpatialPose* spatialPose, const a3_SpatialP
 inline a3i32 a3spatialPoseRestore(a3_SpatialPose* spatialPose, const a3_SpatialPoseChannel channel, const a3_SpatialPoseEulerOrder order)
 {
 	
+	if (spatialPose)
+	{
+		a3real xRot, yRot, zRot;
+		a3vec3 translation;
+
+		switch (order)
+		{
+		case a3poseEulerOrder_xyz:
+			a3real4x4GetEulerXYZTranslateIgnoreScale(spatialPose->transformMat.m, &xRot, &yRot, &zRot, translation.v);
+			break;
+		case a3poseEulerOrder_yzx:
+
+			break;
+		case a3poseEulerOrder_zxy:
+
+			break;
+		case a3poseEulerOrder_yxz:
+
+			break;
+		case a3poseEulerOrder_xzy:
+
+			break;
+		case a3poseEulerOrder_zyx:
+			a3real4x4GetEulerZYXTranslateIgnoreScale(spatialPose->transformMat.m, &xRot, &yRot, &zRot, translation.v);
+			spatialPose->rotate.x = xRot;
+			spatialPose->rotate.y = yRot;
+			spatialPose->rotate.z = zRot;
+			
+			spatialPose->translate.xyz = translation;
+			break;
+		}
+		return 1;
+	}
 	return -1;
 }
 
