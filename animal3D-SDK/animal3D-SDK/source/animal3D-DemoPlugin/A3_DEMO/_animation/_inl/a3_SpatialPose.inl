@@ -146,6 +146,11 @@ inline a3i32 a3spatialPoseRestore(a3_SpatialPose* spatialPose, const a3_SpatialP
 		{
 		case a3poseEulerOrder_xyz:
 			a3real4x4GetEulerXYZTranslateIgnoreScale(spatialPose->transformMat.m, &xRot, &yRot, &zRot, translation.v);
+			spatialPose->rotate.x = xRot;
+			spatialPose->rotate.y = yRot;
+			spatialPose->rotate.z = zRot;
+
+			spatialPose->translate.xyz = translation;
 			break;
 		case a3poseEulerOrder_yzx:
 
