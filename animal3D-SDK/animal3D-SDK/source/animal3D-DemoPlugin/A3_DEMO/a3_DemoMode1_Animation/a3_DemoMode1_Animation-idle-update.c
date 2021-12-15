@@ -351,7 +351,7 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 
 				// Concat the two vectors to get the final position of the elbow and set the elbow transform
 				a3real3Add(x.xyz.v, y.xyz.v);
-				elbowPos = x;
+				activeHS->objectSpaceInv->pose[j_elbow].transformMat.v3 = x;
 			}
 			
 			// ****TO-DO: 
@@ -363,13 +363,16 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j_shoulder].transformMat.m, activeHS->objectSpace->pose[j_shoulder].transformMat.m);
 			a3real4x4TransformInverse(activeHS->objectSpaceInv->pose[j_elbow].transformMat.m, activeHS->objectSpace->pose[j_elbow].transformMat.m);
 
-			a3kinematicsSolveInversePartial(activeHS, j_shoulder, 3);
+			//a3kinematicsSolveInversePartial(activeHS, j_shoulder, 3);
+			a3kinematicsSolveInverseSingle(activeHS, j_shoulder, activeHS->hierarchy->nodes[j_shoulder].parentIndex);
+			a3kinematicsSolveInverseSingle(activeHS, j_elbow, activeHS->hierarchy->nodes[j_elbow].parentIndex);
+			a3kinematicsSolveInverseSingle(activeHS, j_wrist, activeHS->hierarchy->nodes[j_wrist].parentIndex);
 
-			a3spatialPoseRestore(activeHS->localSpace->pose + j_shoulder, poseGroup->channel[j_shoulder], poseGroup->order[j_shoulder]);
+			//a3spatialPoseRestore(activeHS->localSpace->pose + j_shoulder, poseGroup->channel[j_shoulder], poseGroup->order[j_shoulder]);
 			//a3spatialPoseDeconcat(activeHS->animPose->pose + j_shoulder, activeHS->localSpace->pose + j_shoulder, baseHS->localSpace->pose + j_shoulder);
-			a3spatialPoseRestore(activeHS->localSpace->pose + j_elbow, poseGroup->channel[j_elbow], poseGroup->order[j_elbow]);
+			//a3spatialPoseRestore(activeHS->localSpace->pose + j_elbow, poseGroup->channel[j_elbow], poseGroup->order[j_elbow]);
 			//a3spatialPoseDeconcat(activeHS->animPose->pose + j_elbow, activeHS->localSpace->pose + j_elbow, baseHS->localSpace->pose + j_elbow);
-			a3spatialPoseRestore(activeHS->localSpace->pose + j_wrist, poseGroup->channel[j_wrist], poseGroup->order[j_wrist]);
+			//a3spatialPoseRestore(activeHS->localSpace->pose + j_wrist, poseGroup->channel[j_wrist], poseGroup->order[j_wrist]);
 			//a3spatialPoseDeconcat(activeHS->animPose->pose + j_wrist, activeHS->localSpace->pose + j_wrist, baseHS->localSpace->pose + j_wrist);
 		}
 	}

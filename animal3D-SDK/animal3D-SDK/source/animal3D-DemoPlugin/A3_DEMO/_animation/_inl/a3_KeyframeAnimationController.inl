@@ -147,6 +147,16 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 	return -1;
 }
 
+inline a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 newTarget)
+{
+	if (clipCtrl)
+	{
+		clipCtrl->currentTarget = newTarget;
+		return 1;
+	}
+	return -1;
+}
+
 inline a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal)
 {
 	if (clipCtrl && clipA && clipB)

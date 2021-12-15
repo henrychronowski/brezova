@@ -53,6 +53,14 @@ enum
 	a3keyframeAnimation_nameLenMax = 32,
 };
 
+enum AnimStates 
+{
+	run,
+	walk,
+	idle,
+	jump
+};
+
 
 // sample
 // metaphor: moment

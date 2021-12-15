@@ -63,6 +63,11 @@ struct a3_ClipController
 	// clip and keyframe interpolation parameters
 	a3f64 clipParam, keyframeParam;
 
+	a3real currentSpeed;
+	a3vec3 currentDirection;
+	a3vec3 currentTarget;
+	a3ui32 currentState;
+
 	// clip pool and pointers
 	a3_ClipPool const* clipPool;
 	a3_Clip const* clip;
@@ -83,6 +88,10 @@ a3i32 a3clipControllerSetPlayback(a3_ClipController* clipCtrl, const a3i32 playb
 
 // set clip to play
 a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool, const a3i32 playback_step, const a3f64 playback_stepPerSec);
+
+void a3clipControllerUpdateMovement(a3_ClipController* clipCtrl);
+
+a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 newTarget);
 
 a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal);
 a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController* clipCtrlA, a3_ClipController* clipCtrlB, a3_HierarchyState* active_HS, const a3_HierarchyPoseGroup * active_PoseGroup, a3real blendParam);

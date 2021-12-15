@@ -38,6 +38,10 @@
 a3i32 a3clipControllerInit(a3_ClipController* clipCtrl_out, const a3byte ctrlName[a3keyframeAnimation_nameLenMax], const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool, const a3i32 playback_step, const a3f64 playback_stepPerSec)
 {
 	a3i32 const ret = a3clipControllerSetClip(clipCtrl_out, clipPool, clipIndex_pool, playback_step, playback_stepPerSec);
+	clipCtrl_out->currentState = idle;
+	clipCtrl_out->currentDirection = a3vec3_zero;
+	clipCtrl_out->currentTarget = a3vec3_zero;
+	clipCtrl_out->currentSpeed = 0.0f;
 	if (ret >= 0)
 	{
 		strncpy(clipCtrl_out->name, A3_CLIPCTRL_SEARCHNAME, a3keyframeAnimation_nameLenMax);
