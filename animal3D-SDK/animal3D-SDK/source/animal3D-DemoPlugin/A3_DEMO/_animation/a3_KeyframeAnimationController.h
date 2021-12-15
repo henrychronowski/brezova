@@ -31,6 +31,7 @@
 #include "a3_Hierarchy.h"
 #include "a3_HierarchyState.h"
 #include "a3_HierarchyStateBlend.h"
+#include "a3_Kinematics.h"
 
 
 //-----------------------------------------------------------------------------
@@ -89,7 +90,7 @@ a3i32 a3clipControllerSetPlayback(a3_ClipController* clipCtrl, const a3i32 playb
 // set clip to play
 a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* clipPool, const a3ui32 clipIndex_pool, const a3i32 playback_step, const a3f64 playback_stepPerSec);
 
-void a3clipControllerUpdateMovement(a3_ClipController* clipCtrl);
+void a3clipControllerUpdateMovement(a3_ClipController* clipCtrl, a3_AIController* aiCtrl);
 
 a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 newTarget);
 

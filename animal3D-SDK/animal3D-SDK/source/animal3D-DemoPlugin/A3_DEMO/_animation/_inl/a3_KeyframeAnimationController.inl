@@ -147,6 +147,15 @@ inline a3i32 a3clipControllerUpdate(a3_ClipController* clipCtrl, a3f64 dt)
 	return -1;
 }
 
+inline void a3clipControllerUpdateMovement(a3_ClipController* clipCtrl, a3_AIController* aiCtrl)
+{
+	if (clipCtrl && aiCtrl)
+	{
+		clipCtrl->currentDirection = a3AIGetMovementInput(aiCtrl);
+		clipCtrl->currentSpeed = a3real3Length(aiCtrl->curVelocity.v);
+	}
+}
+
 inline a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 newTarget)
 {
 	if (clipCtrl)
