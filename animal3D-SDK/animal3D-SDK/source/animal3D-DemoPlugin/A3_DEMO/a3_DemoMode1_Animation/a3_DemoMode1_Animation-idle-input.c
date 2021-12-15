@@ -152,6 +152,9 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 
 		}
 	*/	break;
+	case animation_ctr_ai:
+		// update anim controller based on ai controller
+		break;
 	}
 
 	// allow the controller, if connected, to change control targets

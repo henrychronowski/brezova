@@ -394,6 +394,10 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 
 	// resolve FK state
 	// update clip controller, keyframe lerp
+	a3_DemoSceneObject* lookAtEffector = demoMode->obj_skeleton_neckLookat_ctrl;
+	a3vec4 effectorPos = lookAtEffector->modelMat.v3;
+	a3ClipControllerUpdateTarget(clipCtrl_fk, effectorPos.xyz);
+
 	a3clipControllerUpdate(clipCtrl_fk, dt);
 	sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 	sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
