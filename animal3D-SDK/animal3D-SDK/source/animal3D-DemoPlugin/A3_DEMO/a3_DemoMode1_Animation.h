@@ -189,6 +189,10 @@ typedef enum a3_DemoMode1_Animation_InputMode				a3_DemoMode1_Animation_InputMod
 		a3vec2 pos, vel, acc;
 		a3real rot, velr, accr;
 
+		// Teapot: AI controller and target
+		a3vec3 target;
+		a3_AIController AIController;
+
 		a3real clipBlendParam;
 
 		// objects

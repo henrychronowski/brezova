@@ -88,8 +88,11 @@ struct a3_AIController
 	a3vec3 targetLocation;
 	a3vec3 targetVelocity;
 	a3i16 targetIndex;
+	a3vec3 predictLocation;
 	a3vec3 curLocation;
 	a3vec3 curVelocity;
+
+	a3f32 devianceThreshold;
 };
 
 // Sets default values for the AI controller
@@ -103,6 +106,9 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in);
 
 // Get the necessary aim point
 a3vec3 a3AIGetAimInput(const a3_AIController* in);
+
+// Fire
+a3i32 a3AIFire();
 
 //-----------------------------------------------------------------------------
 

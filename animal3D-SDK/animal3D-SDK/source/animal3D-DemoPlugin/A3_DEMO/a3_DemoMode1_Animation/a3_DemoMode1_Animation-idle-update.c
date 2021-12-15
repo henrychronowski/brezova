@@ -459,6 +459,9 @@ void a3animation_update_sceneGraph(a3_DemoMode1_Animation* demoMode, a3f64 const
 	a3kinematicsSolveForward(demoMode->sceneGraphState);
 	a3hierarchyStateUpdateLocalInverse(demoMode->sceneGraphState);
 	a3hierarchyStateUpdateObjectInverse(demoMode->sceneGraphState);
+
+	// Update AI controller state
+	a3AIUpdate(&demoMode->AIController, dt);
 }
 
 void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode, a3f64 const dt)

@@ -23,6 +23,7 @@
 */
 
 #include "../a3_Kinematics.h"
+#include <stdio.h>
 
 a3i32 a3AIReset(a3_AIController * inout)
 {
@@ -31,12 +32,34 @@ a3i32 a3AIReset(a3_AIController * inout)
 		inout->targetLocation = a3vec3_zero;
 		inout->targetVelocity = a3vec3_zero;
 		inout->targetIndex = 0;
+		inout->predictLocation = a3vec3_zero;
 		inout->curLocation = a3vec3_zero;
 		inout->curVelocity = a3vec3_zero;
 
 		return 1;
 	}
 	return -1;
+}
+
+a3i32 a3AIUpdate(a3_AIController* out, const a3f64 dt)
+{
+	if (out && dt >= __a3f64zero)
+	{
+		// Update current position and velocity of target
+
+		// Check for firing solution
+		a3AIFire();
+
+		return 1;
+	}
+
+	return -1;
+}
+
+a3i32 a3AIFire()
+{
+	printf("No fire solution found\n");
+	return 1;
 }
 
 //-----------------------------------------------------------------------------

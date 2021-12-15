@@ -188,6 +188,10 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 
 	// Teapot
 	demoMode->obj_teapot->sceneGraphIndex = a3hierarchyGetNodeIndex(demoMode->sceneGraph, "scene_teapot");
+	demoMode->target = a3vec3_y;
+
+	// AI controller instantiate
+	a3AIReset(&demoMode->AIController);
 
 	// scene graph state
 	demoMode->sceneGraphState->hierarchy = 0;
