@@ -41,11 +41,15 @@ a3i32 a3AIReset(a3_AIController * inout)
 	return -1;
 }
 
-a3i32 a3AIUpdate(a3_AIController* out, const a3f64 dt)
+a3i32 a3AIUpdate(a3_AIController* inout, a3vec2* pos, const a3f64 dt)
 {
-	if (out && dt >= __a3f64zero)
+	if (inout && dt >= __a3f64zero)
 	{
 		// Update current position and velocity of target
+		inout->targetLocation = a3vec3_y;
+		a3real3MulS(inout->targetLocation.v, 3);
+		//printf("%f %f %f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z);
+
 
 		// Check for firing solution
 		a3AIFire();
@@ -58,8 +62,25 @@ a3i32 a3AIUpdate(a3_AIController* out, const a3f64 dt)
 
 a3i32 a3AIFire()
 {
-	printf("No fire solution found\n");
+	//printf("No fire solution found\n");
 	return 1;
+}
+
+a3vec3 a3AIGetMovementInput(const a3_AIController* in, const a3vec2* pos)
+{
+	if (in)
+	{
+		a3vec3 result = a3vec3_zero;
+		result.x = pos->x;
+		result.y = pos->y;
+		
+		a3real3Sub(result.v, in->targetLocation.v);
+		a3real3GetNegative(result.v, result.v);
+		a3real3Normalize(result.v);
+
+		return result;
+	}
+	return a3vec3_zero;
 }
 
 //-----------------------------------------------------------------------------

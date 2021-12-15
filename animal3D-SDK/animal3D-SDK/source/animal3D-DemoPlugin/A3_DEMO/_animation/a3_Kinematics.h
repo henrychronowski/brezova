@@ -27,6 +27,7 @@
 
 
 #include "a3_HierarchyState.h"
+//#include "A3_DEMO/a3_DemoMode1_Animation.h"
 
 
 //-----------------------------------------------------------------------------
@@ -99,10 +100,10 @@ struct a3_AIController
 a3i32 a3AIReset(a3_AIController* inout);
 
 // Update the estimate to reflect current target status
-a3i32 a3AIUpdate(a3_AIController* out, const a3f64 dt);
+a3i32 a3AIUpdate(a3_AIController* inout, a3vec2* pos, const a3f64 dt);
 
 // Get the direction of movement necessary
-a3vec3 a3AIGetMovementInput(const a3_AIController* in);
+a3vec3 a3AIGetMovementInput(const a3_AIController* in, const a3vec2* pos);
 
 // Get the necessary aim point
 a3vec3 a3AIGetAimInput(const a3_AIController* in);
