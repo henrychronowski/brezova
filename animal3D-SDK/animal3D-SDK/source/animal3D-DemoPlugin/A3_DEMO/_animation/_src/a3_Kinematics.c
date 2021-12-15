@@ -24,6 +24,20 @@
 
 #include "../a3_Kinematics.h"
 
+a3i32 a3AIReset(a3_AIController * inout)
+{
+	if (inout)
+	{
+		inout->targetLocation = a3vec3_zero;
+		inout->targetVelocity = a3vec3_zero;
+		inout->targetIndex = 0;
+		inout->curLocation = a3vec3_zero;
+		inout->curVelocity = a3vec3_zero;
+
+		return 1;
+	}
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 
