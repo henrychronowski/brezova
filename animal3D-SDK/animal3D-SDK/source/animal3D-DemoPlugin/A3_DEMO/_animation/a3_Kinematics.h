@@ -35,7 +35,7 @@
 extern "C"
 {
 #else	// !__cplusplus
-
+typedef struct a3_AIController a3_AIController;
 #endif	// __cplusplus
 
 
@@ -79,6 +79,32 @@ void a3kinematicsSolveInverseSingle(const a3_HierarchyState* hierarchyState, con
 
 //-----------------------------------------------------------------------------
 
+// AI Controller functionality
+//	
+//
+
+struct a3_AIController
+{
+	a3vec3 targetLocation;
+	a3vec3 targetVelocity;
+	a3i16 targetIndex;
+	a3vec3 curLocation;
+	a3vec3 curVelocity;
+};
+
+// Sets default values for the AI controller
+a3i32 a3AIReset(a3_AIController* inout);
+
+// Update the estimate to reflect current target status
+a3i32 a3AIUpdate(a3_AIController* out, const a3f64 dt);
+
+// Get the direction of movement necessary
+a3vec3 a3AIGetMovementInput(const a3_AIController* in);
+
+// Get the necessary aim point
+a3vec3 a3AIGetAimInput(const a3_AIController* in);
+
+//-----------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }
