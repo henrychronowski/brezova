@@ -52,9 +52,10 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt)
 		// Update current position and velocity of target
 		inout->targetLocation = a3vec3_y;
 		a3real3MulS(inout->targetLocation.v, a3sinr(inout->tmpTimeTrack) * 10);
-		//printf("%f %f %f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z);
 		
 		inout->curLocation = *pos;
+		
+
 
 		// Check for firing solution
 		a3AIFire();
@@ -84,6 +85,20 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in)
 		if(a3absolute(result.x + result.y + result.z) >= 0.1)
 			return result;
 	}
+	return a3vec3_zero;
+}
+
+a3vec3 a3AIGetAimInput(const a3_AIController* in)
+{
+	if (in)
+	{
+		a3vec3 result;
+		
+		result = in->targetLocation;
+
+		return result;
+	}
+
 	return a3vec3_zero;
 }
 

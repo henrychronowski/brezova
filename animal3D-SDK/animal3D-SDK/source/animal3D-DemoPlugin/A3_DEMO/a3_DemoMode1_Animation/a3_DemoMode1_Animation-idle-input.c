@@ -156,11 +156,18 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 	case animation_ctr_ai:
 		// update anim controller based on ai controller
 		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, dt);
+
+		demoMode->pos = demoMode->obj_skeleton_ctrl->position;
 		a3vec3 tmp;
 		tmp = a3AIGetMovementInput(&demoMode->AIController);
-		a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, tmp.x, tmp.y, tmp.z);
 
-		printf("%f %f %f\n", tmp.x, tmp.y, tmp.z);
+		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(tmp.x * dt);
+		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(tmp.y * dt);
+
+		//a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, demoMode->pos.x, demoMode->pos.y, a3real_zero);//tmp.z);
+		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
+		demoMode->obj_skeleton_ctrl->position.y = +(demoMode->pos.y);
+		//printf("%f %f %f\n", tmp.x, tmp.y, tmp.z);
 		break;
 	}
 
