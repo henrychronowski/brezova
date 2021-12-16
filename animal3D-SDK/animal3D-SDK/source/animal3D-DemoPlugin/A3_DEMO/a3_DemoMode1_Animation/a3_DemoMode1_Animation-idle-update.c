@@ -521,6 +521,20 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 	demoMode->clipBlendParam = a3absolute(yPos) * 0.5f;
 
+	switch (demoMode->clipCtrlA->currentState)
+	{
+	case idle:
+		break;
+	case walk:
+		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 1.0f);
+		break;
+	case run:
+		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 5.0f);
+		break;
+	case jump:
+		break;
+	}
+
 	if(jumping)
 		a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
 	else if(yPos < runThreshold && yPos > -runThreshold)
