@@ -84,8 +84,29 @@ inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialP
 		pose_out->rotate = a3vec4Lerp(pose0->rotate, pose1->rotate, u);
 		pose_out->scale = a3vec4LogLerp(pose0->scale, pose1->scale, u);
 		pose_out->translate = a3vec4Lerp(pose0->translate, pose1->translate, u);
+
+		a3spatialPoseConvert(pose_out, a3poseChannel_none, a3poseEulerOrder_xyz);
 	}
 	// done
+	return pose_out;
+}
+
+inline a3_SpatialPose* a3SpatialPoseOpBiLinear(a3_SpatialPose* pose_out, a3_SpatialPose* const pose0, a3_SpatialPose* pose1, a3_SpatialPose* poseA, a3_SpatialPose* poseB, a3real u0, a3real u1, a3real u)
+{
+	if (pose_out && pose0 && pose1 && poseA && poseB)
+	{
+		a3_SpatialPose* tmp;
+
+		// Interpolate pose 0 and pose 1
+		a3spatialPoseOpLERP(pose_out, pose0, pose1, u0);
+
+		// Interpolate pose A and pose B
+		a3spatialPoseOpLERP(tmp, poseA, poseB, u1);
+
+		// Interpolate the results of the previous 2 interpolations
+		a3spatialPoseOpLERP(pose_out, pose_out, tmp, u);
+	}
+
 	return pose_out;
 }
 
@@ -138,7 +159,7 @@ inline a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a
 	{
 		for (a3ui32 i = 0; i < nodeCount; i++)
 		{
-
+			a3SpatialPoseOpBiLinear(pose_out->pose + i, pose0->pose + i, pose1->pose + i, poseA->pose + i, poseB->pose + i, u0, u1, u);
 		}
 	}
 
