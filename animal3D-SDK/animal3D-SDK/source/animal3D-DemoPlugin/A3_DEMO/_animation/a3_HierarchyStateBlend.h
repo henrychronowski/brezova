@@ -29,6 +29,7 @@
 #include "a3_HierarchyState.h"
 
 #include "a3_Kinematics.h"
+#include <math.h>
 
 
 #ifdef __cplusplus
@@ -38,6 +39,17 @@ extern "C"
 
 #endif	// __cplusplus
 	
+
+//-----------------------------------------------------------------------------
+
+a3vec4 a3vec4Lerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
+a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
+a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
+a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u);
+
 
 //-----------------------------------------------------------------------------
 
@@ -63,6 +75,8 @@ a3_HierarchyPose* a3hierarchyPoseOpIdentity(a3_HierarchyPose* pose_out);
 
 // pointer-based LERP operation for hierarchical pose
 a3_HierarchyPose* a3hierarchyPoseOpLERP(a3_HierarchyPose* pose_out, a3_HierarchyPose const* pose0, a3_HierarchyPose const* pose1, a3real const u);
+
+a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* poseA, a3_HierarchyPose* poseB, a3real u0, a3real u1, a3real u, a3ui32 const nodeCount);
 
 
 //-----------------------------------------------------------------------------

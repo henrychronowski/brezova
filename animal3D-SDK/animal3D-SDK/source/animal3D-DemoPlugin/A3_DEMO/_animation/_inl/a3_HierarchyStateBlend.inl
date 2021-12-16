@@ -27,6 +27,42 @@
 #ifndef __ANIMAL3D_HIERARCHYSTATEBLEND_INL
 #define __ANIMAL3D_HIERARCHYSTATEBLEND_INL
 
+//-----------------------------------------------------------------------------
+
+inline a3vec4 a3vec4Lerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4Lerp(out_vec.v, v0.v, v1.v, u);
+	return out_vec;
+}
+
+inline a3vec4 a3vec4LogLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+
+	out_vec.x = powf(v1.x * powf(v0.x, -1), u) * v0.x;
+	out_vec.y = powf(v1.y * powf(v0.y, -1), u) * v0.y;
+	out_vec.z = powf(v1.z * powf(v0.z, -1), u) * v0.z;
+	out_vec.w = powf(v1.w * powf(v0.w, -1), u) * v0.w;
+
+	return out_vec;
+}
+
+inline a3vec4 a3vec4SLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4Slerp(out_vec.v, v0.v, v1.v, u);
+
+	return out_vec;
+}
+
+inline a3vec4 a3vec4NLerp(a3vec4 const v0, a3vec4 const v1, a3real const u)
+{
+	a3vec4 out_vec = a3vec4_zero;
+	a3real4NLerp(out_vec.v, v0.v, v1.v, u);
+
+	return out_vec;
+}
 
 //-----------------------------------------------------------------------------
 
@@ -43,7 +79,12 @@ inline a3_SpatialPose* a3spatialPoseOpIdentity(a3_SpatialPose* pose_out)
 // pointer-based LERP operation for single spatial pose
 inline a3_SpatialPose* a3spatialPoseOpLERP(a3_SpatialPose* pose_out, a3_SpatialPose const* pose0, a3_SpatialPose const* pose1, a3real const u)
 {
-
+	if (pose_out && pose0 && pose1)
+	{
+		pose_out->rotate = a3vec4Lerp(pose0->rotate, pose1->rotate, u);
+		pose_out->scale = a3vec4LogLerp(pose0->scale, pose1->scale, u);
+		pose_out->translate = a3vec4Lerp(pose0->translate, pose1->translate, u);
+	}
 	// done
 	return pose_out;
 }
@@ -82,11 +123,27 @@ inline a3_HierarchyPose* a3hierarchyPoseOpIdentity(a3_HierarchyPose* pose_out)
 // pointer-based LERP operation for hierarchical pose
 inline a3_HierarchyPose* a3hierarchyPoseOpLERP(a3_HierarchyPose* pose_out, a3_HierarchyPose const* pose0, a3_HierarchyPose const* pose1, a3real const u)
 {
+	if (pose_out && pose0 && pose1)
+	{
+		
+	}
 
 	// done
 	return pose_out;
 }
 
+inline a3_HierarchyPose* a3hierarchyPoseOpBiLinear(a3_HierarchyPose* pose_out, a3_HierarchyPose* const pose0, a3_HierarchyPose* pose1, a3_HierarchyPose* poseA, a3_HierarchyPose* poseB, a3real u0, a3real u1, a3real u, a3ui32 const nodeCount)
+{
+	if (pose_out && pose0 && pose1 && poseA && poseB)
+	{
+		for (a3ui32 i = 0; i < nodeCount; i++)
+		{
+
+		}
+	}
+
+	return pose_out;
+}
 
 //-----------------------------------------------------------------------------
 
