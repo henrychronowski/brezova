@@ -156,9 +156,9 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 	case animation_ctr_ai:
 		// update anim controller based on ai controller
 		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, dt);
-
 		a3vec3 tmp;
 		tmp = a3AIGetMovementInput(&demoMode->AIController);
+		a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, tmp.x, tmp.y, tmp.z);
 
 		printf("%f %f %f\n", tmp.x, tmp.y, tmp.z);
 		break;

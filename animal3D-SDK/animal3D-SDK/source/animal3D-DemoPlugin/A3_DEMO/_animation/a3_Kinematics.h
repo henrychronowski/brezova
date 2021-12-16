@@ -93,7 +93,9 @@ struct a3_AIController
 	a3vec3 curLocation;
 	a3vec3 curVelocity;
 
-	a3f32 devianceThreshold;
+	a3f64 devianceThreshold;
+
+	a3real tmpTimeTrack;
 };
 
 // Sets default values for the AI controller

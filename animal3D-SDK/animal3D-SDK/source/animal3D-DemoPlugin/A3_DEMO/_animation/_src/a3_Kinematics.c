@@ -36,6 +36,8 @@ a3i32 a3AIReset(a3_AIController * inout)
 		inout->curLocation = a3vec3_zero;
 		inout->curVelocity = a3vec3_zero;
 
+		inout->tmpTimeTrack = a3real_zero;
+
 		return 1;
 	}
 	return -1;
@@ -45,9 +47,11 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt)
 {
 	if (inout && dt >= __a3f64zero)
 	{
+		inout->tmpTimeTrack += (a3real)dt;
+
 		// Update current position and velocity of target
 		inout->targetLocation = a3vec3_y;
-		a3real3MulS(inout->targetLocation.v, 3);
+		a3real3MulS(inout->targetLocation.v, a3sinr(inout->tmpTimeTrack) * 10);
 		//printf("%f %f %f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z);
 		
 		inout->curLocation = *pos;
@@ -71,12 +75,14 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in)
 {
 	if (in)
 	{
-		a3vec3 result = in->targetLocation;
+		a3vec3 result = in->curLocation;
+			//in->targetLocation;
 		
-		a3real3Sub(result.v, in->curLocation.v);
+		a3real3Sub(result.v, in->targetLocation.v);//in->curLocation.v);
 		a3real3Normalize(result.v);
 
-		return result;
+		if(a3absolute(result.x + result.y + result.z) >= 0.1)
+			return result;
 	}
 	return a3vec3_zero;
 }
