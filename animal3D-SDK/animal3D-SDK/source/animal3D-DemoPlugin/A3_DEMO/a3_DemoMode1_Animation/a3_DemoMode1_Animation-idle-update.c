@@ -465,12 +465,7 @@ void a3animation_update_sceneGraph(a3_DemoMode1_Animation* demoMode, a3f64 const
 	a3hierarchyStateUpdateObjectInverse(demoMode->sceneGraphState);
 
 	// Update AI controller state
-	a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, dt);
 
-	a3vec3 tmp;
-	tmp = a3AIGetMovementInput(&demoMode->AIController);
-
-	printf("%f %f %f\n", tmp.x, tmp.y, tmp.z);
 }
 
 void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode, a3f64 const dt)
