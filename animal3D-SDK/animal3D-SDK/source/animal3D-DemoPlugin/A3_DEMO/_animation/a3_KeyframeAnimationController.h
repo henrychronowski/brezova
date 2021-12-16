@@ -92,6 +92,8 @@ a3i32 a3clipControllerSetClip(a3_ClipController* clipCtrl, const a3_ClipPool* cl
 
 void a3clipControllerUpdateMovement(a3_ClipController* clipCtrl, a3_AIController* aiCtrl);
 
+a3vec3 a3clipControllerGetTargetLookaAt(a3_AIController* aiCtrl, a3vec3 targetPos);
+
 a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 newTarget);
 
 a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal);

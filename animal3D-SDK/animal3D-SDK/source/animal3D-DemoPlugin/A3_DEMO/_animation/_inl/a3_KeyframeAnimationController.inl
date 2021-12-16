@@ -191,6 +191,19 @@ inline a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const
 	return -1;
 }
 
+inline a3vec3 a3clipControllerGetTargetLookaAt(a3_AIController* aiCtrl, a3vec3 targetPos)
+{
+	if (aiCtrl)
+	{
+		a3vec3 result = aiCtrl->curLocation;
+		a3real3Sub(result.v, targetPos.v);
+
+		return result;
+	}
+	
+	return a3vec3_zero;
+}
+
 inline a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController* clipCtrlA, a3_ClipController* clipCtrlB, a3_HierarchyState* active_HS, const a3_HierarchyPoseGroup* active_PoseGroup, a3real blendParam)
 {
 	if (clipCtrlA && clipCtrlB)
