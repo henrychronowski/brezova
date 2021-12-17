@@ -182,8 +182,8 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		//demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);
 
 		demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
-		/*demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
-		a3real3Add(demoMode->obj_skeleton_neckLookat_ctrl->position.v, demoMode->targetPos.v);*/
+		//demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
+		//a3real3Add(demoMode->obj_skeleton_neckLookat_ctrl->position.v, lookAtInput.v);//demoMode->targetPos.v);
 		//demoMode->obj_skeleton_neckLookat_ctrl.
 		break;
 	}

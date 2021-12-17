@@ -53,9 +53,9 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt)
 		// Update current position and velocity of target
 		inout->targetLocation = a3vec3_y;
 		a3real3Add(inout->targetLocation.v, a3vec3_x.v);
-		a3real3MulS(inout->targetLocation.v, 10);// a3absolute(a3sinr(inout->tmpTimeTrack) * 10));
-		printf("%f|%f|%f // %f|%f|%f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z, pos->x, pos->y, pos->z);
-
+		a3real3MulS(inout->targetLocation.v, a3absolute(a3sinrv(inout->tmpTimeTrack) * 10));
+		//printf("%f|%f|%f // %f|%f|%f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z, pos->x, pos->y, pos->z);
+		//printf("%f\n", inout->tmpTimeTrack);
 		inout->curLocation = *pos;
 		
 
@@ -107,8 +107,8 @@ a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3* neckPos)
 		speedFactor = sT - in->fireSpeed;*/
 		
 
-		//result = in->targetLocation;
-		a3real3MulS(result.v, 10.0);
+		result = in->targetLocation;
+		//a3real3MulS(result.v, 10.0);
 		//a3real3Add(a3real3MulS(a3real3MulS(a3real3Sub(result.v, neckPos->v), speedFactor), 1.0f / a3real3Distance(in->targetLocation.v, neckPos->v)), in->targetVelocity.v);
 
 		return result;
