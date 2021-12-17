@@ -94,8 +94,20 @@ a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3* neckPos)
 	if (in)
 	{
 		a3vec3 result;
+		a3vec3 PT;
+
+		a3real sT, speedFactor;
+
+		PT = in->targetLocation;
+
+		a3real3Sub(PT.v, neckPos->v);
+		sT = a3real3Dot(in->targetVelocity.v, PT.v) / a3real3Length(PT.v);
+		speedFactor = sT - in->fireSpeed;
 		
+
 		result = in->targetLocation;
+
+		a3real3Add(a3real3MulS(a3real3MulS(a3real3Sub(result.v, neckPos->v), speedFactor), 1.0f / a3real3Distance(in->targetLocation.v, neckPos->v)), in->targetVelocity.v);
 
 		return result;
 	}

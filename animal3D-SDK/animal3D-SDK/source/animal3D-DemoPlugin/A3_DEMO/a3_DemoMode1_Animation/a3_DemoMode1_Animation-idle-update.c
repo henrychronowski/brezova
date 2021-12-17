@@ -437,6 +437,12 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	// run FK pipeline (skinning optional)
 	a3animation_update_fk(activeHS, baseHS, poseGroup);
 	a3animation_update_skin(activeHS, baseHS);
+
+	/*a3vec3 temp;
+	for (int i = 0; i < 100; i++)
+	{
+		temp = demoMode->hierarchyState_skel_ik->objectSpace->pose[i].translate.xyz;
+	}*/
 }
 
 void a3animation_update_sceneGraph(a3_DemoMode1_Animation* demoMode, a3f64 const dt)
