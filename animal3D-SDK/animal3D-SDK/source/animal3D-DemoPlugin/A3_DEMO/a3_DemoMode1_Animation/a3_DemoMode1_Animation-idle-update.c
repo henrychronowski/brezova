@@ -219,8 +219,8 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 		{
 			// look-at effector
 			sceneObject = demoMode->obj_skeleton_neckLookat_ctrl;
-			a3real4Real4x4Product(controlLocator_neckLookat.v, controlToSkeleton.m,
-				demoMode->sceneGraphState->localSpace->pose[sceneObject->sceneGraphIndex].transformMat.v3.v);
+			//a3real4Real4x4Product(controlLocator_neckLookat.v, controlToSkeleton.m,
+			//	demoMode->sceneGraphState->localSpace->pose[sceneObject->sceneGraphIndex].transformMat.v3.v);
 			j = j_neck = a3hierarchyGetNodeIndex(activeHS->hierarchy, "mixamorig:Neck");
 			jointTransform_neck = activeHS->objectSpace->pose[j].transformMat;
 
@@ -229,8 +229,8 @@ void a3animation_update_applyEffectors(a3_DemoMode1_Animation* demoMode,
 			// in this example, +Z is towards locator, +Y is up
 			a3vec4 neckPos = activeHS->objectSpace->pose[j].transformMat.v3;
 			a3vec4 lookDir = a3vec4_zero;
-			lookDir.xyz = controlLocator_neckLookat.xyz;
-
+			lookDir.xyz = sceneObject->position;//controlLocator_neckLookat.xyz;
+			controlLocator_neckLookat;
 			a3vec4 x = a3vec4_zero;
 			a3real3Normalize(a3real3Sub(lookDir.xyz.v, neckPos.xyz.v));
 			a3real3Cross(x.xyz.v, a3vec3_y.v, lookDir.xyz.v);
@@ -437,6 +437,12 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	// run FK pipeline (skinning optional)
 	a3animation_update_fk(activeHS, baseHS, poseGroup);
 	a3animation_update_skin(activeHS, baseHS);
+
+	/*a3vec3 temp;
+	for (int i = 0; i < 100; i++)
+	{
+		temp = demoMode->hierarchyState_skel_ik->objectSpace->pose[i].translate.xyz;
+	}*/
 }
 
 void a3animation_update_sceneGraph(a3_DemoMode1_Animation* demoMode, a3f64 const dt)
