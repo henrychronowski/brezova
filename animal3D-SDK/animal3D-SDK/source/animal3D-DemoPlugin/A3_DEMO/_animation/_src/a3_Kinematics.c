@@ -44,7 +44,7 @@ a3i32 a3AIReset(a3_AIController * inout)
 	return -1;
 }
 
-a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt)
+a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 dt)
 {
 	if (inout && dt >= __a3f64zero)
 	{
@@ -57,6 +57,7 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt)
 		//printf("%f|%f|%f // %f|%f|%f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z, pos->x, pos->y, pos->z);
 		//printf("%f\n", inout->tmpTimeTrack);
 		inout->curLocation = *pos;
+		inout->curVelocity = *vel;
 		
 
 		// Check for firing solution
