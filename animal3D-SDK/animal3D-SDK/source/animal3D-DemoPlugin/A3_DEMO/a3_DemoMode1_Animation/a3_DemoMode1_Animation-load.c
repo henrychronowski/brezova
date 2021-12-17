@@ -254,11 +254,11 @@ void a3animation_init_animation(a3_DemoState const* demoState, a3_DemoMode1_Anim
 			a3clipCalculateDuration(demoMode->clipPool, j, fps);
 		}
 
-		j = a3clipGetIndexInPool(demoMode->clipPool, "xbot");
+		j = a3clipGetIndexInPool(demoMode->clipPool, "xbot_run_f");
 		a3clipControllerInit(demoMode->clipCtrl, "xbot_ctrl", demoMode->clipPool, j, rate, fps);
 		j = a3clipGetIndexInPool(demoMode->clipPool, "xbot_idle_f");
 		a3clipControllerInit(demoMode->clipCtrlA, "xbot_ctrlA", demoMode->clipPool, j, rate, fps);
-		j = a3clipGetIndexInPool(demoMode->clipPool, "xbot_skintest");
+		j = a3clipGetIndexInPool(demoMode->clipPool, "xbot_walk_f");
 		a3clipControllerInit(demoMode->clipCtrlB, "xbot_ctrlB", demoMode->clipPool, j, rate, fps);
 	}
 

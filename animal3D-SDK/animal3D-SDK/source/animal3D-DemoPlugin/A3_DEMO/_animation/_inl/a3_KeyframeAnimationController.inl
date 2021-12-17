@@ -166,12 +166,15 @@ inline a3i32 a3ClipControllerUpdateTarget(a3_ClipController* clipCtrl, a3vec3 ne
 	return -1;
 }
 
+
 inline a3i32 a3clipControllerBranchTransition(a3_ClipController* clipCtrl, const a3_Clip* clipA, a3_Clip* clipB, a3real param, a3real goal)
 {
 	if (clipCtrl && clipA && clipB)
 	{
 		a3ui32 const rate = 24;
 		a3f64 const fps = (a3f64)rate;
+
+		
 
 		param = a3absolute(param);
 
@@ -208,28 +211,32 @@ inline a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController
 {
 	if (clipCtrlA && clipCtrlB)
 	{
-		a3_HierarchyPose poseA;// = malloc(sizeof(a3_HierarchyPose));
-		a3_HierarchyPose poseB;// = malloc(sizeof(a3_HierarchyPose));
+		a3_HierarchyPose* poseA = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
+		a3_HierarchyPose* poseB = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
 
+		//a3hierarchyPoseReset(&poseA, active_HS->hierarchy->numNodes);
+		//a3hierarchyPoseReset(&poseB, active_HS->hierarchy->numNodes);
 
 		//a3clipControllerUpdate(clipCtrl_fk, dt);
 		a3ui32 sampleIndex0, sampleIndex1;
 
 		sampleIndex0 = clipCtrlA->clipPool->keyframe[clipCtrlA->keyframeIndex].sampleIndex0;
 		sampleIndex1 = clipCtrlA->clipPool->keyframe[clipCtrlA->keyframeIndex].sampleIndex1;
-		a3hierarchyPoseLerp(&poseA,
+		a3hierarchyPoseLerp(poseA,
 			active_PoseGroup->hpose + sampleIndex0, active_PoseGroup->hpose + sampleIndex1,
 			(a3real)clipCtrlA->keyframeParam, active_HS->hierarchy->numNodes);
 
 		sampleIndex0 = clipCtrlB->clipPool->keyframe[clipCtrlB->keyframeIndex].sampleIndex0;
 		sampleIndex1 = clipCtrlB->clipPool->keyframe[clipCtrlB->keyframeIndex].sampleIndex1;
-		a3hierarchyPoseLerp(&poseB,
+		a3hierarchyPoseLerp(poseB,
 			active_PoseGroup->hpose + sampleIndex0, active_PoseGroup->hpose + sampleIndex1,
 			(a3real)clipCtrlB->keyframeParam, active_HS->hierarchy->numNodes);
 
-		a3hierarchyPoseOpLERP(active_HS->animPose, &poseA, &poseB, blendParam);
+		a3hierarchyPoseOpLERP(active_HS->animPose, poseA, poseB, blendParam);
+		//a3hierarchyPoseOpBiLinear(active_HS->animPose, active_HS->animPose, poseA, active_HS->animPose, poseB, )
 
-		//free(poseA, poseB);
+		//free(poseA);
+		//free(poseB);
 
 		return active_HS->animPose;
 	}

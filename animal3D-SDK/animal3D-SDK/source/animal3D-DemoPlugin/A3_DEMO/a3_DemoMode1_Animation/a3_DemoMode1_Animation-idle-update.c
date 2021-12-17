@@ -515,31 +515,31 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	a3real yPos = demoMode->obj_skeleton_ctrl->position.y;
 
 	demoMode->clipBlendParam = a3absolute(yPos) * 0.5f;
+	
 
 	switch (demoMode->clipCtrlA->currentState)
 	{
 	case idle:
+		a3clipControllerBranchTransitionBlend(demoMode->clipCtrlA, demoMode->clipCtrlB, demoMode->hierarchyState_skel, demoMode->hierarchyPoseGroup_skel, demoMode->clipCtrlA->currentSpeed);
 		break;
 	case walk:
-		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 1.0f);
 		break;
 	case run:
-		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 5.0f);
 		break;
 	case jump:
 		break;
 	}
 
-	if(jumping)
-		a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
-	else if(yPos < runThreshold && yPos > -runThreshold)
-	{
-		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 1.0f);
-	}
-	else
-	{
-		a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 5.0f);
-	}
+	//if(jumping)
+	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
+	//else if(yPos < runThreshold && yPos > -runThreshold)
+	//{
+	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 1.0f);
+	//}
+	//else
+	//{
+	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 5.0f);
+	//}
 
 	//a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[10], demoMode->obj_skeleton_ctrl->position.y, 1.0f);
 	
