@@ -211,11 +211,13 @@ inline a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController
 {
 	if (clipCtrlA && clipCtrlB)
 	{
-		a3_HierarchyPose* poseA = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
-		a3_HierarchyPose* poseB = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
+		a3_HierarchyPose* poseA = malloc(sizeof(a3_HierarchyPose));// = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
+		*poseA = *active_HS->animPose;
+		a3_HierarchyPose* poseB = malloc(sizeof(a3_HierarchyPose));// = active_HS->animPose; //= malloc(sizeof(a3_HierarchyPose));
+		*poseB = *active_HS->animPose;
 
-		//a3hierarchyPoseReset(&poseA, active_HS->hierarchy->numNodes);
-		//a3hierarchyPoseReset(&poseB, active_HS->hierarchy->numNodes);
+		a3hierarchyPoseReset(poseA, active_HS->hierarchy->numNodes);
+		a3hierarchyPoseReset(poseB, active_HS->hierarchy->numNodes);
 
 		//a3clipControllerUpdate(clipCtrl_fk, dt);
 		a3ui32 sampleIndex0, sampleIndex1;
@@ -232,11 +234,10 @@ inline a3_HierarchyPose* a3clipControllerBranchTransitionBlend(a3_ClipController
 			active_PoseGroup->hpose + sampleIndex0, active_PoseGroup->hpose + sampleIndex1,
 			(a3real)clipCtrlB->keyframeParam, active_HS->hierarchy->numNodes);
 
-		a3hierarchyPoseOpLERP(active_HS->animPose, poseA, poseB, blendParam);
-		//a3hierarchyPoseOpBiLinear(active_HS->animPose, active_HS->animPose, poseA, active_HS->animPose, poseB, )
+		a3hierarchyPoseOpLERP(active_HS->animPose, poseA, poseB, blendParam, active_HS->hierarchy->numNodes);
 
-		//free(poseA);
-		//free(poseB);
+		free(poseA);
+		free(poseB);
 
 		return active_HS->animPose;
 	}

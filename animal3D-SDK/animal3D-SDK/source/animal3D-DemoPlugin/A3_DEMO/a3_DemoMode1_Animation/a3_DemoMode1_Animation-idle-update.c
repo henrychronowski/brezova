@@ -522,13 +522,14 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 	demoMode->clipBlendParam = a3absolute(yPos) * 0.5f;
 	
-
 	switch (demoMode->clipCtrlA->currentState)
 	{
 	case idle:
-		a3clipControllerBranchTransitionBlend(demoMode->clipCtrlA, demoMode->clipCtrlB, demoMode->hierarchyState_skel, demoMode->hierarchyPoseGroup_skel, demoMode->clipCtrlA->currentSpeed);
+		a3clipControllerUpdateMovement(demoMode->clipCtrlA, &demoMode->AIController);
+		//a3clipControllerBranchTransitionBlend(demoMode->clipCtrlA, demoMode->clipCtrlB, demoMode->hierarchyState_skel, demoMode->hierarchyPoseGroup_skel, demoMode->clipCtrlA->currentSpeed);
 		break;
 	case walk:
+		
 		break;
 	case run:
 		break;
