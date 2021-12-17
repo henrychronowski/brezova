@@ -46,6 +46,7 @@ a3i32 a3AIReset(a3_AIController * inout)
 
 a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 dt)
 {
+	// validate input
 	if (inout && dt >= __a3f64zero)
 	{
 		inout->tmpTimeTrack += (a3real)dt;
@@ -54,8 +55,6 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 d
 		inout->targetLocation = a3vec3_y;
 		a3real3Add(inout->targetLocation.v, a3vec3_x.v);
 		a3real3MulS(inout->targetLocation.v, a3absolute(a3sinrv(inout->tmpTimeTrack) * 10));
-		//printf("%f|%f|%f // %f|%f|%f\n", inout->targetLocation.x, inout->targetLocation.y, inout->targetLocation.z, pos->x, pos->y, pos->z);
-		//printf("%f\n", inout->tmpTimeTrack);
 		inout->curLocation = *pos;
 		inout->curVelocity = *vel;
 
@@ -79,9 +78,9 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in)
 	if (in)
 	{
 		a3vec3 result = in->targetLocation;
-			//in->targetLocation;
 		
-		a3real3Sub(result.v, in->curLocation.v);//in->curLocation.v);
+		// get vector from current location to target
+		a3real3Sub(result.v, in->curLocation.v);
 		a3real3Normalize(result.v);
 
 		if(a3absolute(result.x + result.y + result.z) >= 0.1)

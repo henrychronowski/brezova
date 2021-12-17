@@ -157,35 +157,25 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		// update anim controller based on ai controller
 		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, &demoMode->vel, dt);
 
+		// Update movement input
 		demoMode->pos = demoMode->obj_skeleton_ctrl->position;
 		a3vec3 movementInput;
 		movementInput = a3AIGetMovementInput(&demoMode->AIController);
-		printf("%f\n", a3real3Length(demoMode->AIController.curVelocity.v));
+
+		// Get controller lookat input
 		a3vec3 lookAtInput;
 		lookAtInput = a3AIGetAimInput(&demoMode->AIController, &demoMode->hierarchyState_skel_ik->localSpace->pose[a3hierarchyGetNodeIndex(demoMode->hierarchyState_skel_ik->hierarchy, "mixamorig:Neck")].translate.xyz);
 
+		// Apply movement
 		demoMode->vel.x = (a3f32)(demoMode->vel.x + (5 * (a3f32)movementInput.x - demoMode->vel.x) * dt);
 		demoMode->vel.y = (a3f32)(demoMode->vel.y + (5 * (a3f32)movementInput.y - demoMode->vel.y) * dt);
-
 		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoMode->vel.x * dt);
 		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoMode->vel.y * dt);
-
-		/*demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(movementInput.x * dt);
-		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);*/
-
-		//a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, demoMode->pos.x, demoMode->pos.y, a3real_zero);//movementInput.z);
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
 		demoMode->obj_skeleton_ctrl->position.y = +(demoMode->pos.y);
-		//printf("%f %f %f\n", movementInput.x, movementInput.y, movementInput.z);
-
-		demoMode->targetPos = demoMode->obj_skeleton_ctrl->position;// +(lookAtInput * dt);
-		//a3real3Add(demoMode->targetPos.v, a3real3MulS(lookAtInput.v, (a3real)dt));
-		//demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);
-
+		demoMode->targetPos = demoMode->obj_skeleton_ctrl->position;
 		demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
-		//demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
-		//a3real3Add(demoMode->obj_skeleton_neckLookat_ctrl->position.v, lookAtInput.v);//demoMode->targetPos.v);
-		//demoMode->obj_skeleton_neckLookat_ctrl.
+
 		break;
 	}
 

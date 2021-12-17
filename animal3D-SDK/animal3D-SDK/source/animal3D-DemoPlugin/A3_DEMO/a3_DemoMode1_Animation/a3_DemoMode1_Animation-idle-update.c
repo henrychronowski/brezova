@@ -420,27 +420,19 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	a3ClipControllerUpdateTarget(clipCtrl_fk, effectorPos.xyz);
 
 	a3clipControllerUpdate(clipCtrl_fk, dt);
-	/*sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
-	sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
-	a3hierarchyPoseLerp(activeHS_fk->animPose,
-		poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
-		(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);*/
 
-	/*a3hierarchyPoseLerp(activeHS_fk->animPose,
-		activeHS_fk->animPose,
-		activeHS_ik->animPose,
-		0.0f,
-		activeHS_fk->hierarchy->numNodes);*/
-
+	// Get character velocity to use as interp param
 	a3real velLen = a3real3Length(demoMode->AIController.curVelocity.v);
 	a3real param = a3real_zero;
 
-	if (velLen == 0.0f)
+	if (velLen <= 1.0f)
 	{
+		// Set state to idle
 		clipCtrl_fk->currentState = idle;
 		// 0-1, don't need to normalize
 		param = velLen;
 
+		// get current idle clip
 		clipCtrl_fk = demoMode->clipCtrlA;
 		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
@@ -448,6 +440,7 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
 			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
 
+		// get current walk clip
 		clipCtrl_fk = demoMode->clipCtrlB;
 		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
@@ -457,11 +450,13 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	}
 	else if (velLen > 1.0f && velLen < 3.0f)
 	{
+		// Set state to walk
 		clipCtrl_fk->currentState = walk;
 
 		// Shift to 0-2 and normalize
 		param = (velLen - a3real_one) * (a3real)0.5;
 
+		// get current walk clip
 		clipCtrl_fk = demoMode->clipCtrlB;
 		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
@@ -469,6 +464,7 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
 			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
 
+		// get current run clip
 		clipCtrl_fk = demoMode->clipCtrl;
 		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
@@ -478,10 +474,12 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	}
 	else
 	{
+		// set state to run
 		clipCtrl_fk->currentState = run;
 		// is run
 		param = a3real_one;
 
+		// get current run clip
 		clipCtrl_fk = demoMode->clipCtrl;
 		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
@@ -497,6 +495,7 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
 	}
 
+	// Blend chosen clips
 	a3hierarchyPoseOpLERP(activeHS_fk->animPose,
 		activeHS_fk->animPose,
 		activeHS_ik->animPose,
@@ -536,12 +535,6 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	// run FK pipeline (skinning optional)
 	a3animation_update_fk(activeHS, baseHS, poseGroup);
 	a3animation_update_skin(activeHS, baseHS);
-
-	/*a3vec3 temp;
-	for (int i = 0; i < 100; i++)
-	{
-		temp = demoMode->hierarchyState_skel_ik->objectSpace->pose[i].translate.xyz;
-	}*/
 }
 
 void a3animation_update_sceneGraph(a3_DemoMode1_Animation* demoMode, a3f64 const dt)
@@ -613,48 +606,10 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 
 	// ****TO-DO:
 	// process input
+
+	// update clip controller based on ai controller
+	a3clipControllerUpdateMovement(demoMode->clipCtrlA, &demoMode->AIController);
 	
-	a3boolean jumping = a3keyboardGetState(demoState->keyboard, a3key_space);
-	a3real runThreshold = 6.0f;
-	a3real walkThreshold = 2.0f;
-	a3real yPos = demoMode->obj_skeleton_ctrl->position.y;
-
-	demoMode->clipBlendParam = a3absolute(yPos) * 0.5f;
-	
-	switch (demoMode->clipCtrlA->currentState)
-	{
-	case idle:
-		a3clipControllerUpdateMovement(demoMode->clipCtrlA, &demoMode->AIController);
-		//a3clipControllerBranchTransitionBlend(demoMode->clipCtrlA, demoMode->clipCtrlB, demoMode->hierarchyState_skel, demoMode->hierarchyPoseGroup_skel, demoMode->clipCtrlA->currentSpeed);
-		//a3hierarchyPoseOpLERP(demoMode->hierarchyState_skel->animPose, 
-		//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->clipCtrlA->clipPool->keyframe[demoMode->clipCtrlA->keyframeIndex].index,
-		//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->clipCtrlB->clipPool->keyframe[demoMode->clipCtrlB->keyframeIndex].index,
-		//	1.0,//demoMode->clipCtrlA->currentSpeed,
-		//	demoMode->hierarchyState_skel->hierarchy->numNodes);
-		break;
-	case walk:
-		
-		break;
-	case run:
-		break;
-	case jump:
-		break;
-	}
-
-	//if(jumping)
-	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, demoMode->clipCtrlA->clip, &demoMode->clipCtrlA->clipPool->clip[9], (a3real)jumping, 0.0f);
-	//else if(yPos < runThreshold && yPos > -runThreshold)
-	//{
-	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 1.0f);
-	//}
-	//else
-	//{
-	//	a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[8], yPos, 5.0f);
-	//}
-
-	//a3clipControllerBranchTransition(demoMode->clipCtrlA, &demoMode->clipCtrlA->clipPool->clip[8], &demoMode->clipCtrlA->clipPool->clip[10], demoMode->obj_skeleton_ctrl->position.y, 1.0f);
-	
-
 	// apply input
 	//demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
 	//demoMode->obj_skeleton_ctrl->position.y = +(demoMode->pos.y);
