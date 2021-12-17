@@ -58,7 +58,6 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 d
 		//printf("%f\n", inout->tmpTimeTrack);
 		inout->curLocation = *pos;
 		inout->curVelocity = *vel;
-		
 
 		// Check for firing solution
 		a3AIFire();

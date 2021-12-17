@@ -391,7 +391,10 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	// A is idle, arms down; B is skin test, arms out
 	a3_ClipController* clipCtrl_fk = demoMode->clipCtrlA;
 	a3ui32 sampleIndex0, sampleIndex1;
-
+	//a3_HierarchyPose a, b, none;
+	//a3hierarchyStateCreate(&a, activeHS_fk->animPose);
+	//a3hierarchyStateCreate(&b, activeHS_fk->animPose);
+	//a3hierarchyStateCreate(&none, activeHS_fk->animPose);
 	// resolve FK state
 	// update clip controller, keyframe lerp
 	a3_DemoSceneObject* lookAtEffector = demoMode->obj_skeleton_neckLookat_ctrl;
@@ -399,11 +402,107 @@ void a3animation_update_animation(a3_DemoMode1_Animation* demoMode, a3f64 const 
 	a3ClipControllerUpdateTarget(clipCtrl_fk, effectorPos.xyz);
 
 	a3clipControllerUpdate(clipCtrl_fk, dt);
+	
+
+	clipCtrl_fk = demoMode->clipCtrlB;
+
+	a3ClipControllerUpdateTarget(clipCtrl_fk, effectorPos.xyz);
+
+	a3clipControllerUpdate(clipCtrl_fk, dt);
 	sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+	sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+	a3hierarchyPoseLerp(activeHS_ik->animPose,
+		poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+		(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+
+	clipCtrl_fk = demoMode->clipCtrl;
+
+	a3ClipControllerUpdateTarget(clipCtrl_fk, effectorPos.xyz);
+
+	a3clipControllerUpdate(clipCtrl_fk, dt);
+	/*sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
 	sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
 	a3hierarchyPoseLerp(activeHS_fk->animPose,
 		poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
-		(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+		(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);*/
+
+	/*a3hierarchyPoseLerp(activeHS_fk->animPose,
+		activeHS_fk->animPose,
+		activeHS_ik->animPose,
+		0.0f,
+		activeHS_fk->hierarchy->numNodes);*/
+
+	a3real velLen = a3real3Length(demoMode->AIController.curVelocity.v);
+	a3real param = a3real_zero;
+
+	if (velLen == 0.0f)
+	{
+		clipCtrl_fk->currentState = idle;
+		// 0-1, don't need to normalize
+		param = velLen;
+
+		clipCtrl_fk = demoMode->clipCtrlA;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_fk->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+
+		clipCtrl_fk = demoMode->clipCtrlB;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_ik->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+	}
+	else if (velLen > 1.0f && velLen < 3.0f)
+	{
+		clipCtrl_fk->currentState = walk;
+
+		// Shift to 0-2 and normalize
+		param = (velLen - a3real_one) * (a3real)0.5;
+
+		clipCtrl_fk = demoMode->clipCtrlB;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_fk->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+
+		clipCtrl_fk = demoMode->clipCtrl;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_ik->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+	}
+	else
+	{
+		clipCtrl_fk->currentState = run;
+		// is run
+		param = a3real_one;
+
+		clipCtrl_fk = demoMode->clipCtrl;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_fk->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+
+		clipCtrl_fk = demoMode->clipCtrl;
+		sampleIndex0 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex0;
+		sampleIndex1 = demoMode->clipPool->keyframe[clipCtrl_fk->keyframeIndex].sampleIndex1;
+		a3hierarchyPoseLerp(activeHS_ik->animPose,
+			poseGroup->hpose + sampleIndex0, poseGroup->hpose + sampleIndex1,
+			(a3real)clipCtrl_fk->keyframeParam, activeHS_fk->hierarchy->numNodes);
+	}
+
+	a3hierarchyPoseOpLERP(activeHS_fk->animPose,
+		activeHS_fk->animPose,
+		activeHS_ik->animPose,
+		param,//0.5f,
+		activeHS_fk->hierarchy->numNodes);
+
 	//a3clipControllerBranchTransitionBlend(clipCtrl_fk, demoMode->clipCtrl, activeHS_fk, poseGroup, demoMode->clipBlendParam);
 	// run FK pipeline
 	a3animation_update_fk(activeHS_fk, baseHS, poseGroup);
@@ -527,6 +626,11 @@ void a3animation_update(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMod
 	case idle:
 		a3clipControllerUpdateMovement(demoMode->clipCtrlA, &demoMode->AIController);
 		//a3clipControllerBranchTransitionBlend(demoMode->clipCtrlA, demoMode->clipCtrlB, demoMode->hierarchyState_skel, demoMode->hierarchyPoseGroup_skel, demoMode->clipCtrlA->currentSpeed);
+		//a3hierarchyPoseOpLERP(demoMode->hierarchyState_skel->animPose, 
+		//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->clipCtrlA->clipPool->keyframe[demoMode->clipCtrlA->keyframeIndex].index,
+		//	demoMode->hierarchyPoseGroup_skel->hpose + demoMode->clipCtrlB->clipPool->keyframe[demoMode->clipCtrlB->keyframeIndex].index,
+		//	1.0,//demoMode->clipCtrlA->currentSpeed,
+		//	demoMode->hierarchyState_skel->hierarchy->numNodes);
 		break;
 	case walk:
 		

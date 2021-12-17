@@ -160,7 +160,7 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		demoMode->pos = demoMode->obj_skeleton_ctrl->position;
 		a3vec3 movementInput;
 		movementInput = a3AIGetMovementInput(&demoMode->AIController);
-
+		printf("%f\n", a3real3Length(demoMode->AIController.curVelocity.v));
 		a3vec3 lookAtInput;
 		lookAtInput = a3AIGetAimInput(&demoMode->AIController, &demoMode->hierarchyState_skel_ik->localSpace->pose[a3hierarchyGetNodeIndex(demoMode->hierarchyState_skel_ik->hierarchy, "mixamorig:Neck")].translate.xyz);
 
