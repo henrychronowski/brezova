@@ -155,7 +155,7 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 	*/	break;
 	case animation_ctr_ai:
 		// update anim controller based on ai controller
-		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, dt);
+		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, &demoMode->vel, dt);
 
 		demoMode->pos = demoMode->obj_skeleton_ctrl->position;
 		a3vec3 movementInput;
@@ -163,14 +163,15 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 
 		a3vec3 lookAtInput;
 		lookAtInput = a3AIGetAimInput(&demoMode->AIController, &demoMode->hierarchyState_skel_ik->localSpace->pose[a3hierarchyGetNodeIndex(demoMode->hierarchyState_skel_ik->hierarchy, "mixamorig:Neck")].translate.xyz);
-		/*a3vec3 temp;
-		for (int i = 0; i < 100; i++)
-		{
-			temp = demoMode->hierarchyState_skel_ik->localSpace->pose[i].translate.xyz;
-		}*/
 
-		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(movementInput.x * dt);
-		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);
+		demoMode->vel.x = (a3f32)(demoMode->vel.x + (5 * (a3f32)movementInput.x - demoMode->vel.x) * dt);
+		demoMode->vel.y = (a3f32)(demoMode->vel.y + (5 * (a3f32)movementInput.y - demoMode->vel.y) * dt);
+
+		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(demoMode->vel.x * dt);
+		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(demoMode->vel.y * dt);
+
+		/*demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(movementInput.x * dt);
+		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);*/
 
 		//a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, demoMode->pos.x, demoMode->pos.y, a3real_zero);//movementInput.z);
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
