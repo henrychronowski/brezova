@@ -35,6 +35,7 @@ a3i32 a3AIReset(a3_AIController * inout)
 		inout->predictLocation = a3vec3_zero;
 		inout->curLocation = a3vec3_zero;
 		inout->curVelocity = a3vec3_zero;
+		inout->fireSpeed = 10.0;
 
 		inout->tmpTimeTrack = a3real_zero;
 
@@ -88,7 +89,7 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in)
 	return a3vec3_zero;
 }
 
-a3vec3 a3AIGetAimInput(const a3_AIController* in)
+a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3* neckPos)
 {
 	if (in)
 	{

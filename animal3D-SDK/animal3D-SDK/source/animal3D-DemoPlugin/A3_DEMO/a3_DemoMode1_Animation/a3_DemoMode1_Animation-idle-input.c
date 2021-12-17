@@ -158,16 +158,28 @@ void a3animation_input(a3_DemoState* demoState, a3_DemoMode1_Animation* demoMode
 		a3AIUpdate(&demoMode->AIController, &demoMode->obj_skeleton_ctrl->position, dt);
 
 		demoMode->pos = demoMode->obj_skeleton_ctrl->position;
-		a3vec3 tmp;
-		tmp = a3AIGetMovementInput(&demoMode->AIController);
+		a3vec3 movementInput;
+		movementInput = a3AIGetMovementInput(&demoMode->AIController);
 
-		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(tmp.x * dt);
-		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(tmp.y * dt);
+		a3vec3 lookAtInput;
+		lookAtInput = a3AIGetAimInput(&demoMode->AIController, &demoMode->hierarchyState_skel_ik->objectSpace->pose[a3hierarchyGetNodeIndex(demoMode->hierarchyState_skel_ik->hierarchy, "mixamorig:Neck")].translate.xyz);
+		;
 
-		//a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, demoMode->pos.x, demoMode->pos.y, a3real_zero);//tmp.z);
+		demoMode->pos.x = demoMode->obj_skeleton_ctrl->position.x + (a3f32)(movementInput.x * dt);
+		demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);
+
+		//a3demo_moveSceneObject(demoMode->obj_skeleton_ctrl, 0.25, demoMode->pos.x, demoMode->pos.y, a3real_zero);//movementInput.z);
 		demoMode->obj_skeleton_ctrl->position.x = +(demoMode->pos.x);
 		demoMode->obj_skeleton_ctrl->position.y = +(demoMode->pos.y);
-		//printf("%f %f %f\n", tmp.x, tmp.y, tmp.z);
+		//printf("%f %f %f\n", movementInput.x, movementInput.y, movementInput.z);
+
+		demoMode->targetPos = demoMode->obj_skeleton_ctrl->position;// +(lookAtInput * dt);
+		a3real3Add(demoMode->targetPos.v, a3real3MulS(lookAtInput.v, (a3real)dt));
+		//demoMode->pos.y = demoMode->obj_skeleton_ctrl->position.y + (a3f32)(movementInput.y * dt);
+
+		demoMode->obj_skeleton_neckLookat_ctrl->position = lookAtInput;
+		a3real3Add(demoMode->obj_skeleton_neckLookat_ctrl->position.v, demoMode->targetPos.v);
+		//demoMode->obj_skeleton_neckLookat_ctrl.
 		break;
 	}
 

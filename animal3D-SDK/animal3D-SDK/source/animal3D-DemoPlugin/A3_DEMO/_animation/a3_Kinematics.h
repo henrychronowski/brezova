@@ -96,6 +96,7 @@ struct a3_AIController
 	a3f64 devianceThreshold;
 
 	a3real tmpTimeTrack;
+	a3real fireSpeed;
 };
 
 // Sets default values for the AI controller
@@ -108,7 +109,7 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, const a3f64 dt);
 a3vec3 a3AIGetMovementInput(const a3_AIController* in);
 
 // Get the necessary aim point
-a3vec3 a3AIGetAimInput(const a3_AIController* in);
+a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3 * neckPos);
 
 // Fire
 a3i32 a3AIFire();
