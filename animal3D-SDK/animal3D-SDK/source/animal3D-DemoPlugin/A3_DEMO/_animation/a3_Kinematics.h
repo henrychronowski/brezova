@@ -112,7 +112,7 @@ a3vec3 a3AIGetMovementInput(const a3_AIController* in);
 a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3 * neckPos);
 
 // Fire
-a3i32 a3AIFire();
+a3i32 a3AIFire(a3_AIController* in);
 
 //-----------------------------------------------------------------------------
 

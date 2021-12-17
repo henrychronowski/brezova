@@ -59,7 +59,7 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 d
 		inout->curVelocity = *vel;
 
 		// Check for firing solution
-		a3AIFire();
+		a3AIFire(inout);
 
 		return 1;
 	}
@@ -67,9 +67,15 @@ a3i32 a3AIUpdate(a3_AIController* inout, a3vec3* pos, a3vec3* vel, const a3f64 d
 	return -1;
 }
 
-a3i32 a3AIFire()
+a3i32 a3AIFire(a3_AIController* in)
 {
-	//printf("No fire solution found\n");
+	//a3vec3 temp;
+	//temp = in->targetLocation;
+	////printf("No fire solution found\n");
+	//if (a3real3Length(a3real3Sub(temp, )
+	//{
+
+	//}
 	return 1;
 }
 
@@ -95,7 +101,7 @@ a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3* neckPos)
 	{
 		a3vec3 result;
 		result = a3vec3_x;
-		/*a3vec3 PT;
+		a3vec3 PT;
 
 		a3real sT, speedFactor;
 
@@ -103,12 +109,12 @@ a3vec3 a3AIGetAimInput(const a3_AIController* in, const a3vec3* neckPos)
 
 		a3real3Sub(PT.v, neckPos->v);
 		sT = a3real3Dot(in->targetVelocity.v, PT.v) / a3real3Length(PT.v);
-		speedFactor = sT - in->fireSpeed;*/
+		speedFactor = sT - in->fireSpeed;
 		
 
-		result = in->targetLocation;
+		//result = in->targetLocation;
 		//a3real3MulS(result.v, 10.0);
-		//a3real3Add(a3real3MulS(a3real3MulS(a3real3Sub(result.v, neckPos->v), speedFactor), 1.0f / a3real3Distance(in->targetLocation.v, neckPos->v)), in->targetVelocity.v);
+		a3real3Add(a3real3MulS(a3real3MulS(a3real3Sub(result.v, neckPos->v), speedFactor), 1.0f / a3real3Distance(in->targetLocation.v, neckPos->v)), in->targetVelocity.v);
 
 		return result;
 	}
